@@ -7,9 +7,9 @@ Gen_ign_helper <- function(x, n, replace = TRUE, prob = TRUE) {
 
   probs <- probs[!is.na(val)]
 
-  sites <- sample(cellNum, size=n, replace=TRUE, prob=TRUE)
+  sites <- sample(cellNum, size=n, replace=replace, prob=probs)
   xy <- raster::xyFromCell(x, sites)
 
-  #xy
+  xy
 
 }
