@@ -7,7 +7,7 @@
 #'
 #' @return Returns a csv file with the hourly meteorological data per fire perimeter in the study area (fire_weather_study_area.csv)
 #' @export
-#' @import lubridate sp tidyverse ecmwfr ncdf4 udunits2 sf rgdal raster rgeos stringr zoo lwgeom tibble
+#' @import lubridate sp tidyverse ecmwfr ncdf4 udunits2 sf rgdal raster rgeos stringr zoo lwgeom tibble abind
 #' @examples
 #' \dontrun{fire_weather_nc(study.area="C:/user/study_area.shp",
 #' my.fires="C:/user/my_fires.shp",nc.folder="C:/user/netdcf_file.nc",
@@ -221,7 +221,7 @@ fire_weather_nc <- function(study.area, my.fires,nc.folder,output.folder) {
 
   my_fires_t_dated_2020 <- subset(my_fires_t_dated_2020,!(date_diff_t > 10 & Area_ha < 500))
 
-  library(stringr)
+  #library(stringr)
   my_fires_t_dated_2020_separate <- as.data.frame(str_split_fixed(my_fires_t_dated_2020$Data_ini, "-", 3))
 
   #str(my_fires_t_dated_2020_separate)
@@ -277,7 +277,7 @@ fire_weather_nc <- function(study.area, my.fires,nc.folder,output.folder) {
 
     posicoes_dias <- results_j
 
-    require(abind)
+    #require(abind)
 
 
 
@@ -572,7 +572,7 @@ fire_weather_nc <- function(study.area, my.fires,nc.folder,output.folder) {
       # }
 
 
-      library(zoo)
+      #library(zoo)
       seal_coords <- na.locf(seal_coords)
 
       #my_fires_t_dated_df[i,7] <- sacar_linha_fin

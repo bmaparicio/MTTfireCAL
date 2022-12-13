@@ -67,12 +67,12 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
   #plot pt map with study-area
 
 
-  library(ggplot2)
-  library(dplyr)
-  library(ggspatial)
-  library(tidyverse)
-  library(rnaturalearth)
-  library(rnaturalearthdata)
+  # library(ggplot2)
+  # library(dplyr)
+  # library(ggspatial)
+  # library(tidyverse)
+  # library(rnaturalearth)
+  # library(rnaturalearthdata)
 
   #world_st <- sf::st_as_sf(map_data('world'), coords = c("long", "lat"), crs = 4326)
 
@@ -230,7 +230,7 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
   table_for_graph$label <- paste0(round (table_for_graph$V1,0), "%") #paste0(table_for_graph$V2, "\n value: ", table_for_graph$V1)
 
 
-  library(ggplot2)
+  #library(ggplot2)
 
   # cols <- c("Fires below 100 ha" = "#FFFFCC", "Fires between 100 and 500 ha" = "#FFEDA0",
   #           "Fires between 500 and 1000 ha" = "#FED976", "Fires between 1000 and 5000 ha" = "#FD8D3C",
@@ -264,7 +264,7 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
 
 
 
-  library(RColorBrewer)
+  #library(RColorBrewer)
 
   # Put all the color values (in hex format) from Dark2 into a vector
   myPal <- brewer.pal(8,"YlOrRd")
@@ -286,7 +286,7 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
 
   #my_fires_t_inter_2020_intersected_df <-as.data.frame(my_fires_t_inter_2020_intersected)
 
-  library(tidyquant)
+  #library(tidyquant)
 
   freqs_my_fires_t_inter_intersected$class <- c(1:9)
 
@@ -422,7 +422,7 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
 
   #my_fires_t_inter_2020_intersected_df <-as.data.frame(my_fires_t_inter_2020_intersected)
 
-  library(tidyquant)
+  #library(tidyquant)
 
   freqs_my_fires_t_inter_intersected_spikes$class <- c(1:nrow(freqs_my_fires_t_inter_intersected_spikes))
 
@@ -553,7 +553,7 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
 
   freqs_my_fires_t_inter_intersected_spikes_id$dur_ID <- na.locf(freqs_my_fires_t_inter_intersected_spikes_id$dur_ID)
 
-  library(tidyverse)
+  #library(tidyverse)
 
   frequency_per_duration_class <- as.data.frame(freqs_my_fires_t_inter_intersected_spikes_id %>%
                                                   #arrange(id) %>%
@@ -864,12 +864,12 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
     #install.packages("factoextra")
     #install.packages("plot3D")
 
-    library (factoextra)
+    #library (factoextra)
     ###########PLOTS
 
-    library(scatterplot3d)
+    #library(scatterplot3d)
     #library(plot3D)
-    library(car)
+    #library(car)
     #scatter3d(newdata$temperatura, newdata$WS, newdata$HR,phi = 0, bty = "g", pch = 20, cex = 1.0, ticktype = "detailed")
     #text3D(meteo$Temp, meteo$WS, meteo$HR,  labels = rownames(meteo),add = TRUE, colkey = FALSE, cex = 0.5)
 
@@ -881,7 +881,7 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
 
     ##### Model-Based Clustering
 
-    library(mclust)
+    #library(mclust)
     mc <- Mclust(df)
 
 
@@ -922,7 +922,7 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
 
     ############### Visualization (MODEL-BASED)
 
-    library(factoextra)
+    #library(factoextra)
     # BIC values used for choosing the number of clusters
     BIC_fviz <- fviz_mclust(mc, "BIC", palette = "jco")
 
@@ -997,7 +997,7 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
     sil_kmean9 <- fviz_silhouette(km.res9, label = FALSE, print.summary = FALSE)+ theme(title = element_text(size = 8))
     sil_kmean10 <- fviz_silhouette(km.res10, label = FALSE, print.summary = FALSE)+ theme(title = element_text(size = 8))
 
-    library(ggpubr)
+    #library(ggpubr)
 
 
     kmeans_all <- ggarrange(sil_kmean2, sil_kmean3, sil_kmean4,sil_kmean5,
@@ -1053,7 +1053,7 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
 
     mc_df <- as.data.frame(mc$classification)
 
-    library(dplyr)
+    #library(dplyr)
     mc_df_fin <- mc_df %>%
       group_by(mc$classification) %>%
       summarise(count=n())
@@ -1082,7 +1082,7 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
 
 
     #########################Determining The Optimal Number Of Clusters
-    library(factoextra)
+    #library(factoextra)
 
 
     # Elbow method
@@ -1678,9 +1678,9 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
   ###wind rose#####
 
   # WindRose.R
-  library(ggplot2)
-  library(RColorBrewer)
-  library(tidyquant)
+  #library(ggplot2)
+  #library(RColorBrewer)
+  #library(tidyquant)
 
   plot.windrose <- function(data,
                             spd,
@@ -1950,9 +1950,9 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
 
 
   ###fazer report#####
-  library(officer)
-  library(flextable)
-  library(magrittr)
+  #library(officer)
+  #library(flextable)
+  #library(magrittr)
 
   if (create.clusters == TRUE){
     meteo1_use <- round(meteo1[,c("cluster","temperature_use","HR_use","WS_use", "size","mean_area_ha", "per95_area_ha" )],0) #"FWI_use"

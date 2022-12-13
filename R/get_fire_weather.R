@@ -9,7 +9,7 @@
 #'
 #' @return Returns a raw netdcf file with all the hourly meteorological variables of temperature, relative humidity, wind speed and direction (same as simply using the wf_request function from the ecmwfr package; the request is stored at https://cds.climate.copernicus.eu/cdsapp#!/yourrequests). Also returns a csv file with the hourly meteorological data per fire perimeter in the study area (fire_weather_study_area.csv)
 #' @export
-#' @import lubridate sp tidyverse ecmwfr ncdf4 udunits2 sf rgdal raster rgeos stringr zoo lwgeom tibble
+#' @import lubridate sp tidyverse ecmwfr ncdf4 udunits2 sf rgdal raster rgeos stringr zoo lwgeom tibble abind
 #' @examples
 #' \dontrun{get_fire_weather(study.area="C:/user/study_area.shp", my.fires="C:/user/my_fires.shp",
 #' utc.zone=+1,wf_user="12345",wf_key="123456ab-12a3-1234-1234-123ab4567891",

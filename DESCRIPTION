@@ -35,4 +35,8 @@ Imports:
     scatterplot3d,
     car,
     mclust,
-    ggpubr
+    ggpubr,
+    officer,
+    flextable,
+    magrittr,
+    abind
