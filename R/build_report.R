@@ -17,6 +17,7 @@
 #'
 #' @return Returns fuel moisture file based on clustering or percentiles, a csv file with the meteorological values per clustering method, a csv file with a summary of meteorology per fire event, and a csv file with the fire size for the fires recorded in the study area in the period analysed.
 #' @export
+#' @import sf rgeos rgdal sp tibble tidyverse tseries ggpubr ggplot2 dplyr ggspatial rnaturalearth rnaturalearthdata RColorBrewer tidyquant factoextra car mclust officer flextable magrittr tidyr
 #'
 #' @examples
 #' \dontrun{build_report(study.area="C:/user/study_area.shp",
@@ -859,16 +860,11 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
     df<-scale(newdata)
 
 
-    #libPaths()
-    #libPaths("C:/Program Files/R/R-4.0.3/library")
-    #install.packages("factoextra")
-    #install.packages("plot3D")
+
 
     #library (factoextra)
     ###########PLOTS
 
-    #library(scatterplot3d)
-    #library(plot3D)
     #library(car)
     #scatter3d(newdata$temperatura, newdata$WS, newdata$HR,phi = 0, bty = "g", pch = 20, cex = 1.0, ticktype = "detailed")
     #text3D(meteo$Temp, meteo$WS, meteo$HR,  labels = rownames(meteo),add = TRUE, colkey = FALSE, cex = 0.5)
