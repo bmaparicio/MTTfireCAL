@@ -18,6 +18,8 @@ install_github("bmaparicio/MTTfireCAL")
 - check_BP_nxburned.R is the script that compares the estimated burn probability with the historical number of times burned.
 - check_fire_size.R is the script that compares the simulated fire size distribution with the historical fire size distribution.
 
+Please also refer to the package pdf manual for complete information on the functions and how to use them. 
+
 ## Citation
 Please use the following citation when refering to this package:
 Aparício, B.A., Benali, A., Sá, A.C.L. (2023) ‘MTTfireCAL’ package for R – An innovative, comprehensive and fast procedure to calibrate the MTT fire spread modelling system. MethodsX.
