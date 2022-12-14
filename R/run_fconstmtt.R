@@ -81,7 +81,7 @@ run_fconstmtt <- function(Folder,landscape,CrownFireMethod,
 
 
 
-  library(dplyr)
+  #library(dplyr)
 
 
   V1 <- c("landscape:","CrownFireMethod:",
@@ -232,7 +232,7 @@ run_fconstmtt <- function(Folder,landscape,CrownFireMethod,
 
 
 
-  library (tidyr)
+  #library (tidyr)
 
   if(is.logical(Duration.1_correct)==FALSE){
     FireListFile_correct_df_dur_1_final <- FireListFile_correct_df_dur_1 %>% separate(FireListFile_correct_df_dur_1,

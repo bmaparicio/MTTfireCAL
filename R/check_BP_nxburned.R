@@ -23,8 +23,8 @@ check_BP_nxburned <- function (Folder.Outputs,
 
   setwd(Folder.Outputs)
   my_files <- list.files(pattern = "BP.asc")
-  library (raster)
-  library(ggplot2)
+  #library (raster)
+  #library(ggplot2)
 
   obs.nxburned_use <- raster(obs.nxburned)
 
@@ -81,7 +81,7 @@ check_BP_nxburned <- function (Folder.Outputs,
   #datalist <- list()
   #results <- data.frame(matrix(NA, nrow = ((nCombos * nIgn.per.combo)+5000), ncol = 2))
 
-  library(tidyr)
+  #library(tidyr)
 
   correlation_df <- matrix(ncol=2,nrow=length(nCombos))
 
@@ -557,36 +557,6 @@ check_BP_nxburned <- function (Folder.Outputs,
   colnames(correlation_df) <- c("combo","correlation burn probability - number of times burned")
   write.csv(correlation_df,"correlation_BP_NxBurned.csv",row.names = FALSE)
 
-
-  correlation_df[,2]
-  my_combos_file_order[,"Correlation"]
-
-  for_plot_correlation <- as.data.frame(cbind(correlation_df[,2],my_combos_file_order[,"Correlation"]))
-  colnames(for_plot_correlation) <- c("cor_BP_NxBurned","cor_fire_size")
-
-
-
-  library(ggplot2)
-  plot_correlation <- ggplot(for_plot_correlation, aes(cor_fire_size, cor_BP_NxBurned)) +
-    geom_point(na.rm = TRUE, size=3)+
-    geom_point(shape = 1,size = 3,colour = "black")+
-    scale_color_gradient2(midpoint=mid, low="blue", mid="white",
-                          high="red", space ="Lab" )+
-    theme_classic()+
-    theme(axis.text=element_text(size=12),
-          axis.title=element_text(size=14,face="bold"))+
-    xlab("Correlation fire size")+
-    ylab("Correlation BP vs Nx Burned")#+
-  #geom_smooth(method='lm', color='grey',se=FALSE)
-  #geom_smooth(method = "glm", alpha = 0.5,se=TRUE)
-
-
-  if(export.plots==1){
-    ggsave(filename=paste(Folder.Outputs,"/correlation_BP_NxBurned","/plot_correlations.jpg",sep=""), plot=plot_correlation, width = 6, height = 5)
-    #png(paste(Folder.Outputs,"/BP_nxburned_combo_",i,".png",sep=""), width = 500, height = 400,)
-    #boxplot(all_rasters_sum,r3,main=paste("Combo",i), ylab='Simulated Burn Probability', xlab="Historical number of times burned")
-    #dev.off()
-  }
 
 
 

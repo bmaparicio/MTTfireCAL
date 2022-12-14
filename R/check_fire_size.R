@@ -27,7 +27,7 @@ check_fire_size <- function (Folder.Outputs,
   datalist <- list()
   results <- data.frame(matrix(NA, nrow = 1000000, ncol = 2))
 
-  library(tidyr)
+  #library(tidyr)
 
   for (i in 1:length(my_files)) {
     t <- read.table(my_files[i], sep=",", header = T)
@@ -378,8 +378,8 @@ check_fire_size <- function (Folder.Outputs,
   #
 
 
-  library(dplyr)
-  library(tidyr)
+  #library(dplyr)
+  #library(tidyr)
   #results_inter <- results_inter[1:208,]
   #results_inter_expanded<-unique(expand.grid(split(results_inter$X4, results_inter$X3)))
 
@@ -563,10 +563,10 @@ check_fire_size <- function (Folder.Outputs,
   results_rmse <- matrix(ncol=8, nrow= nrow(results_inter_expanded))
   nrow(results_rmse)
 
-  library(Metrics)
-  library (tidyr)
-  library(forestmangr)
-  library(wesanderson)
+  #library(Metrics)
+  #library (tidyr)
+  #library(forestmangr)
+  #library(wesanderson)
 
   for (t in 1:nrow(results_inter_expanded)){
     results_inter_expanded_loop <- as.data.frame(results_inter_expanded[t,])

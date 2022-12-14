@@ -154,7 +154,7 @@ Gen_ign <- function(ign.raster, IgnitionData, fuelmap, nIgnitions, unburnable, L
 
   nDurations <- length(grep(pattern = '^duration', x = colnames(my_ignitions), value = T))
 
-  library(dplyr)
+  #library(dplyr)
   #my_ignitions$nIgnitions <- my_ignitions$Freq*nIgnitions
 
   ndur <- length(grep(x = colnames(my_ignitions), pattern = "^duration"))
