@@ -1,7 +1,7 @@
 # MTTfireCAL
 MTT fire spread semi-automatic calibration - R package
 
-This R package is meant to assists in the calibration of the [MTT](https://cdnsciencepub.com/doi/abs/10.1139/x02-068) fire spread models.
+This R package is meant to assists in the calibration of the [MTT](https://cdnsciencepub.com/doi/abs/10.1139/x02-068) fire spread models. The package uses the executable FConstMTT (a command line of MTT). This executable can be downloaded [here](https://www.alturassolutions.com/FB/FB_API.htm) and is essential to run the semi-automatic calibration.
 
 ## File Descriptions
 - Gen_ign.R is the script that generates ignitions in the study area that either follow a surface of probability of ignition (raster file) or are randomly allocated
