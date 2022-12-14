@@ -3,6 +3,12 @@ MTT fire spread semi-automatic calibration - R package
 
 This R package is meant to assists in the calibration of the [MTT](https://cdnsciencepub.com/doi/abs/10.1139/x02-068) fire spread models. The package uses the executable FConstMTT (a command line of MTT). This executable can be downloaded [here](https://www.alturassolutions.com/FB/FB_API.htm) and is essential to run the semi-automatic calibration.
 
+## Instalation
+To install MTTfireCAL from GitHub:
+```
+install_github("bmaparicio/MTTfireCAL")
+```
+
 ## File Descriptions
 - get_fire_weather.R is the script that downloads [ERA5-Land reanalysis data](https://www.ecmwf.int/en/era5-land) and stores it in a csv file.
 - fire_weather_nc.R is the script that extracts meteorological variables from an existing netcdf file and stores it in a csv file.
