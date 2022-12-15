@@ -60,14 +60,11 @@ run_fconstmtt <- function(Folder,landscape,CrownFireMethod,
   CrownFireMethod_correct <- as.numeric(CrownFireMethod)
   customfmd_correct <- gsub("/", paste("\\\\"), customfmd)
   FmsFolder_correct <- list.files(FmsFolder,pattern = ".fms")
-  #FmsFolder_correct <- gsub("/", paste("\\\\"), FmsFolder)
 
   Resolution_correct <- as.numeric(Resolution)
   GridDistanceUnits_correct <- as.numeric(GridDistanceUnits)
-  #WindSpeed_correct <- as.list(WindSpeed)
 
   NumFires_correct <- as.numeric(500)
-  #FireListFile_correct <- gsub("/", paste("\\\\"), FireListFile)
   FireListFile_correct <- intersect(list.files(FireListFile,pattern = ".txt"), list.files(FireListFile,pattern = "ignitions"))
 
   SpotProbability_correct <- as.numeric(SpotProbability)
@@ -78,10 +75,6 @@ run_fconstmtt <- function(Folder,landscape,CrownFireMethod,
   MetricFLP_correct <- as.numeric(MetricFLP)
   IgnitionProbabilitySeed_correct <- as.numeric (42)
 
-
-
-
-  #library(dplyr)
 
 
   V1 <- c("landscape:","CrownFireMethod:",
@@ -95,13 +88,6 @@ run_fconstmtt <- function(Folder,landscape,CrownFireMethod,
           "MetricFLP:", "IgnitionProbabilitySeed:")
 
 
-
-
-  #Duration.1_correct <- seq(from = Duration.1.min, to = Duration.1.max, by = by.1)
-  #Duration.2_correct <- seq(from = Duration.2.min, to = Duration.2.max, by = by.2)
-  #Duration.3_correct <- seq(from = Duration.3.min, to = Duration.3.max, by = by.3)
-  #Duration.4_correct <- seq(from = Duration.4.min, to = Duration.4.max, by = by.4)
-  #Duration.5_correct <- seq(from = Duration.5.min, to = Duration.5.max, by = by.5)
 
 
 
@@ -150,34 +136,14 @@ run_fconstmtt <- function(Folder,landscape,CrownFireMethod,
 
 
 
-  #if(is.null(x))
-  #  x <- seq(from = 0.05, to = b, by = 0.001)
-
-
-  #my_grid <- expand.grid(Duration.1_correct,Duration.2_correct,Duration.3_correct,Duration.4_correct,Duration.5_correct)
-
-  #colnames(my_grid)<- c("Duration.1","Duration.2","Duration.3","Duration.4","Duration.5")
-
-  #my_grid<- my_grid[, colSums(is.na(my_grid)) != nrow(my_grid)]
-
-
-
-
 
   mainDir<- Folder
   subDir_FMS <- "inputs"
   subDir_outs <- "Outputs"
-  #create the csv file with cluster meteo data
   dir.create(file.path(mainDir, subDir_outs), showWarnings = FALSE)
   dir.create(file.path(mainDir, subDir_FMS), showWarnings = FALSE)
   setwd(file.path(mainDir, subDir_FMS))
 
-
-
-
-
-  #write.table(my_grid, "my_batch_1_combos.csv",
-  #            row.names = FALSE,col.names=TRUE, quote=FALSE)
 
 
   FireListFile_correct_df <- as.data.frame(FireListFile_correct)
@@ -231,24 +197,12 @@ run_fconstmtt <- function(Folder,landscape,CrownFireMethod,
 
 
 
-
-  #library (tidyr)
-
   if(is.logical(Duration.1_correct)==FALSE){
     FireListFile_correct_df_dur_1_final <- FireListFile_correct_df_dur_1 %>% separate(FireListFile_correct_df_dur_1,
                                                                                       into=c("ignition", "cluster","cluster_name",
                                                                                              "duration","duration_name",
                                                                                              "direction","land","cover","land_cover_id"), sep="_")
 
-    # FireListFile_correct_df_dur_1_final$direction_val <- NA
-    # FireListFile_correct_df_dur_1_final$direction_val[FireListFile_correct_df_dur_1_final$direction=="N"]<-0
-    # FireListFile_correct_df_dur_1_final$direction_val[FireListFile_correct_df_dur_1_final$direction=="NE"]<-45
-    # FireListFile_correct_df_dur_1_final$direction_val[FireListFile_correct_df_dur_1_final$direction=="E"]<-90
-    # FireListFile_correct_df_dur_1_final$direction_val[FireListFile_correct_df_dur_1_final$direction=="SE"]<-135
-    # FireListFile_correct_df_dur_1_final$direction_val[FireListFile_correct_df_dur_1_final$direction=="S"]<-180
-    # FireListFile_correct_df_dur_1_final$direction_val[FireListFile_correct_df_dur_1_final$direction=="SW"]<-225
-    # FireListFile_correct_df_dur_1_final$direction_val[FireListFile_correct_df_dur_1_final$direction=="W"]<-270
-    # FireListFile_correct_df_dur_1_final$direction_val[FireListFile_correct_df_dur_1_final$direction=="NW"]<-315
 
     FireListFile_correct_df_dur_1_final$fullName <- FireListFile_correct_df_dur_1$FireListFile_correct_df_dur_1}  else{
       FireListFile_correct_df_dur_1_final<-NA
@@ -264,16 +218,6 @@ run_fconstmtt <- function(Folder,landscape,CrownFireMethod,
                                                                                              "duration","duration_name",
                                                                                              "direction","land","cover","land_cover_id"), sep="_")
 
-    # FireListFile_correct_df_dur_2_final$direction_val <- NA
-    # FireListFile_correct_df_dur_2_final$direction_val[FireListFile_correct_df_dur_2_final$direction=="N"]<-0
-    # FireListFile_correct_df_dur_2_final$direction_val[FireListFile_correct_df_dur_2_final$direction=="NE"]<-45
-    # FireListFile_correct_df_dur_2_final$direction_val[FireListFile_correct_df_dur_2_final$direction=="E"]<-90
-    # FireListFile_correct_df_dur_2_final$direction_val[FireListFile_correct_df_dur_2_final$direction=="SE"]<-135
-    # FireListFile_correct_df_dur_2_final$direction_val[FireListFile_correct_df_dur_2_final$direction=="S"]<-180
-    # FireListFile_correct_df_dur_2_final$direction_val[FireListFile_correct_df_dur_2_final$direction=="SW"]<-225
-    # FireListFile_correct_df_dur_2_final$direction_val[FireListFile_correct_df_dur_2_final$direction=="W"]<-270
-    # FireListFile_correct_df_dur_2_final$direction_val[FireListFile_correct_df_dur_2_final$direction=="NW"]<-315
-
 
     FireListFile_correct_df_dur_2_final$fullName <- FireListFile_correct_df_dur_2$FireListFile_correct_df_dur_2 }  else{
       FireListFile_correct_df_dur_2_final<-NA
@@ -288,15 +232,6 @@ run_fconstmtt <- function(Folder,landscape,CrownFireMethod,
                                                                                              "duration","duration_name",
                                                                                              "direction","land","cover","land_cover_id"), sep="_")
 
-    # FireListFile_correct_df_dur_3_final$direction_val <- NA
-    # FireListFile_correct_df_dur_3_final$direction_val[FireListFile_correct_df_dur_3_final$direction=="N"]<-0
-    # FireListFile_correct_df_dur_3_final$direction_val[FireListFile_correct_df_dur_3_final$direction=="NE"]<-45
-    # FireListFile_correct_df_dur_3_final$direction_val[FireListFile_correct_df_dur_3_final$direction=="E"]<-90
-    # FireListFile_correct_df_dur_3_final$direction_val[FireListFile_correct_df_dur_3_final$direction=="SE"]<-135
-    # FireListFile_correct_df_dur_3_final$direction_val[FireListFile_correct_df_dur_3_final$direction=="S"]<-180
-    # FireListFile_correct_df_dur_3_final$direction_val[FireListFile_correct_df_dur_3_final$direction=="SW"]<-225
-    # FireListFile_correct_df_dur_3_final$direction_val[FireListFile_correct_df_dur_3_final$direction=="W"]<-270
-    # FireListFile_correct_df_dur_3_final$direction_val[FireListFile_correct_df_dur_3_final$direction=="NW"]<-315
 
 
     FireListFile_correct_df_dur_3_final$fullName <- FireListFile_correct_df_dur_3$FireListFile_correct_df_dur_3}  else{
@@ -311,15 +246,6 @@ run_fconstmtt <- function(Folder,landscape,CrownFireMethod,
                                                                                              "duration","duration_name",
                                                                                              "direction","land","cover","land_cover_id"), sep="_")
 
-    # FireListFile_correct_df_dur_4_final$direction_val <- NA
-    # FireListFile_correct_df_dur_4_final$direction_val[FireListFile_correct_df_dur_4_final$direction=="N"]<-0
-    # FireListFile_correct_df_dur_4_final$direction_val[FireListFile_correct_df_dur_4_final$direction=="NE"]<-45
-    # FireListFile_correct_df_dur_4_final$direction_val[FireListFile_correct_df_dur_4_final$direction=="E"]<-90
-    # FireListFile_correct_df_dur_4_final$direction_val[FireListFile_correct_df_dur_4_final$direction=="SE"]<-135
-    # FireListFile_correct_df_dur_4_final$direction_val[FireListFile_correct_df_dur_4_final$direction=="S"]<-180
-    # FireListFile_correct_df_dur_4_final$direction_val[FireListFile_correct_df_dur_4_final$direction=="SW"]<-225
-    # FireListFile_correct_df_dur_4_final$direction_val[FireListFile_correct_df_dur_4_final$direction=="W"]<-270
-    # FireListFile_correct_df_dur_4_final$direction_val[FireListFile_correct_df_dur_4_final$direction=="NW"]<-315
 
 
     FireListFile_correct_df_dur_4_final$fullName <- FireListFile_correct_df_dur_4$FireListFile_correct_df_dur_4} else{
@@ -335,15 +261,6 @@ run_fconstmtt <- function(Folder,landscape,CrownFireMethod,
                                                                                              "duration","duration_name",
                                                                                              "direction","land","cover","land_cover_id"), sep="_")
 
-    # FireListFile_correct_df_dur_5_final$direction_val <- NA
-    # FireListFile_correct_df_dur_5_final$direction_val[FireListFile_correct_df_dur_5_final$direction=="N"]<-0
-    # FireListFile_correct_df_dur_5_final$direction_val[FireListFile_correct_df_dur_5_final$direction=="NE"]<-45
-    # FireListFile_correct_df_dur_5_final$direction_val[FireListFile_correct_df_dur_5_final$direction=="E"]<-90
-    # FireListFile_correct_df_dur_5_final$direction_val[FireListFile_correct_df_dur_5_final$direction=="SE"]<-135
-    # FireListFile_correct_df_dur_5_final$direction_val[FireListFile_correct_df_dur_5_final$direction=="S"]<-180
-    # FireListFile_correct_df_dur_5_final$direction_val[FireListFile_correct_df_dur_5_final$direction=="SW"]<-225
-    # FireListFile_correct_df_dur_5_final$direction_val[FireListFile_correct_df_dur_5_final$direction=="W"]<-270
-    # FireListFile_correct_df_dur_5_final$direction_val[FireListFile_correct_df_dur_5_final$direction=="NW"]<-315
 
     FireListFile_correct_df_dur_5_final$fullName <- FireListFile_correct_df_dur_5$FireListFile_correct_df_dur_5} else{
       FireListFile_correct_df_dur_5_final<-NA
@@ -375,34 +292,15 @@ run_fconstmtt <- function(Folder,landscape,CrownFireMethod,
   FireListFile_correct_df_all_dur$land_cover_id_final <- gsub(".txt","",FireListFile_correct_df_all_dur$land_cover_id)
 
 
-  #merge(FireListFile_correct_df_all_dur, landscape_correct_df_final, by.x="land_cover_id_final",by.y="id",all=TRUE)
-
   FireListFile_correct_df_all_dur <- left_join(FireListFile_correct_df_all_dur, landscape_correct_df_final, by=c("land_cover_id_final"="id"))
 
-  #FireListFile_correct_df_all_dur_all <- expand.grid(fullName=FireListFile_correct_df_all_dur$fullName,LCPName=landscape_correct_df_final$LCPName)
-  #FireListFile_correct_df_all_dur_all$cluster_name <- FireListFile_correct_df_all_dur$cluster_name
-  #FireListFile_correct_df_all_dur_all$duration_name <- FireListFile_correct_df_all_dur$duration_name
 
-
-  #FireListFile_correct_df_all_dur_all
 
   FireListFile_correct_df_all_dur_all_all <- FireListFile_correct_df_all_dur %>% separate(fullName,
                                                                                           into=c("ignition", "cluster","cluster_name",
                                                                                                  "duration","duration_name",
                                                                                                  "direction","land","cover","land_cover_id"), sep="_")
   FireListFile_correct_df_all_dur_all_all$fullName <- FireListFile_correct_df_all_dur$fullName
-
-
-
-  # FireListFile_correct_df_all_dur_all_all$direction_val <- NA
-  # FireListFile_correct_df_all_dur_all_all$direction_val[FireListFile_correct_df_all_dur_all_all$direction=="N"]<-0
-  # FireListFile_correct_df_all_dur_all_all$direction_val[FireListFile_correct_df_all_dur_all_all$direction=="NE"]<-45
-  # FireListFile_correct_df_all_dur_all_all$direction_val[FireListFile_correct_df_all_dur_all_all$direction=="E"]<-90
-  # FireListFile_correct_df_all_dur_all_all$direction_val[FireListFile_correct_df_all_dur_all_all$direction=="SE"]<-135
-  # FireListFile_correct_df_all_dur_all_all$direction_val[FireListFile_correct_df_all_dur_all_all$direction=="S"]<-180
-  # FireListFile_correct_df_all_dur_all_all$direction_val[FireListFile_correct_df_all_dur_all_all$direction=="SW"]<-225
-  # FireListFile_correct_df_all_dur_all_all$direction_val[FireListFile_correct_df_all_dur_all_all$direction=="W"]<-270
-  # FireListFile_correct_df_all_dur_all_all$direction_val[FireListFile_correct_df_all_dur_all_all$direction=="NW"]<-315
 
 
 
@@ -445,18 +343,6 @@ run_fconstmtt <- function(Folder,landscape,CrownFireMethod,
 
   FireListFile_correct_df_all_dur_all_all<-left_join(FireListFile_correct_df_all_dur_all_all,FireListFile_correct_df_all_dur_all_all_not_fin, by=c("cluster_name"="cluster"))
 
-  #FireListFile_correct_df_all_dur_all_all <- left_join(FireListFile_correct_df_all_dur_all_all, FmsFolder_correct_df_final, by=c("cluster_name"="id"))
-
-
-  #for duration 1
-
-  # n_durations1 <- length(Duration.1_correct)
-  # n_durations2 <- length(Duration.2_correct)
-  # n_durations3 <- length(Duration.3_correct)
-  # n_durations4 <- length(Duration.4_correct)
-  # n_durations5 <- length(Duration.5_correct)
-  #
-
 
 
 
@@ -474,61 +360,23 @@ run_fconstmtt <- function(Folder,landscape,CrownFireMethod,
   FireListFile_correct_df_all_dur_all_all_dur5_use <- do.call("rbind", replicate(n_durations5, FireListFile_correct_df_all_dur_all_all_dur5, simplify = FALSE))
 
 
-  # rep_dur1 <- nrow(FireListFile_correct_df_all_dur_all_all_dur1_use)/nrow(FireListFile_correct_df_all_dur_all_all_dur1)
-  # rep(FireListFile_correct_df_all_dur_all_all_dur1_use,)
-  #
-
   FireListFile_correct_df_all_dur_all_all_use <- rbind(FireListFile_correct_df_all_dur_all_all_dur1_use,
                                                        FireListFile_correct_df_all_dur_all_all_dur2_use,
                                                        FireListFile_correct_df_all_dur_all_all_dur3_use,
                                                        FireListFile_correct_df_all_dur_all_all_dur4_use,
                                                        FireListFile_correct_df_all_dur_all_all_dur5_use)
 
-  # Duration.1_correct<- as.data.frame(Duration.1_correct)
-  # Duration.2_correct<- as.data.frame(Duration.2_correct)
-  # Duration.3_correct<- as.data.frame(Duration.3_correct)
-  # Duration.4_correct<- as.data.frame(Duration.4_correct)
-  # Duration.5_correct<- as.data.frame(Duration.5_correct)
-  #
-  # Duration.1_correct$rep<-1:nrow(Duration.1_correct)
-  # Duration.2_correct$rep<-1:nrow(Duration.2_correct)
-  # Duration.3_correct$rep<-1:nrow(Duration.3_correct)
-  # Duration.4_correct$rep<-1:nrow(Duration.4_correct)
-  # Duration.5_correct$rep<-1:nrow(Duration.5_correct)
-  #
-  #
-  # colnames(Duration.1_correct)<-c("dur","rep")
-  # colnames(Duration.2_correct)<-c("dur","rep")
-  # colnames(Duration.3_correct)<-c("dur","rep")
-  # colnames(Duration.4_correct)<-c("dur","rep")
-  # colnames(Duration.5_correct)<-c("dur","rep")
-  #
+
   all_durations_test <- c(Duration.1_correct,Duration.2_correct,Duration.3_correct,Duration.4_correct,Duration.5_correct)
-  #
-
-  #rep_dur1 <- nrow(FireListFile_correct_df_all_dur_all_all_use)/nrow(FireListFile_correct_df_all_dur_all_all)
-  #rep_dur1 <- length(Duration.1_correct)
-  #rep_dur1_use_df <- rep(1:rep_dur1,each=nrow(FireListFile_correct_df_all_dur_all_all_dur1))
-
-  #FireListFile_correct_df_all_dur_all_all_dur1_use$rep <- rep_dur1_use_df
-
-
-
 
 
   dur_loop <- subset(FireListFile_correct_df_all_dur_all_all, duration_name == 1)
-  #dur_loop2 <- subset(FireListFile_correct_df_all_dur_all_all, duration_name == 2)
-  #dur_loop3 <- subset(FireListFile_correct_df_all_dur_all_all, duration_name == 3)
-  #dur_loop4 <- subset(FireListFile_correct_df_all_dur_all_all, duration_name == 4)
-  #dur_loop5 <- subset(FireListFile_correct_df_all_dur_all_all, duration_name == 5)
+
 
   if(!is.na(Duration.1_correct[1])){
-    #for(i in 1:nrow(my_grid)) {
+
     for(j in 1:length(Duration.1_correct)) {
       Duration_correct<- Duration.1_correct[j]
-      #combo_n <- my_grid[i,"combo"]
-
-
 
 
       for(k in 1:nrow(dur_loop)){
@@ -552,7 +400,6 @@ run_fconstmtt <- function(Folder,landscape,CrownFireMethod,
         landscape_name <- as.character(landscape_correct_loop)
         landscape_name <- gsub(".tif|.lcp", "", landscape_name)
 
-        #OutputsName_correct <- paste0(OutputsFolder_correct,"\\durval_",Duration_correct,"_cluster_",cluster_id,"_durclass_",1,"_",WindDirection_correct,"_land_cover_",land_cover_id,"_",landscape_name,sep="")
         OutputsName_correct <- paste0(OutputsFolder_correct,"\\durval_",Duration_correct,"_cluster_",cluster_id,"_durclass_",1,"_",WindDirection_correct,"_land_cover_",land_cover_id,sep="")
 
         Folder_right <- gsub("/", paste("\\\\"), Folder)
@@ -575,8 +422,6 @@ run_fconstmtt <- function(Folder,landscape,CrownFireMethod,
         result <- cbind(V1,V2)
 
         nameInp<-paste0("durval_",Duration_correct,"_cluster_",cluster_id,"_land_cover_",land_cover_id,"_durclass_",1,"_",WindDirection_correct,".input",sep="")
-        #nameInp<-paste0("durval_",Duration_correct,"_cluster_",cluster_id,"_",landscape_name,"_land_cover_",land_cover_id,"_durclass_",1,"_",WindDirection_correct,".input",sep="")
-        #nameInp<-paste0("combo_",combo_n,"_cluster_",cluster_id,"_duration_",j,"_",WindDirection_correct,"_land_cover_",land_cover_id,"_",landscape_name,".input",sep="")
         write.table(result, nameInp,
                     sep=" ",row.names = FALSE,col.names=FALSE, quote=FALSE)
 
@@ -586,7 +431,7 @@ run_fconstmtt <- function(Folder,landscape,CrownFireMethod,
         } else {
           all.nameInp <- rbind (all.nameInp,nameInp)}
 
-      }}#}
+      }}
   }else{
     all.nameInp1 <- data.frame()
   }
@@ -598,10 +443,10 @@ run_fconstmtt <- function(Folder,landscape,CrownFireMethod,
   dur_loop2 <- subset(FireListFile_correct_df_all_dur_all_all, duration_name == 2)
 
   if(!is.na(Duration.2_correct[1])){
-    #for(i in 1:nrow(my_grid)) {
+
     for(j in 1:length(Duration.2_correct)) {
       Duration_correct<- Duration.2_correct[j]
-      #combo_n <- my_grid[i,"combo"]
+
 
 
 
@@ -626,7 +471,6 @@ run_fconstmtt <- function(Folder,landscape,CrownFireMethod,
 
         landscape_name <- as.character(landscape_correct_loop)
 
-        #OutputsName_correct <- paste0(OutputsFolder_correct,"\\durval_",Duration_correct,"_cluster_",cluster_id,"_durclass_",2,"_",WindDirection_correct,"_land_cover_",land_cover_id,"_",landscape_name,sep="")
         OutputsName_correct <- paste0(OutputsFolder_correct,"\\durval_",Duration_correct,"_cluster_",cluster_id,"_durclass_",2,"_",WindDirection_correct,"_land_cover_",land_cover_id,sep="")
 
 
@@ -650,8 +494,6 @@ run_fconstmtt <- function(Folder,landscape,CrownFireMethod,
         result <- cbind(V1,V2)
 
         nameInp<-paste0("durval_",Duration_correct,"_cluster_",cluster_id,"_land_cover_",land_cover_id,"_durclass_",2,"_",WindDirection_correct,".input",sep="")
-        #nameInp<-paste0("durval_",Duration_correct,"_cluster_",cluster_id,"_",landscape_name,"_land_cover_",land_cover_id,"_durclass_",2,"_",WindDirection_correct,".input",sep="")
-        #nameInp<-paste0("combo_",combo_n,"_cluster_",cluster_id,"_duration_",j,"_",WindDirection_correct,"_land_cover_",land_cover_id,"_",landscape_name,".input",sep="")
         write.table(result, nameInp,
                     sep=" ",row.names = FALSE,col.names=FALSE, quote=FALSE)
 
@@ -661,7 +503,7 @@ run_fconstmtt <- function(Folder,landscape,CrownFireMethod,
         } else {
           all.nameInp2 <- rbind (all.nameInp2,nameInp)}
 
-      }}#}
+      }}
   }else{
     all.nameInp2 <- data.frame()
   }
@@ -672,12 +514,8 @@ run_fconstmtt <- function(Folder,landscape,CrownFireMethod,
   dur_loop3 <- subset(FireListFile_correct_df_all_dur_all_all, duration_name == 3)
 
   if(!is.na(Duration.3_correct[1])){
-    #for(i in 1:nrow(my_grid)) {
     for(j in 1:length(Duration.3_correct)) {
       Duration_correct<- Duration.3_correct[j]
-      #combo_n <- my_grid[i,"combo"]
-
-
 
 
       for(k in 1:nrow(dur_loop3)){
@@ -700,7 +538,6 @@ run_fconstmtt <- function(Folder,landscape,CrownFireMethod,
 
         landscape_name <- as.character(landscape_correct_loop)
 
-        #OutputsName_correct <- paste0(OutputsFolder_correct,"\\durval_",Duration_correct,"_cluster_",cluster_id,"_durclass_",3,"_",WindDirection_correct,"_land_cover_",land_cover_id,"_",landscape_name,sep="")
         OutputsName_correct <- paste0(OutputsFolder_correct,"\\durval_",Duration_correct,"_cluster_",cluster_id,"_durclass_",3,"_",WindDirection_correct,"_land_cover_",land_cover_id,sep="")
 
         Folder_right <- gsub("/", paste("\\\\"), Folder)
@@ -723,8 +560,6 @@ run_fconstmtt <- function(Folder,landscape,CrownFireMethod,
         result <- cbind(V1,V2)
 
         nameInp<-paste0("durval_",Duration_correct,"_cluster_",cluster_id,"_land_cover_",land_cover_id,"_durclass_",3,"_",WindDirection_correct,".input",sep="")
-        #nameInp<-paste0("durval_",Duration_correct,"_cluster_",cluster_id,"_",landscape_name,"_land_cover_",land_cover_id,"_durclass_",3,"_",WindDirection_correct,".input",sep="")
-        #nameInp<-paste0("combo_",combo_n,"_cluster_",cluster_id,"_duration_",j,"_",WindDirection_correct,"_land_cover_",land_cover_id,"_",landscape_name,".input",sep="")
         write.table(result, nameInp,
                     sep=" ",row.names = FALSE,col.names=FALSE, quote=FALSE)
 
@@ -734,7 +569,7 @@ run_fconstmtt <- function(Folder,landscape,CrownFireMethod,
         } else {
           all.nameInp3 <- rbind (all.nameInp3,nameInp)}
 
-      }}#}
+      }}
   }else{
     all.nameInp3 <- data.frame()
   }
@@ -746,11 +581,8 @@ run_fconstmtt <- function(Folder,landscape,CrownFireMethod,
   dur_loop4 <- subset(FireListFile_correct_df_all_dur_all_all, duration_name == 4)
 
   if(!is.na(Duration.4_correct[1])){
-    #for(i in 1:nrow(my_grid)) {
     for(j in 1:length(Duration.4_correct)) {
       Duration_correct<- Duration.4_correct[j]
-      #combo_n <- my_grid[i,"combo"]
-
 
 
 
@@ -774,7 +606,6 @@ run_fconstmtt <- function(Folder,landscape,CrownFireMethod,
 
         landscape_name <- as.character(landscape_correct_loop)
 
-        #OutputsName_correct <- paste0(OutputsFolder_correct,"\\durval_",Duration_correct,"_cluster_",cluster_id,"_durclass_",4,"_",WindDirection_correct,"_land_cover_",land_cover_id,"_",landscape_name,sep="")
         OutputsName_correct <- paste0(OutputsFolder_correct,"\\durval_",Duration_correct,"_cluster_",cluster_id,"_durclass_",4,"_",WindDirection_correct,"_land_cover_",land_cover_id,sep="")
 
         Folder_right <- gsub("/", paste("\\\\"), Folder)
@@ -797,8 +628,6 @@ run_fconstmtt <- function(Folder,landscape,CrownFireMethod,
         result <- cbind(V1,V2)
 
         nameInp<-paste0("durval_",Duration_correct,"_cluster_",cluster_id,"_land_cover_",land_cover_id,"_durclass_",4,"_",WindDirection_correct,".input",sep="")
-        #nameInp<-paste0("durval_",Duration_correct,"_cluster_",cluster_id,"_",landscape_name,"_land_cover_",land_cover_id,"_durclass_",4,"_",WindDirection_correct,".input",sep="")
-        #nameInp<-paste0("combo_",combo_n,"_cluster_",cluster_id,"_duration_",j,"_",WindDirection_correct,"_land_cover_",land_cover_id,"_",landscape_name,".input",sep="")
         write.table(result, nameInp,
                     sep=" ",row.names = FALSE,col.names=FALSE, quote=FALSE)
 
@@ -808,7 +637,7 @@ run_fconstmtt <- function(Folder,landscape,CrownFireMethod,
         } else {
           all.nameInp4 <- rbind (all.nameInp4,nameInp)}
 
-      }}#}
+      }}
   }else{
     all.nameInp4 <- data.frame()
   }
@@ -825,12 +654,8 @@ run_fconstmtt <- function(Folder,landscape,CrownFireMethod,
 
   if(!is.na(Duration.5_correct[1])){
 
-    #for(i in 1:nrow(my_grid)) {
     for(j in 1:length(Duration.5_correct)) {
       Duration_correct<- Duration.5_correct[j]
-      #combo_n <- my_grid[i,"combo"]
-
-
 
 
       for(k in 1:nrow(dur_loop5)){
@@ -853,7 +678,6 @@ run_fconstmtt <- function(Folder,landscape,CrownFireMethod,
 
         landscape_name <- as.character(landscape_correct_loop)
 
-        #OutputsName_correct <- paste0(OutputsFolder_correct,"\\durval_",Duration_correct,"_cluster_",cluster_id,"_durclass_",5,"_",WindDirection_correct,"_land_cover_",land_cover_id,"_",landscape_name,sep="")
         OutputsName_correct <- paste0(OutputsFolder_correct,"\\durval_",Duration_correct,"_cluster_",cluster_id,"_durclass_",5,"_",WindDirection_correct,"_land_cover_",land_cover_id,sep="")
 
         Folder_right <- gsub("/", paste("\\\\"), Folder)
@@ -876,8 +700,6 @@ run_fconstmtt <- function(Folder,landscape,CrownFireMethod,
         result <- cbind(V1,V2)
 
         nameInp<-paste0("durval_",Duration_correct,"_cluster_",cluster_id,"_land_cover_",land_cover_id,"_durclass_",5,"_",WindDirection_correct,".input",sep="")
-        #nameInp<-paste0("durval_",Duration_correct,"_cluster_",cluster_id,"_",landscape_name,"_land_cover_",land_cover_id,"_durclass_",5,"_",WindDirection_correct,".input",sep="")
-        #nameInp<-paste0("combo_",combo_n,"_cluster_",cluster_id,"_duration_",j,"_",WindDirection_correct,"_land_cover_",land_cover_id,"_",landscape_name,".input",sep="")
         write.table(result, nameInp,
                     sep=" ",row.names = FALSE,col.names=FALSE, quote=FALSE)
 
@@ -887,7 +709,7 @@ run_fconstmtt <- function(Folder,landscape,CrownFireMethod,
         } else {
           all.nameInp5 <- rbind (all.nameInp5,nameInp)}
 
-      }}#}
+      }}
   }else{
     all.nameInp5 <- data.frame()
   }

@@ -27,8 +27,6 @@ check_fire_size <- function (Folder.Outputs,
   datalist <- list()
   results <- data.frame(matrix(NA, nrow = 1000000, ncol = 2))
 
-  #library(tidyr)
-
   for (i in 1:length(my_files)) {
     t <- read.table(my_files[i], sep=",", header = T)
     name_file <- as.data.frame(my_files[i])
@@ -42,13 +40,8 @@ check_fire_size <- function (Folder.Outputs,
     combo_id6 <- paste("durclass_",combo_id5,sep="")
 
     combo_use <- paste(combo_id_temp,combo_id6,sep="_")
-    #combo_id <- as.numeric(sub("combo_", "", combo_id_temp))
 
-    # sub(".*combo_", "", name_file$name)
-    #
-    # sub(".*combo_","", name_file$name)
-    #
-    size <- as.data.frame(t [,4])/2.471 #para passar para hectares
+    size <- as.data.frame(t [,4])/2.471 #from acres to hectares
     row_numbers <- nrow(t)
     datalist[i] <- (nrow(t))
     NonNAindex <- which(is.na(results))
@@ -58,25 +51,10 @@ check_fire_size <- function (Folder.Outputs,
     results[start_row:end_row,2]<- combo_use
   }
 
-  #head (results)
-  #tail (results)
 
   colnames(results) <- c("size","combo")
 
   results<- results[complete.cases(results), ]
-  #head (results)
-  #tail (results)
-
-
-  #datalist_final_giant_id<-as.data.frame(do.call(rbind,datalist))
-  #sum(datalist_final_giant_id)
-
-  #create a frequency table
-
-  #sum(results$size)
-
-
-
 
 
   results_inter <- data.frame(matrix(NA, nrow = 1000, ncol = 5))
@@ -207,8 +185,6 @@ check_fire_size <- function (Folder.Outputs,
 
       results_i_final<- results_i_final[complete.cases(results_i_final), ]
       results_i_final$x_axis <- 1:nrow(results_i_final)
-
-      #assign(paste("results_", i, sep=""),results_i_final)
 
       row_numbers <- nrow(results_i_final)
       NonNAindex <- which(is.na(results_inter))
@@ -346,8 +322,6 @@ check_fire_size <- function (Folder.Outputs,
       results_i_final<- results_i_final[complete.cases(results_i_final), ]
       results_i_final$x_axis <- 1:nrow(results_i_final)
 
-      #assign(paste("results_", i, sep=""),results_i_final)
-
       row_numbers <- nrow(results_i_final)
       NonNAindex <- which(is.na(results_inter))
       start_row <- min(NonNAindex)
@@ -360,28 +334,7 @@ check_fire_size <- function (Folder.Outputs,
 
   results_inter<- results_inter[complete.cases(results_inter), ]
 
-  #
-  # results_all <- rbind (results_1,results_2,results_3,results_4,results_5,
-  #                       results_6,results_7,results_8,results_9)
-  #
-  #
-  # results_all$interval <- c("< 100","100-200","200-300","300-400",
-  #                           "400-500","500-600","600-700","700-800",
-  #                           "800-900","900-1000","1000-5000","5000-10000",
-  #                           "> 10000")
-  #
-  #
-  # head(results_all)
-  # tail (results_all)
-  #
-  #
-  #
 
-
-  #library(dplyr)
-  #library(tidyr)
-  #results_inter <- results_inter[1:208,]
-  #results_inter_expanded<-unique(expand.grid(split(results_inter$X4, results_inter$X3)))
 
   unique_all <- paste(results_inter$X4,results_inter$X3,sep="_")
   unique_all <- as.data.frame(unique(unique_all))
@@ -401,9 +354,8 @@ check_fire_size <- function (Folder.Outputs,
 
 
 
-  #setwd("G:/projectos/phd/auto_calibration_package")
   my_observed_fire <- read.csv (hist.fire.sizes)
-  #colnames(my_observed_fire)<-"size"
+
 
 
   if (is.na(intervals[1])) {
@@ -523,13 +475,7 @@ check_fire_size <- function (Folder.Outputs,
                                                   int_last))
   }
 
-  # my_observed_fire_final$interval <- c("< 100","100-200","200-300","300-400",
-  #                                      "400-500","500-600","600-700","700-800",
-  #                                      "800-900","900-1000","1000-5000","5000-10000",
-  #                                      "> 10000")
-  #
 
-  #sum(my_observed_fire_final$V1)
   my_observed_fire_final$combo <- 0
 
   my_observed_fire_final<- my_observed_fire_final[complete.cases(my_observed_fire_final), ]
@@ -562,11 +508,6 @@ check_fire_size <- function (Folder.Outputs,
 
   results_rmse <- matrix(ncol=8, nrow= nrow(results_inter_expanded))
   nrow(results_rmse)
-
-  #library(Metrics)
-  #library (tidyr)
-  #library(forestmangr)
-  #library(wesanderson)
 
   for (t in 1:nrow(results_inter_expanded)){
     results_inter_expanded_loop <- as.data.frame(results_inter_expanded[t,])
@@ -677,32 +618,15 @@ check_fire_size <- function (Folder.Outputs,
 
 
     test_obs$V1_sim <- test_i$V1
-    #test_obs <- test_obs[,c("V1","V1_sim")]
 
     rmse_i <- sqrt(mean((test_obs$V1 - test_obs$V1_sim)^2))
 
-    #rmse_i <- rmse_per(test_obs,y="V1",yhat="V1_sim")
     cor_i <- cor(test_obs$V1,test_obs$V1_sim)
 
-
-    #sqrt(mean((test_obs$V1 - test_obs$V1_sim)^2))
-
-    # test_obs_no_under_100 <- test_obs[-1,]
-    # test_obs_no_under_100$V1_sim <- test_obs_no_under_100$V1_sim*1/sum(test_obs_no_under_100$V1_sim)
-    #
-    #
-    # rmse_i <- ks.test(test_obs_no_under_100$V1, test_obs_no_under_100$x_axis)
-    #
-
-
-
-    #put in table
 
     NAindex <- which(is.na(results))
     firstNA <- min(NAindex)
 
-
-    #length(seal_coords)
 
     start_results <- firstNA
     end_results <- firstNA+nrow(all_dur_loop_bind)-1
@@ -710,12 +634,10 @@ check_fire_size <- function (Folder.Outputs,
 
 
 
-    #put in table rmse
+
     NAindex_rmse <- which(is.na(results_rmse))
     firstNA_rmse <- min(NAindex_rmse)
 
-
-    #length(seal_coords)
 
     start_results_rmse <- firstNA_rmse
     end_results_rmse <- firstNA_rmse
@@ -759,15 +681,6 @@ check_fire_size <- function (Folder.Outputs,
   all_for_plot_diff <- my_observed_fire_final$V1-results$V1
 
 
-  #Gini(abs(all_for_plot_diff), unbiased=FALSE)
-
-  #cor(my_observed_fire_final$V1,results$V1,method = "spearman")
-
-  #res <- cor.test(my_observed_fire_final$V1,results$V1,
-  #                method = "pearson")
-
-
-
 
   nbreaks <- nrow(dur1_combo1_use)
 
@@ -809,59 +722,27 @@ check_fire_size <- function (Folder.Outputs,
 
 
         temp_plot <- ggplot(plot_partially_use, aes(x=x_axis, y=V1, group=factor(combo),fill = factor(combo))) +
-          #geom_histogram(aes(y=..density..), position = "dodge", alpha = 0.5)+
 
-          geom_bar(data = filter(plot_partially_use, combo  == 0), aes(fill="Historical"),col="black",stat = "identity") + #,fill="grey80"
 
-          #scale_colour_manual(" ", "black")+
+          geom_bar(data = filter(plot_partially_use, combo  == 0), aes(fill="Historical"),col="black",stat = "identity") +
+
+
           scale_fill_manual("",values=c("Historical" = "grey80"))+
 
           geom_line(data = filter(plot_partially_use, combo  != 0), aes(col = factor(combo) , group = factor(combo)),size=1)+
           scale_color_brewer(palette="Spectral",
                              name="Combination")+
-          #scale_fill_manual(values=wes_palette(n=max(all_for_plot$combo), name="GrandBudapest1"))+
-          #geom_col(width = .7, position = "dodge", alpha=0.5)+
-          #geom_errorbar(aes(ymin = P25_Frel, ymax = P75_Frel), position=position_dodge(width=0.7))+
-
-          #scale_x_continuous(breaks= 1:nbreaks,
-          #                   labels= paste(1:nbreaks))+
-
 
           scale_x_continuous(breaks= c(1:nrow(historical_use_always)),
                              labels= c(automatic_lables_final,paste(">",intervals[length(intervals)],sep="")))+
 
-          # labels= c(paste("0-",inter.1,sep=""),
-          #           paste(inter.1,"-",inter.2,sep=""),
-          #           paste(inter.2,"-",inter.3,sep=""),
-          #           paste(inter.3,"-",inter.4,sep=""),
-          #           paste(inter.4,"-",inter.5,sep=""),
-          #           paste(inter.5,"-",inter.6,sep=""),
-          #           paste(inter.6,"-",inter.7,sep=""),
-          #           paste(inter.7,"-",inter.8,sep=""),
-          #           paste(inter.8,"-",inter.9,sep=""),
-          #           paste(inter.9,"-",inter.10,sep=""),
-        #           paste(inter.10,"-",inter.11,sep=""),
-        #           paste(inter.11,"-",inter.12,sep=""),
-        #           paste(inter.12,"-",inter.13,sep=""),
-        #           paste(inter.13,"-",inter.14,sep=""),
-        #           paste(inter.14,"-",inter.15,sep=""),
-        #           paste(inter.15,"-",last.int,sep=""),
-        #           paste(">",last.int,sep="")))+
+
         theme_tq()+
           theme(panel.grid.minor = element_blank(), axis.title=element_text(size=12),
                 panel.grid.major.x = element_blank(), axis.text = element_text(size = 8),
-                plot.title = element_text(size = 16))+#, legend.position = "none")+
-          ylab("Relative frequency") + xlab("Fire size class (ha)") #+
-        #ggtitle(paste("Combo", i))+
-        #scale_colour_discrete(name="Scenario",
-        #                    breaks=c(0,1:total_combos),
-        #                    labels=c("Observed", rep("Simulated",total_combos)))
-        #scale_x_continuous(breaks=c(0,100,200,300,400,500,600,700,800,900,1000,2000,3000,4000))
-        #geom_histogram(position="identity")+
-        #scale_y_continuous(labels = scales::percent)
-        #geom_line()
+                plot.title = element_text(size = 16))+
+          ylab("Relative frequency") + xlab("Fire size class (ha)")
 
-        #dev.off()
         ggsave(temp_plot, file=paste(Folder.Outputs,"/fire size distribution part",b,".png",sep=""), width = 17, height = 10, units = "cm")
 
 
@@ -896,68 +777,32 @@ check_fire_size <- function (Folder.Outputs,
 
 
         temp_plot <- ggplot(plot_partially_use, aes(x=x_axis, y=V1, group=factor(combo),fill = factor(combo))) +
-          #geom_histogram(aes(y=..density..), position = "dodge", alpha = 0.5)+
 
-          geom_bar(data = filter(plot_partially_use, combo  == 0), aes(fill="Historical"),col="black",stat = "identity") + #,fill="grey80"
 
-          #scale_colour_manual(" ", "black")+
+          geom_bar(data = filter(plot_partially_use, combo  == 0), aes(fill="Historical"),col="black",stat = "identity") +
+
           scale_fill_manual("",values=c("Historical" = "grey80"))+
 
           geom_line(data = filter(plot_partially_use, combo  != 0), aes(col = factor(combo) , group = factor(combo)),size=1)+
           scale_color_brewer(palette="Spectral",
                              name="Combination")+
-          #scale_fill_manual(values=wes_palette(n=max(all_for_plot$combo), name="GrandBudapest1"))+
-          #geom_col(width = .7, position = "dodge", alpha=0.5)+
-          #geom_errorbar(aes(ymin = P25_Frel, ymax = P75_Frel), position=position_dodge(width=0.7))+
-
-          #scale_x_continuous(breaks= 1:nbreaks,
-          #                   labels= paste(1:nbreaks))+
-
 
           scale_x_continuous(breaks= c(1:nrow(historical_use_always)),
                              labels= c(automatic_lables_final,paste(">",intervals[length(intervals)],sep="")))+
 
-          # labels= c(paste("0-",inter.1,sep=""),
-          #           paste(inter.1,"-",inter.2,sep=""),
-          #           paste(inter.2,"-",inter.3,sep=""),
-          #           paste(inter.3,"-",inter.4,sep=""),
-          #           paste(inter.4,"-",inter.5,sep=""),
-          #           paste(inter.5,"-",inter.6,sep=""),
-          #           paste(inter.6,"-",inter.7,sep=""),
-          #           paste(inter.7,"-",inter.8,sep=""),
-          #           paste(inter.8,"-",inter.9,sep=""),
-          #           paste(inter.9,"-",inter.10,sep=""),
-        #           paste(inter.10,"-",inter.11,sep=""),
-        #           paste(inter.11,"-",inter.12,sep=""),
-        #           paste(inter.12,"-",inter.13,sep=""),
-        #           paste(inter.13,"-",inter.14,sep=""),
-        #           paste(inter.14,"-",inter.15,sep=""),
-        #           paste(inter.15,"-",last.int,sep=""),
-        #           paste(">",last.int,sep="")))+
+
         theme_tq()+
           theme(panel.grid.minor = element_blank(), axis.title=element_text(size=12),
                 panel.grid.major.x = element_blank(), axis.text = element_text(size = 8),
-                plot.title = element_text(size = 16))+#, legend.position = "none")+
-          ylab("Relative frequency") + xlab("Fire size class (ha)") #+
-        #ggtitle(paste("Combo", i))+
-        #scale_colour_discrete(name="Scenario",
-        #                    breaks=c(0,1:total_combos),
-        #                    labels=c("Observed", rep("Simulated",total_combos)))
-        #scale_x_continuous(breaks=c(0,100,200,300,400,500,600,700,800,900,1000,2000,3000,4000))
-        #geom_histogram(position="identity")+
-        #scale_y_continuous(labels = scales::percent)
-        #geom_line()
+                plot.title = element_text(size = 16))+
+          ylab("Relative frequency") + xlab("Fire size class (ha)")
 
-        #dev.off()
         ggsave(temp_plot, file=paste(Folder.Outputs,"/fire size distribution part",b,".png",sep=""), width = 17, height = 10, units = "cm")
 
 
 
       }
     }}
-
-
-
 
 
 
@@ -992,67 +837,32 @@ check_fire_size <- function (Folder.Outputs,
           automatic_lables_final <- c(automatic_lables_final,automatic_lables)
         }
 
-        #automatic_lables_final <- c(first_interval,automatic_lables_final)
-
         automatic_lables_final <- gsub("-","-\n",automatic_lables_final)
 
 
 
 
         temp_plot <- ggplot(plot_partially_use, aes(x=x_axis, y=V1, group=factor(combo),fill = factor(combo))) +
-          #geom_histogram(aes(y=..density..), position = "dodge", alpha = 0.5)+
 
-          geom_bar(data = filter(plot_partially_use, combo  == 0), aes(fill="Historical"),col="black",stat = "identity") + #,fill="grey80"
 
-          #scale_colour_manual(" ", "black")+
+          geom_bar(data = filter(plot_partially_use, combo  == 0), aes(fill="Historical"),col="black",stat = "identity") +
+
           scale_fill_manual("",values=c("Historical" = "grey80"))+
 
           geom_line(data = filter(plot_partially_use, combo  != 0), aes(col = factor(combo) , group = factor(combo)),size=1)+
           scale_color_brewer(palette="Spectral",
                              name="Combination")+
-          #scale_fill_manual(values=wes_palette(n=max(all_for_plot$combo), name="GrandBudapest1"))+
-          #geom_col(width = .7, position = "dodge", alpha=0.5)+
-          #geom_errorbar(aes(ymin = P25_Frel, ymax = P75_Frel), position=position_dodge(width=0.7))+
-
-          #scale_x_continuous(breaks= 1:nbreaks,
-          #                   labels= paste(1:nbreaks))+
-
 
           scale_x_continuous(breaks= c(1:nrow(historical_use_always)),
                              labels= c(automatic_lables_final,paste(">",intervals[length(intervals)],sep="")))+
 
-          # labels= c(paste("0-",inter.1,sep=""),
-          #           paste(inter.1,"-",inter.2,sep=""),
-          #           paste(inter.2,"-",inter.3,sep=""),
-          #           paste(inter.3,"-",inter.4,sep=""),
-          #           paste(inter.4,"-",inter.5,sep=""),
-          #           paste(inter.5,"-",inter.6,sep=""),
-          #           paste(inter.6,"-",inter.7,sep=""),
-          #           paste(inter.7,"-",inter.8,sep=""),
-          #           paste(inter.8,"-",inter.9,sep=""),
-          #           paste(inter.9,"-",inter.10,sep=""),
-        #           paste(inter.10,"-",inter.11,sep=""),
-        #           paste(inter.11,"-",inter.12,sep=""),
-        #           paste(inter.12,"-",inter.13,sep=""),
-        #           paste(inter.13,"-",inter.14,sep=""),
-        #           paste(inter.14,"-",inter.15,sep=""),
-        #           paste(inter.15,"-",last.int,sep=""),
-        #           paste(">",last.int,sep="")))+
+
         theme_tq()+
           theme(panel.grid.minor = element_blank(), axis.title=element_text(size=12),
                 panel.grid.major.x = element_blank(), axis.text = element_text(size = 8),
-                plot.title = element_text(size = 16))+#, legend.position = "none")+
-          ylab("Relative frequency") + xlab("Fire size class (ha)") #+
-        #ggtitle(paste("Combo", i))+
-        #scale_colour_discrete(name="Scenario",
-        #                    breaks=c(0,1:total_combos),
-        #                    labels=c("Observed", rep("Simulated",total_combos)))
-        #scale_x_continuous(breaks=c(0,100,200,300,400,500,600,700,800,900,1000,2000,3000,4000))
-        #geom_histogram(position="identity")+
-        #scale_y_continuous(labels = scales::percent)
-        #geom_line()
+                plot.title = element_text(size = 16))+
+          ylab("Relative frequency") + xlab("Fire size class (ha)")
 
-        #dev.off()
         ggsave(temp_plot, file=paste(Folder.Outputs,"/fire size distribution part",b,".png",sep=""), width = 17, height = 10, units = "cm")
 
 
@@ -1081,65 +891,30 @@ check_fire_size <- function (Folder.Outputs,
           automatic_lables_final <- c(automatic_lables_final,automatic_lables)
         }
 
-        #automatic_lables_final <- c(first_interval,automatic_lables_final)
-
         automatic_lables_final <- gsub("-","-\n",automatic_lables_final)
 
 
         temp_plot <- ggplot(plot_partially_use, aes(x=x_axis, y=V1, group=factor(combo),fill = factor(combo))) +
-          #geom_histogram(aes(y=..density..), position = "dodge", alpha = 0.5)+
 
-          geom_bar(data = filter(plot_partially_use, combo  == 0), aes(fill="Historical"),col="black",stat = "identity") + #,fill="grey80"
 
-          #scale_colour_manual(" ", "black")+
+          geom_bar(data = filter(plot_partially_use, combo  == 0), aes(fill="Historical"),col="black",stat = "identity") +
+
           scale_fill_manual("",values=c("Historical" = "grey80"))+
 
           geom_line(data = filter(plot_partially_use, combo  != 0), aes(col = factor(combo) , group = factor(combo)),size=1)+
           scale_color_brewer(palette="Spectral",
                              name="Combination")+
-          #scale_fill_manual(values=wes_palette(n=max(all_for_plot$combo), name="GrandBudapest1"))+
-          #geom_col(width = .7, position = "dodge", alpha=0.5)+
-          #geom_errorbar(aes(ymin = P25_Frel, ymax = P75_Frel), position=position_dodge(width=0.7))+
-
-          #scale_x_continuous(breaks= 1:nbreaks,
-          #                   labels= paste(1:nbreaks))+
-
 
           scale_x_continuous(breaks= c(1:nrow(historical_use_always)),
                              labels= c(automatic_lables_final,paste(">",intervals[length(intervals)],sep="")))+
 
-          # labels= c(paste("0-",inter.1,sep=""),
-          #           paste(inter.1,"-",inter.2,sep=""),
-          #           paste(inter.2,"-",inter.3,sep=""),
-          #           paste(inter.3,"-",inter.4,sep=""),
-          #           paste(inter.4,"-",inter.5,sep=""),
-          #           paste(inter.5,"-",inter.6,sep=""),
-          #           paste(inter.6,"-",inter.7,sep=""),
-          #           paste(inter.7,"-",inter.8,sep=""),
-          #           paste(inter.8,"-",inter.9,sep=""),
-          #           paste(inter.9,"-",inter.10,sep=""),
-        #           paste(inter.10,"-",inter.11,sep=""),
-        #           paste(inter.11,"-",inter.12,sep=""),
-        #           paste(inter.12,"-",inter.13,sep=""),
-        #           paste(inter.13,"-",inter.14,sep=""),
-        #           paste(inter.14,"-",inter.15,sep=""),
-        #           paste(inter.15,"-",last.int,sep=""),
-        #           paste(">",last.int,sep="")))+
+
         theme_tq()+
           theme(panel.grid.minor = element_blank(), axis.title=element_text(size=12),
                 panel.grid.major.x = element_blank(), axis.text = element_text(size = 8),
-                plot.title = element_text(size = 16))+#, legend.position = "none")+
-          ylab("Relative frequency") + xlab("Fire size class (ha)") #+
-        #ggtitle(paste("Combo", i))+
-        #scale_colour_discrete(name="Scenario",
-        #                    breaks=c(0,1:total_combos),
-        #                    labels=c("Observed", rep("Simulated",total_combos)))
-        #scale_x_continuous(breaks=c(0,100,200,300,400,500,600,700,800,900,1000,2000,3000,4000))
-        #geom_histogram(position="identity")+
-        #scale_y_continuous(labels = scales::percent)
-        #geom_line()
+                plot.title = element_text(size = 16))+
+          ylab("Relative frequency") + xlab("Fire size class (ha)")
 
-        #dev.off()
         ggsave(temp_plot, file=paste(Folder.Outputs,"/fire size distribution part",b,".png",sep=""), width = 17, height = 10, units = "cm")
 
 

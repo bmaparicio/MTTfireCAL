@@ -50,7 +50,6 @@ Gen_ign <- function(ign.raster, IgnitionData, fuelmap, nIgnitions, unburnable, L
 
   if(allow.zero==FALSE){
 
-    #quantile(val[val > 0],0.01,na.rm=T)
 
     minimum_val <- min(val[val > 0],na.rm=T)
     val[val < quantile(val[val > 0],0.01,na.rm=T)] <- quantile(val[val > 0],0.05,na.rm=T)
@@ -103,7 +102,7 @@ Gen_ign <- function(ign.raster, IgnitionData, fuelmap, nIgnitions, unburnable, L
   Pattern1_list<-do.call("list",mget(Pattern1))
 
 
-  #put all rasters with same extent
+
   for (i in 1:length(Pattern1_list)) {
     Pattern1_list[[i]] <- resample(Pattern1_list[[i]], x, "bilinear")
   }
@@ -145,17 +144,11 @@ Gen_ign <- function(ign.raster, IgnitionData, fuelmap, nIgnitions, unburnable, L
 
 
 
-  # sites <- sample(cellNum, size=n, replace=replace, prob=probs)
-  # xy <- raster::xyFromCell(x, sites)
-  #
-  # xy
 
   my_ignitions<-read.csv(IgnitionData)
 
   nDurations <- length(grep(pattern = '^duration', x = colnames(my_ignitions), value = T))
 
-  #library(dplyr)
-  #my_ignitions$nIgnitions <- my_ignitions$Freq*nIgnitions
 
   ndur <- length(grep(x = colnames(my_ignitions), pattern = "^duration"))
 
@@ -167,8 +160,6 @@ Gen_ign <- function(ign.raster, IgnitionData, fuelmap, nIgnitions, unburnable, L
 
   original_size <- nrow(my_ignitions)
 
-  #n <- nrow(lands)
-  #my_ignitions<-do.call("rbind", replicate(n, my_ignitions, simplify = FALSE))
 
   results <- data.frame()
 
@@ -230,14 +221,12 @@ Gen_ign <- function(ign.raster, IgnitionData, fuelmap, nIgnitions, unburnable, L
         }
 
 
-        #my_ignitions$duration_1<-my_ignitions$duration_1*my_ignitions$weight
-      }}
+        }}
 
 
 
     if (nDurations >= 2){
       teste_duration_2 <- as.data.frame(Gen_ign_helper(rst1_mod, my_ignitions[i,"nign_dur_2"], replace = TRUE, prob = TRUE))
-      #teste_duration_2 <- as.data.frame(Gen_ign_helper(rst1_mod, my_ignitions[i,"duration_2"], replace = TRUE, prob = TRUE))
       direction_id <- my_ignitions[i,"WD_use"]
       cluster_id <- my_ignitions[i,"cluster"]
       land_cover_id <- my_ignitions[i,"land_cover"]
@@ -260,7 +249,7 @@ Gen_ign <- function(ign.raster, IgnitionData, fuelmap, nIgnitions, unburnable, L
           crs(teste_duration_2) <- crs(rst1_mod)
           raster::shapefile(teste_duration_2, paste("ignitions_","cluster_",cluster_id,"_duration_2_",direction_id,"_land_cover_",land_cover_id,".shp", sep=""))
         }
-        #my_ignitions$duration_2<-my_ignitions$duration_2*my_ignitions$weight
+
 
       }}
 
@@ -269,7 +258,6 @@ Gen_ign <- function(ign.raster, IgnitionData, fuelmap, nIgnitions, unburnable, L
 
     if (nDurations >= 3){
       teste_duration_3 <- as.data.frame(Gen_ign_helper(rst1_mod, my_ignitions[i,"nign_dur_3"], replace = TRUE, prob = TRUE))
-      #teste_duration_3 <- as.data.frame(Gen_ign_helper(rst1_mod, my_ignitions[i,"duration_3"], replace = TRUE, prob = TRUE))
       direction_id <- my_ignitions[i,"WD_use"]
       cluster_id <- my_ignitions[i,"cluster"]
       land_cover_id <- my_ignitions[i,"land_cover"]
@@ -293,14 +281,13 @@ Gen_ign <- function(ign.raster, IgnitionData, fuelmap, nIgnitions, unburnable, L
           crs(teste_duration_3) <- crs(rst1_mod)
           raster::shapefile(teste_duration_3, paste("ignitions_","cluster_",cluster_id,"_duration_3_",direction_id,"_land_cover_",land_cover_id,".shp", sep=""))
         }
-        #my_ignitions$duration_3<-my_ignitions$duration_3*my_ignitions$weight
+
       }}
 
 
 
     if (nDurations >= 4){
       teste_duration_4 <- as.data.frame(Gen_ign_helper(rst1_mod, my_ignitions[i,"nign_dur_4"], replace = TRUE, prob = TRUE))
-      #teste_duration_4 <- as.data.frame(Gen_ign_helper(rst1_mod, my_ignitions[i,"nign_dur_4"], replace = TRUE, prob = TRUE))
       direction_id <- my_ignitions[i,"WD_use"]
       cluster_id <- my_ignitions[i,"cluster"]
       land_cover_id <- my_ignitions[i,"land_cover"]
@@ -323,7 +310,7 @@ Gen_ign <- function(ign.raster, IgnitionData, fuelmap, nIgnitions, unburnable, L
           crs(teste_duration_4) <- crs(rst1_mod)
           raster::shapefile(teste_duration_4, paste("ignitions_","cluster_",cluster_id,"_duration_4_",direction_id,"_land_cover_",land_cover_id,".shp", sep=""))
         }
-        #my_ignitions$duration_4<-my_ignitions$duration_4*my_ignitions$weight
+
 
       }}
 
@@ -331,7 +318,6 @@ Gen_ign <- function(ign.raster, IgnitionData, fuelmap, nIgnitions, unburnable, L
 
     if (nDurations >= 5){
       teste_duration_5 <- as.data.frame(Gen_ign_helper(rst1_mod, my_ignitions[i,"nign_dur_5"], replace = TRUE, prob = TRUE))
-      #teste_duration_5 <- as.data.frame(Gen_ign_helper(rst1_mod, my_ignitions[i,"duration_5"], replace = TRUE, prob = TRUE))
       direction_id <- my_ignitions[i,"WD_use"]
       cluster_id <- my_ignitions[i,"cluster"]
       land_cover_id <- my_ignitions[i,"land_cover"]
@@ -353,7 +339,6 @@ Gen_ign <- function(ign.raster, IgnitionData, fuelmap, nIgnitions, unburnable, L
           crs(teste_duration_5) <- crs(rst1_mod)
           raster::shapefile(teste_duration_5, paste("ignitions_","cluster_",cluster_id,"_duration_5_",direction_id,"_land_cover_",land_cover_id,".shp", sep=""))
         }
-        #my_ignitions$duration_5<-my_ignitions$duration_5*my_ignitions$weight
 
       }}
 

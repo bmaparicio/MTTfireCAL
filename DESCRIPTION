@@ -2,8 +2,8 @@ Package: MTTfireCAL
 Type: Package
 Title: Minimum Travel Time (MTT) fire spread semi-automatic calibrator
 Version: 1.0.0
-Author: Bruno Aparicio
-Maintainer: Bruno Aparicio <bruno.a.aparicio@gmail.com>
+Author: Bruno A. Aparicio <bruno.a.aparicio@gmail.com>, Akli Benali <aklibenali@gmail.com>, Ana C. L. Sá <anasa30@gmail.com>
+Maintainer: Bruno A. Aparicio <bruno.a.aparicio@gmail.com>
 Description: Minimum Travel Time (MTT) fire spread semi-automatic calibrator.
 License: What license is it under?
 Encoding: UTF-8

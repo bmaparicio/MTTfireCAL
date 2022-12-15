@@ -40,19 +40,10 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
   my_study_area_t_plot <- my_study_area_t
 
 
-  #intersect entre perimetros do fogo e a study-area. Tenho de os converter para st. ? mais r?pido
   my_study_area_t <- st_as_sf(my_study_area_t)
 
   my_fires$Area_ha <- as.numeric(my_fires$Area_ha)
 
-
-  # my_fires_to_contribute_big_fire <- my_fires
-  # my_fires_to_contribute_big_fire <- spTransform(my_fires, CRS("+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0"))
-  #
-  # my_fires_to_contribute_big_fire <- st_as_sf(my_fires_to_contribute_big_fire)
-
-
-  #my_fires <- subset(my_fires,Area_ha >=min.size)
 
   my_fires <- gBuffer(my_fires,width=0,byid=TRUE)
 
@@ -62,20 +53,6 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
   my_fires_t_inter <- st_as_sf(my_fires_t)
 
 
-
-
-
-  #plot pt map with study-area
-
-
-  # library(ggplot2)
-  # library(dplyr)
-  # library(ggspatial)
-  # library(tidyverse)
-  # library(rnaturalearth)
-  # library(rnaturalearthdata)
-
-  #world_st <- sf::st_as_sf(map_data('world'), coords = c("long", "lat"), crs = 4326)
 
   world_st <- ne_countries(scale = "medium", returnclass = "sf")
 
@@ -105,16 +82,8 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
     suppressWarnings(geom_map(data = WorldData, map = WorldData,
                               aes(x = long, y = lat, group = group, map_id=region),
                               fill = "antiquewhite", colour = "black", size=0.5))+
-    #geom_sf(fill= "antiquewhite")+
     suppressMessages(geom_polygon(data = my_study_area_t_plot, aes(long, lat),
                                   colour = alpha("darkred", 1/2), size = 0.7, fill=NA,linetype = "dashed"))+
-
-    #coord_sf(xlim = c(-10, -6), ylim = c(37, 43))+
-
-
-    #annotation_north_arrow(location = "bl", which_north = "true", pad_x = unit(0.1, "cm"),
-    #                       pad_y = unit(0.5, "cm"), style = north_arrow_fancy_orienteering)+
-    #annotation_scale(location = "bl", width_hint = 0.5, plot_unit="km") +
     theme(panel.grid.major = element_line(color = "gray", linetype = "dashed", size = 0.5),
           panel.background = element_rect(fill = "aliceblue"))+
     xlab("Longitude") + ylab("Latitude") + ggtitle("Study area location")
@@ -124,44 +93,24 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
   plot(pt_study)
   dev.off()
 
-  #my_fires_t_inter <- subset(my_fires_t_inter,Area_ha >=min.size)
-
 
   if (min.overlap==0){
-    #print("doing intersect")
     fire_inside_study_area <- suppressMessages(suppressWarnings(st_intersects(my_study_area_t,my_fires_t_inter)))
 
     fire_inside_study_area_df <- as.data.frame(fire_inside_study_area)
-    #nrow(fire_inside_study_area_df)
-
-
-    #eu sei que a col.id no ficheiro das intersec??es ? a linha do ficheiro dos perimetros do fogo que meti.
-    #? s? ir buscar os ids reais dos fogos
 
     my_fires_t_inter_intersected <- my_fires_t_inter[fire_inside_study_area_df$col.id,]
 
 
-    #my_fires_t_inter_intersected$ID
-
     my_fires_t_inter_intersected$Area_ha <- as.numeric(my_fires_t_inter_intersected$Area_ha)
-
-    #ir buscar as frequ?ncias dos tamanhos dos fogos
-
-
 
 
 
   } else {
-    #print("doing intersect")
-
     my_study_area_t <- suppressMessages(suppressWarnings(st_buffer(my_study_area_t,0)))
-
-    #my_fires_t_inter <- st_make_valid(my_fires_t_inter)
 
     fire_inside_study_area_by_area <- suppressMessages(suppressWarnings(st_intersection(my_study_area_t,my_fires_t_inter)))
     fire_inside_study_area_by_area$area_correct <- as.numeric(round(st_area(fire_inside_study_area_by_area)/10000))
-
-    #subset(fire_inside_study_area_by_area,ID==24322)
 
     fire_inside_study_area_by_area$Area_ha<-as.numeric(fire_inside_study_area_by_area$Area_ha)
 
@@ -208,9 +157,6 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
   table_for_graph <- as.data.frame(rbind(percentage_below_100,percentage_above_100_below_500,percentage_above_500_below_1000,
                                          percentage_above_1000_below_5000,percentage_above_5000))
 
-  # table_for_graph$V2 <- c("Fires below 100 ha","Fires between 100 and 500 ha",
-  #                         "Fires between 500 and 1000 ha","Fires between 1000 and 5000 ha",
-  #                         "Fires above 5000 ha")
 
 
   table_for_graph$V2 <- c("< 100","100 - 500",
@@ -221,22 +167,13 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
 
   table_for_graph$ymax = cumsum(table_for_graph$V1)
 
-  # Compute the bottom of each rectangle
   table_for_graph$ymin = c(0, head(table_for_graph$ymax, n=-1))
 
 
   table_for_graph$labelPosition <- (table_for_graph$ymax + table_for_graph$ymin) / 2
 
-  # Compute a good label
-  table_for_graph$label <- paste0(round (table_for_graph$V1,0), "%") #paste0(table_for_graph$V2, "\n value: ", table_for_graph$V1)
+  table_for_graph$label <- paste0(round (table_for_graph$V1,0), "%")
 
-
-  #library(ggplot2)
-
-  # cols <- c("Fires below 100 ha" = "#FFFFCC", "Fires between 100 and 500 ha" = "#FFEDA0",
-  #           "Fires between 500 and 1000 ha" = "#FED976", "Fires between 1000 and 5000 ha" = "#FD8D3C",
-  #           "Fires above 5000 ha" = "#FC4E2A")
-  #
 
   cols <- c("< 100" = "#FFFFCC", "100 - 500" = "#FFEDA0",
             "500 - 1000" = "#FED976", "1000 - 5000" = "#FD8D3C",
@@ -246,16 +183,15 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
   plot_burned_area_per_class <- ggplot(table_for_graph, aes(ymax=ymax, ymin=ymin, xmax=4, xmin=3, fill=V2)) +
     geom_rect() +
     geom_label(x=3.5, aes(y=labelPosition, label=label), size=5, show.legend = FALSE,label.size = NA,fill = NA) +
-    #scale_fill_brewer(palette="Spectral") +
     scale_fill_manual (values=cols)+
     coord_polar(theta="y") +
     xlim(c(2, 4)) +
     theme_void() +
     theme(legend.position = "bottom")+
     theme(legend.text=element_text(size=10),
-          legend.title=element_text(size=12))+#,plot.title = element_text(size=14))+
-    guides(fill=guide_legend(nrow=1,byrow=TRUE,title="Fire size (ha)"))#+
-  #ggtitle("Contribution of burned area in each fire\nsize class to the overall burned area")
+          legend.title=element_text(size=12))+
+    guides(fill=guide_legend(nrow=1,byrow=TRUE,title="Fire size (ha)"))
+
 
 
   plot_burned_area_per_class_use <- tempfile(fileext = ".png")
@@ -265,9 +201,6 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
 
 
 
-  #library(RColorBrewer)
-
-  # Put all the color values (in hex format) from Dark2 into a vector
   myPal <- brewer.pal(8,"YlOrRd")
 
 
@@ -275,9 +208,8 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
 
 
   freqs_my_fires_t_inter_intersected <- as.data.frame(my_fires_t_inter_intersected_all_fires %>%
-                                                        mutate (class=cut(Area_ha,c(-1,99.9,250,500,750,1000,2500,5000,10000,10000000))) %>% # #c(-1,fire.size.intervals,10000000)))
+                                                        mutate (class=cut(Area_ha,c(-1,99.9,250,500,750,1000,2500,5000,10000,10000000))) %>%
                                                         group_by(class) %>%
-                                                        #group_by(table(cut(results_n_ig_80_final$`area (ha)`, c(0,100,200,300,400,500,600,700,800,900,1000,2000,3000,4000)))) %>%
                                                         summarize(Total_areas = n())%>%
                                                         complete(class))
 
@@ -285,14 +217,9 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
 
   freqs_my_fires_t_inter_intersected$freq_rel <- freqs_my_fires_t_inter_intersected$Total_areas/sum(freqs_my_fires_t_inter_intersected$Total_areas)
 
-  #my_fires_t_inter_2020_intersected_df <-as.data.frame(my_fires_t_inter_2020_intersected)
-
-  #library(tidyquant)
-
   freqs_my_fires_t_inter_intersected$class <- c(1:9)
 
   size_dist <- ggplot(freqs_my_fires_t_inter_intersected, aes(x=class, y=freq_rel)) +
-    #geom_histogram(aes(y=..density..), position = "dodge", alpha = 0.5)+
     geom_col(width = .7, position = "dodge", alpha=0.5)+
     scale_x_continuous(breaks= c(1, 2, 3,4,5,6,7,8,9),
                        labels= c("0-\n100","100-\n250","250-\n500","500-\n750","750-\n1000","1000-\n2500",
@@ -303,10 +230,8 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
           panel.grid.major.x = element_blank(), axis.text = element_text(size = 8),
           plot.title = element_text(size = 16), legend.position = "none",
           axis.ticks.length=unit(.15, "cm"),
-          #axis.text.x = element_text(colour="black"), axis.text.y = element_text(colour="black"))+
           axis.ticks = element_line(colour = "black"))+
-    ylab("Relative frequency") + xlab("Area (ha)")  #ylab("Relative Frequency")
-
+    ylab("Relative frequency") + xlab("Area (ha)")
 
   size_dist_use <- tempfile(fileext = ".png")
   png(filename = size_dist_use, width = 6, height = 4, units = 'in', res = 300)
@@ -315,17 +240,10 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
 
 
 
-
-
-
-  #agora vamos fazer a figura de ?rea ardida por ano. Aqui vou manipular os dados um pouco, s? porque s? tenho ainda 2020
-
   BA_year_my_fires_t_inter_intersected <- as.data.frame(my_fires_t_inter_intersected_all_fires %>%
-                                                          #mutate (class=cut(Area_ha,c(0,100,250,500,750,1000,2500,5000,10000,100000))) %>%
-                                                          group_by(Year) %>%
-                                                          #group_by(table(cut(results_n_ig_80_final$`area (ha)`, c(0,100,200,300,400,500,600,700,800,900,1000,2000,3000,4000)))) %>%
-                                                          summarize(Total_areas = sum(Area_ha)))#%>%
-  #complete(class))
+                                                         group_by(Year) %>%
+                                                         summarize(Total_areas = sum(Area_ha)))
+
 
 
 
@@ -358,20 +276,15 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
 
 
   BA_dist <- ggplot(my_BA_per_year_fin, aes(x=Year, y=Burned_area)) +
-    #geom_histogram(aes(y=..density..), position = "dodge", alpha = 0.5)+
     geom_col(width = .7, position = "dodge", alpha=0.5)+
-    #scale_x_continuous(breaks= c(1, 2, 3,4,5,6,7,8,9),
-    #                   labels= c("0-1","1-2.5","2.5-5","5-7.5","7.5-10","10-25",
-    #                             "25-50","50-100",">100"))+
     theme_tq()+
     theme(panel.grid.minor = element_blank(), axis.title=element_text(size=14),
           panel.grid.major.x = element_blank(), axis.text = element_text(size = 10),
           plot.title = element_text(size = 16), legend.position = "none",
           axis.ticks.length=unit(.15, "cm"),
-          #axis.text.x = element_text(colour="black"), axis.text.y = element_text(colour="black"))+
           axis.ticks = element_line(colour = "black"))+
 
-    ylab("Burned area (ha)") + xlab("Year") + #ylab("Relative Frequency")
+    ylab("Burned area (ha)") + xlab("Year") +
     scale_y_continuous(
       sec.axis = sec_axis(~ . / max(my_BA_per_year_fin$Burned_area)*100, name = "Cumulative burned area (%)")
     )+
@@ -392,18 +305,15 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
 
 
 
-  ###spike detection####
+  #spike detection
 
 
-
-  #ir buscar as frequencias dos tamanhos dos fogos
 
   my_fires_t_inter_intersected$Area_ha <- as.numeric(my_fires_t_inter_intersected$Area_ha)
 
   freqs_my_fires_t_inter_intersected_spikes <- as.data.frame(my_fires_t_inter_intersected %>%
-                                                               mutate (class=cut(Area_ha,unique(c(min.size,fire.size.intervals,10000000)))) %>%#c(100,200,300,400,500,600,700,800,900,1000,2500,5000,10000,1000000)))
+                                                               mutate (class=cut(Area_ha,unique(c(min.size,fire.size.intervals,10000000)))) %>%
                                                                group_by(class) %>%
-                                                               #group_by(table(cut(results_n_ig_80_final$`area (ha)`, c(0,100,200,300,400,500,600,700,800,900,1000,2000,3000,4000)))) %>%
                                                                summarize(Total_areas = n())%>%
                                                                complete(class))
 
@@ -412,18 +322,9 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
 
   freqs_my_fires_t_inter_intersected_spikes[is.na(freqs_my_fires_t_inter_intersected_spikes)] <- 0
 
-  #delete the NA in the last row - it represents the fires with sizes from 0 to 100 ha
-  #freqs_my_fires_t_inter_intersected_spikes <- freqs_my_fires_t_inter_intersected_spikes[1:(nrow(freqs_my_fires_t_inter_intersected_spikes)-1),]
-
-
   freqs_my_fires_t_inter_intersected_spikes$freq_rel <- freqs_my_fires_t_inter_intersected_spikes$Total_areas/sum(freqs_my_fires_t_inter_intersected_spikes$Total_areas)
 
 
-
-
-  #my_fires_t_inter_2020_intersected_df <-as.data.frame(my_fires_t_inter_2020_intersected)
-
-  #library(tidyquant)
 
   freqs_my_fires_t_inter_intersected_spikes$class <- c(1:nrow(freqs_my_fires_t_inter_intersected_spikes))
 
@@ -437,20 +338,17 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
   }
 
   size_dist_spike <- ggplot(freqs_my_fires_t_inter_intersected_spikes, aes(x=class, y=freq_rel)) +
-    #geom_histogram(aes(y=..density..), position = "dodge", alpha = 0.5)+
     geom_col(width = .7, position = "dodge", alpha=0.5)+
     scale_x_continuous(breaks= c(1:nrow(freqs_my_fires_t_inter_intersected_spikes)),
                        labels= c(automatic_lables_final,paste(">",fire.size.intervals[length(fire.size.intervals)],sep="")))+
-    #labels= c("100-200","200-300","300-400","400-500","500-600","600-700","700-800","800-900","900-1000",
-    #          "1000-2500","2500-5000","5000-10000",">10000"))+
     theme_tq()+
     theme(panel.grid.minor = element_blank(), axis.title=element_text(size=14),
           panel.grid.major.x = element_blank(), axis.text = element_text(size = 7),
           plot.title = element_text(size = 16), legend.position = "none",
           axis.ticks.length=unit(.15, "cm"),
-          #axis.text.x = element_text(colour="black"), axis.text.y = element_text(colour="black"))+
+
           axis.ticks = element_line(colour = "black"))+
-    ylab("Relative frequency") + xlab("Area (ha)")  #ylab("Relative Frequency")
+    ylab("Relative frequency") + xlab("Area (ha)")
 
 
   size_dist_spike_use <- tempfile(fileext = ".png")
@@ -475,8 +373,8 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
   spike_detected_use <- spike_detected$maxtab
 
 
-  freqs_my_fires_t_inter_intersected_spikes$lable_report <- c(automatic_lables_final,paste(">",fire.size.intervals[length(fire.size.intervals)],sep=""))#c("100","300","400","500","600","700","800","900","1000",
-  #  "2500","5000","10000",">10000")
+  freqs_my_fires_t_inter_intersected_spikes$lable_report <- c(automatic_lables_final,paste(">",fire.size.intervals[length(fire.size.intervals)],sep=""))
+
 
 
   freqs_my_fires_t_inter_intersected_spikes$lable_report
@@ -497,8 +395,6 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
     manual.dur_df_position <- freqs_my_fires_t_inter_intersected_spikes[freqs_my_fires_t_inter_intersected_spikes$first_val %in% manual.dur_df$pos, ]
 
     manual.dur_df$pos <- manual.dur_df_position$class
-
-    #freqs_my_fires_t_inter_intersected_spikes[manual.dur_df_position$class,]
 
 
     for (w in 1:length(manual.dur)){
@@ -522,7 +418,6 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
 
 
   size_dist_spike <- ggplot(freqs_my_fires_t_inter_intersected_spikes, aes(x=class, y=freq_rel)) +
-    #geom_histogram(aes(y=..density..), position = "dodge", alpha = 0.5)+
     geom_col(width = .7, position = "dodge", alpha=0.5)+
     scale_x_continuous(breaks= c(1:nrow(freqs_my_fires_t_inter_intersected_spikes)),
                        labels= c(automatic_lables_final,paste(">",fire.size.intervals[length(fire.size.intervals)],sep="")))+
@@ -532,9 +427,8 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
           panel.grid.major.x = element_blank(), axis.text = element_text(size = 8),
           plot.title = element_text(size = 16), legend.position = "none",
           axis.ticks.length=unit(.15, "cm"),
-          #axis.text.x = element_text(colour="black"), axis.text.y = element_text(colour="black"))+
           axis.ticks = element_line(colour = "black"))+
-    ylab("Relative frequency") + xlab("Area (ha)")  #ylab("Relative Frequency")
+    ylab("Relative frequency") + xlab("Area (ha)")
 
 
   size_dist_spike_use <- tempfile(fileext = ".png")
@@ -554,26 +448,14 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
 
   freqs_my_fires_t_inter_intersected_spikes_id$dur_ID <- na.locf(freqs_my_fires_t_inter_intersected_spikes_id$dur_ID)
 
-  #library(tidyverse)
-
   frequency_per_duration_class <- as.data.frame(freqs_my_fires_t_inter_intersected_spikes_id %>%
-                                                  #arrange(id) %>%
                                                   group_by(dur_ID) %>%
                                                   summarise(sum = sum(freq_rel)))
 
 
 
+  #get meteo
 
-
-
-
-
-
-  ###meteo####
-  #agora vamos ? nossa base de dados da meteorologia nos dias de inc?ndio e dentro dos perimetros de fogo.
-
-
-  #head(result_hours_final)
   class(result_hours_final)
 
   result_hours_final_df<-as.data.frame(result_hours_final)
@@ -582,39 +464,27 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
   dated_fires <- st_read(my.dated.fires)
 
 
-  dated_fires <- st_transform(dated_fires, crs="EPSG:4326")#crs("+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0"))
+  dated_fires <- st_transform(dated_fires, crs="EPSG:4326")
 
   dated_fires <- subset(dated_fires,Data_ini != "NaN" & Data_end != "NaN")
 
-  #dated_fires_join <- suppressMessages(st_join(dated_fires, my_fires_t_inter_intersected,join = st_intersects))
-
 
   if (min.overlap==0){
-    #print("doing intersect")
+
     fire_inside_study_area_dated <- suppressMessages(suppressWarnings(st_intersects(my_study_area_t,dated_fires)))
 
     fire_inside_study_area_dated_df <- as.data.frame(fire_inside_study_area_dated)
-    #nrow(fire_inside_study_area_df)
 
 
-    #eu sei que a col.id no ficheiro das intersec??es ? a linha do ficheiro dos perimetros do fogo que meti.
-    #? s? ir buscar os ids reais dos fogos
 
     dated_fires_intersected <- dated_fires[fire_inside_study_area_dated_df$col.id,]
 
 
-    #my_fires_t_inter_intersected$ID
-
     dated_fires_intersected$Area_ha <- as.numeric(dated_fires_intersected$Area_ha)
-
-    #ir buscar as frequ?ncias dos tamanhos dos fogos
-
-
 
 
 
   } else {
-    #print("doing intersect")
 
     my_study_area_t <- suppressMessages(suppressWarnings(st_buffer(my_study_area_t,0)))
     dated_fires <- suppressMessages(suppressWarnings(st_buffer(dated_fires,0)))
@@ -623,21 +493,14 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
 
 
     fire_inside_study_area_dated_df <- as.data.frame(fire_inside_study_area_dated)
-    #nrow(fire_inside_study_area_df)
 
-
-    #eu sei que a col.id no ficheiro das intersec??es ? a linha do ficheiro dos perimetros do fogo que meti.
-    #? s? ir buscar os ids reais dos fogos
 
     dated_fires_intersected <- dated_fires[fire_inside_study_area_dated_df$col.id,]
 
 
-    #my_fires_t_inter <- st_make_valid(my_fires_t_inter)
-
     fire_inside_study_area_by_area_dated <- suppressMessages(suppressWarnings(st_intersection(my_study_area_t,dated_fires_intersected)))
     fire_inside_study_area_by_area_dated$area_correct <- as.numeric(round(st_area(fire_inside_study_area_by_area_dated)/10000))
 
-    #subset(fire_inside_study_area_by_area,ID==24322)
 
     fire_inside_study_area_by_area_dated$Area_ha<-as.numeric(fire_inside_study_area_by_area_dated$Area_ha)
 
@@ -661,13 +524,6 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
 
 
 
-
-  # nrow(dated_fires_join)
-  # nrow(dated_fires)
-  # nrow(my_fires_t_inter_intersected)
-  # tail(dated_fires_join)
-
-
   dated_fires_join_use <- subset(dated_fires_intersected,perc_inside>1)
   dated_fires_intersected_all_fires <- subset(dated_fires_intersected_all_fires,perc_inside>1)
 
@@ -678,14 +534,6 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
 
   nrow(meteo_fires_inside)
 
-  #this part we still need to define. Should we go for the FWI? Should we go for the average/median of active period (e.g. 12-18)?
-  #just to try out the script, I used the active period.
-
-
-  #subsetting based on the last characters - hours
-
-
-  #tirei isto porque j? n?o queremos s? os per?odos activos
 
   if(active.period=="all") {
     meteo_fires_inside <- meteo_fires_inside
@@ -729,7 +577,6 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
   }
 
   if(meteo.aggregation=="mean") {
-    #detach(package:plyr)
     meteo_fires_inside1 <- as.data.frame(meteo_fires_inside %>%
                                            group_by(concat_use) %>%
                                            summarise(temperature_use = mean(temperature),
@@ -740,39 +587,25 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
     meteo_fires_inside1 <- left_join(meteo_fires_inside1,meteo_fires_inside_use_for_aggregation, by="concat_use",all.x=TRUE)
     meteo_fires_inside1 <- meteo_fires_inside1[!duplicated(meteo_fires_inside1),]
 
-    #meteo_fires_inside1 <- left_join(meteo_fires_inside1,meteo_fires_inside, by="concat_use",all.x=TRUE)
-
     meteo_fires_inside <- meteo_fires_inside1
 
   }
 
-  # if(active.period=="user") {
-  #   meteo_fires_inside <- meteo_fires_inside[grep(paste(user.period,collapse="$|","$",sep=""), meteo_fires_inside$dia), ]
-  # }
-
-
 
   if(meteo.aggregation=="max.min") {
-    #detach(package:plyr)
-    meteo_fires_inside1 <- as.data.frame(meteo_fires_inside %>%
+  meteo_fires_inside1 <- as.data.frame(meteo_fires_inside %>%
                                            group_by(concat_use) %>%
                                            summarise(temperature_use = max(temperature),
                                                      HR_use = min(RH),
-                                                     WS_use = max(WS)))#,
-    #FWI_use= max (FWI)))
+                                                     WS_use = max(WS)))
 
     meteo_fires_inside1 <- left_join(meteo_fires_inside1,meteo_fires_inside_use_for_aggregation, by="concat_use",all.x=TRUE)
     meteo_fires_inside1 <- meteo_fires_inside1[!duplicated(meteo_fires_inside1),]
 
-    #meteo_fires_inside1 <- left_join(meteo_fires_inside1,meteo_fires_inside, by="concat_use",all.x=TRUE)
-
     meteo_fires_inside <- meteo_fires_inside1
 
   }
 
-
-
-  ###aqui estou a escolher s? o ponto com maior velocidade do vento dentro dos perimetros de fogo com mais do que um ponto de meteo####
 
 
   if (fire.aggregation=="WS"){
@@ -817,9 +650,9 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
                                                                                                  ifelse(meteo_fires_inside_wd_use$WD>337.5, "N",NA)))))))))
 
 
-  substrRight <- function(x, n){
-    substr(x, nchar(x)-n+1, nchar(x))
-  }
+  #substrRight <- function(x, n){
+  #  substr(x, nchar(x)-n+1, nchar(x))
+  #}
 
 
   meteo_fires_inside_summary_table <- meteo_fires_inside
@@ -837,89 +670,46 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
   meteo_fires_inside_summary_table$month <- month_x
   meteo_fires_inside_summary_table$day <- day_x
 
-  #meteo_fires_inside_summary_table$ID <- as.character(meteo_fires_inside_summary_table$ID)
+
 
   meteo_fires_inside_summary_table <- as.data.frame(left_join(meteo_fires_inside_summary_table,dated_fires_intersected,by="ID"))
 
 
-  table_to_summary <- meteo_fires_inside_summary_table[c("ID","year","month","day","temperature_use","HR_use","WS_use","Area_ha")] #"FWI_use"
+  table_to_summary <- meteo_fires_inside_summary_table[c("ID","year","month","day","temperature_use","HR_use","WS_use","Area_ha")]
 
   names(table_to_summary)[names(table_to_summary) == 'ID'] <- 'Fire ID'
   names(table_to_summary)[names(table_to_summary) == 'temperature_use'] <- 'T'
   names(table_to_summary)[names(table_to_summary) == 'HR_use'] <- 'RH'
   names(table_to_summary)[names(table_to_summary) == 'WS_use'] <- 'WS'
-  #names(table_to_summary)[names(table_to_summary) == 'FWI_use'] <- 'FWI'
   names(table_to_summary)[names(table_to_summary) == 'Area_ha'] <- 'Fire size'
 
 
+  #clustering
 
   if (create.clusters == TRUE){
 
-    ###clusters####
     newdata <- meteo_fires_inside[c("temperature_use", "HR_use","WS_use")]
     df<-scale(newdata)
 
-
-
-
-    #library (factoextra)
-    ###########PLOTS
-
-    #library(car)
-    #scatter3d(newdata$temperatura, newdata$WS, newdata$HR,phi = 0, bty = "g", pch = 20, cex = 1.0, ticktype = "detailed")
-    #text3D(meteo$Temp, meteo$WS, meteo$HR,  labels = rownames(meteo),add = TRUE, colkey = FALSE, cex = 0.5)
-
-    #meteo$Temp, meteo$WS, meteo$HR
-    #meteo$T, meteo$VentoInt, meteo$HR
-    ###########################################################################
-
-
-
-    ##### Model-Based Clustering
-
-    #library(mclust)
     mc <- Mclust(df)
 
 
-    # BIC_modbas <- tempfile(fileext = ".png")
-    # png(filename = BIC_modbas, width = 5, height = 6, units = 'in', res = 300)
-    # plot(mc,  what = c("BIC"))
-    # dev.off()
-    #
-    #
-    #
-    # class_modbas <- tempfile(fileext = ".png")
-    # png(filename = class_modbas, width = 5, height = 6, units = 'in', res = 300)
-    # plot(mc,  what = c("classification"))
-    # dev.off()
 
-
-
-
-
-
-
-    summary(mc, parameters=TRUE)# display the best model
-    mc$modelName  # Optimal selected model
-    optimal_mbc <- mc$G # Optimal number of cluster
-    head(mc$z, 326) # Probality to belong to a given cluster
+    summary(mc, parameters=TRUE)
+    mc$modelName
+    optimal_mbc <- mc$G
+    head(mc$z, 326)
 
     length(mc$classification)
 
     head(mc$classification,326)
 
-    # append cluster assignment
+
     meteoclust_MB  <- data.frame(newdata, mc$classification)
     names(meteoclust_MB)
     clMB<-mc$classification
 
-    #write.csv(meteoclust_MB, file = "meteo_clusters_MB_monchique.csv")
 
-
-    ############### Visualization (MODEL-BASED)
-
-    #library(factoextra)
-    # BIC values used for choosing the number of clusters
     BIC_fviz <- fviz_mclust(mc, "BIC", palette = "jco")
 
     BIC_modbas <- tempfile(fileext = ".png")
@@ -929,12 +719,10 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
 
 
     if (length(unique(mc$classification))>1){
-      # Classification: plot showing the clustering
-      class_fviz <- fviz_mclust(mc, "classification", geom = "point",
+        class_fviz <- fviz_mclust(mc, "classification", geom = "point",
                                 pointsize = 1.5, palette = "jco")
 
 
-      # Classification uncertainty
       uncer_fviz <- fviz_mclust(mc, "uncertainty", palette = "jco")
 
 
@@ -955,14 +743,8 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
 
 
 
-
-
-    ##########################################################################
-    ############Visual enhancement of clustering analysis (KMEANS)
-
-    #km.res1 <- eclust(df, FUNcluster="kmeans", k = 1, nstart = 50, graph = TRUE)
     km.res2 <- eclust(df, FUNcluster="kmeans", k = 2, nstart = 50, graph = FALSE)
-    km.res2$gap_stat #### estimativa do numero apropriado de clusters
+    km.res2$gap_stat
     km.res3 <- eclust(df, FUNcluster="kmeans", k =3, nstart = 50, graph = FALSE)
     km.res3$nbclust
     km.res4 <- eclust(df, FUNcluster="kmeans", k =4, nstart = 50, graph = FALSE)
@@ -976,13 +758,6 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
 
 
 
-
-
-
-    # bet_ss_tot_ss <- c(48.6,66.3,72.2,77.6)
-    # plot (bet_ss_tot_ss)
-
-    #fviz_silhouette(km.res1, label = FALSE, print.summary = TRUE)
     sil_kmean2 <- fviz_silhouette(km.res2, label = FALSE, print.summary = FALSE)+ theme(title = element_text(size = 8))
     sil_kmean3 <- fviz_silhouette(km.res3, label = FALSE, print.summary = FALSE)+ theme(title = element_text(size = 8))
     sil_kmean4 <- fviz_silhouette(km.res4, label = FALSE, print.summary = FALSE)+ theme(title = element_text(size = 8))
@@ -992,8 +767,6 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
     sil_kmean8 <- fviz_silhouette(km.res8, label = FALSE, print.summary = FALSE)+ theme(title = element_text(size = 8))
     sil_kmean9 <- fviz_silhouette(km.res9, label = FALSE, print.summary = FALSE)+ theme(title = element_text(size = 8))
     sil_kmean10 <- fviz_silhouette(km.res10, label = FALSE, print.summary = FALSE)+ theme(title = element_text(size = 8))
-
-    #library(ggpubr)
 
 
     kmeans_all <- ggarrange(sil_kmean2, sil_kmean3, sil_kmean4,sil_kmean5,
@@ -1012,22 +785,11 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
 
 
 
-
-    ######### append cluster assignment
-
     clKM3<-km.res3$cluster
 
     meteoclust_KM3  <- data.frame(newdata, clKM3)
     names(meteoclust_KM3)
 
-    #write.csv(meteoclust_KM3, file = "meteo_clusters_KM3.csv")
-
-
-
-
-    ########################################
-
-    # It's possible to compute the mean of each variables by clusters using the original data:
 
     meteo1<-aggregate(meteo_fires_inside, by=list(cluster=mc$classification), mean) ### model-based clusters
     meteo2<-aggregate(meteo_fires_inside, by=list(cluster=km.res2$cluster), mean)  ### kmeans 2 clusters
@@ -1040,16 +802,11 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
     meteo9<-aggregate(meteo_fires_inside, by=list(cluster=km.res9$cluster), mean) ### kmeans 9 clusters
     meteo10<-aggregate(meteo_fires_inside, by=list(cluster=km.res10$cluster), mean) ### kmeans 10 clusters
 
-    #meteo1$method <- "model-based clustering"
-    #meteo2$method <- "kmean with 2 clusters"
-    #meteo3$method <- "kmean with 3 clusters"
-    #meteo4$method <- "kmean with 4 clusters"
-    #meteo5$method <- "kmean with 5 clusters"
 
 
     mc_df <- as.data.frame(mc$classification)
 
-    #library(dplyr)
+
     mc_df_fin <- mc_df %>%
       group_by(mc$classification) %>%
       summarise(count=n())
@@ -1070,21 +827,7 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
 
 
     meteoclust_MB <- mc$classification
-    #write( newData, file="class.csv" )
 
-
-
-    ###get hierarchical clustering####
-
-
-    #########################Determining The Optimal Number Of Clusters
-    #library(factoextra)
-
-
-    # Elbow method
-    #fviz_nbclust(df, kmeans, method = "wss") +
-    #  geom_vline(xintercept = 4, linetype = 2)+
-    #  labs(subtitle = "Elbow method")
 
     # Silhouette method
     silhouette <- fviz_nbclust(df, kmeans, method = "silhouette")+
@@ -1095,17 +838,6 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
       labs(subtitle = "Total within sum of square method (Elbow method)")
 
     elbow$data
-
-
-    # Gap statistic
-    # nboot = 50 to keep the function speedy.
-    # recommended value: nboot= 500 for your analysis.
-    # Use verbose = FALSE to hide computing progression.
-
-    # set.seed(123)
-    #
-    # gap <- fviz_nbclust(df, kmeans, nstart = 25,  method = "gap_stat",
-    #                     nboot = 50)+labs(subtitle = "Gap statistic method")
 
 
 
@@ -1121,166 +853,9 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
     plot(elbow)
     dev.off()
 
-    # gap_use <- tempfile(fileext = ".png")
-    # png(filename = gap_use, width = 6, height = 4, units = 'in', res = 300)
-    # plot(gap)
-    # dev.off()
 
 
 
-
-
-
-
-
-
-
-    #
-    #
-    #
-    # clusters <- hclust(dist(df))
-    # plot(clusters,labels=FALSE)
-    #
-    #
-    #
-    #
-    #
-    # abline(h=3)
-    # abline(h=4)
-    #
-    #
-    # clusterCut3 <- cutree(clusters, 3)
-    # clusterCut3f<-aggregate(meteo_fires_inside, by=list(cluster=clusterCut3), mean)
-    #
-    #
-    #
-    #
-    # clusters <- hclust(dist(df), method = "average")
-    # plot(clusters, labels=FALSE)
-    # abline(h=3)
-    # abline(h=4)
-    #
-    #
-    #
-    # ggplot(meteo_fires_inside, aes(temperatura, HR, WS)) +
-    #   geom_point(alpha = 0.4, size = 3.5) + geom_point(col = clusterCut3) +
-    #   scale_color_manual(values = c('black', 'red', 'green'))
-    #
-    #
-    #
-    #
-    #
-    #
-    #
-    # res.dist <- dist(df)
-    #
-    # res.hc <- hclust(d = res.dist, method = "ward.D2")
-    #
-    # fviz_dend(res.hc, cex = 0.5)
-    #
-    # # Compute cophentic distance
-    # res.coph <- cophenetic(res.hc)
-    #
-    # # Correlation between cophenetic distance and
-    # # the original distance
-    # cor(res.dist, res.coph)
-    #
-    #
-    # grp <- cutree(res.hc, k = 3)
-    # head(grp, n = 3)
-    #
-    #
-    # hclust.res2 <- eclust(df, FUNcluster="hclust",hc_method="ward.D2", k = 2)
-    # hierar_2 <- fviz_dend(hclust.res2,#cex=0.5,
-    #                       color_labels_by_k = FALSE, rect = TRUE) # dendrogam
-    #
-    #
-    # hclust.res3 <- eclust(df, FUNcluster="hclust",hc_method="ward.D2", k = 3)
-    # hierar_3 <- fviz_dend(hclust.res3,#cex=0.5,
-    #           color_labels_by_k = FALSE, rect = TRUE) # dendrogam
-    #
-    #
-    # # fviz_dend(hclust.res, rect = TRUE,
-    # #           k_colors ="black",#rect_border = 1:3,
-    # #           rect_lty = 2) # dendrogam
-    #
-    #
-    # hclust.res4 <- eclust(df, FUNcluster="hclust",hc_method="ward.D2", k = 4)
-    # hierar_4 <-fviz_dend(hclust.res4,#cex=0.5,
-    #           color_labels_by_k = FALSE, rect = TRUE) # dendrogam
-    #
-    #
-    # hclust.res5 <- eclust(df, FUNcluster="hclust",hc_method="ward.D2", k = 5)
-    # hierar_5 <-fviz_dend(hclust.res5,#cex=0.5,
-    #           color_labels_by_k = FALSE, rect = TRUE) # dendrogam
-    #
-    #
-    #
-    #
-    # cluster2_hierar<-aggregate(meteo_fires_inside, by=list(cluster=hclust.res2$cluster), mean)
-    # cluster3_hierar<-aggregate(meteo_fires_inside, by=list(cluster=hclust.res3$cluster), mean)
-    # cluster4_hierar<-aggregate(meteo_fires_inside, by=list(cluster=hclust.res4$cluster), mean)
-    # cluster5_hierar<-aggregate(meteo_fires_inside, by=list(cluster=hclust.res5$cluster), mean)
-    #
-    #
-    #
-    #
-    # hierar_2_use <- tempfile(fileext = ".png")
-    # png(filename = hierar_2_use, width = 6, height = 4, units = 'in', res = 300)
-    # plot(hierar_2)
-    # dev.off()
-    #
-    #
-    # hierar_3_use <- tempfile(fileext = ".png")
-    # png(filename = hierar_3_use, width = 6, height = 4, units = 'in', res = 300)
-    # plot(hierar_3)
-    # dev.off()
-    #
-    # hierar_4_use <- tempfile(fileext = ".png")
-    # png(filename = hierar_4_use, width = 6, height = 4, units = 'in', res = 300)
-    # plot(hierar_4)
-    # dev.off()
-    #
-    #
-    # hierar_5_use <- tempfile(fileext = ".png")
-    # png(filename = hierar_5_use, width = 6, height = 4, units = 'in', res = 300)
-    # plot(hierar_5)
-    # dev.off()
-    #
-    #
-    #
-    # # setwd("C:/Users/Vanja/OneDrive - Universidade de Lisboa/phd/Monchique_case_study/5_reports")
-    # #
-    # # png(file="hierarchical_cluster_monchique_eng_9_as_21.png",
-    # #     width=900, height=450)
-    # #
-    # # fviz_dend(hclust.res,#cex=0.5,
-    # #           color_labels_by_k = TRUE, rect = TRUE,
-    # #           k_colors = c("#1B9E77", "#D95F02", "#7570B3"),
-    # #           main="Cluster dendogram",
-    # #           xlab="Days' ID",
-    # #           ylab="")+
-    # #   theme(plot.title = element_text(hjust = 0.5),
-    # #         axis.text.y = element_blank(),
-    # #         axis.ticks.y = element_blank())
-    # # #theme_void()# dendrogam
-    # #
-    # # dev.off()
-    # #
-    # # fviz_silhouette(hclust.res) # silhouette plot
-    # # #plot (hclust.res, hang=1)
-    # #
-    # # meteo_hier_k3<-aggregate(meteo, by=list(cluster=hclust.res$cluster), mean)
-    # # meteo_hier_k3_all<-cbind (meteo, hclust.res$cluster)
-    # #
-    # # write.csv(meteo_hier_k3_all, file = "meteo_clusters_Hierarchical_k3_9_as_21.csv")
-    #
-
-
-
-
-
-    #############
     meteo_fires_inside$cluster_id_MB <- meteoclust_MB
     meteo_fires_inside$cluster_id_km_2 <- km.res2$cluster
     meteo_fires_inside$cluster_id_km_3 <- km.res3$cluster
@@ -1321,10 +896,6 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
       meteo_fires_inside_wd_use$cluster_id_km_9 <- rep(km.res9$cluster,each=n_reps)
       meteo_fires_inside_wd_use$cluster_id_km_10 <- rep(km.res10$cluster,each=n_reps)}
 
-    # meteo_fires_inside$cluster_id_hclust_2 <- hclust.res2$cluster
-    # meteo_fires_inside$cluster_id_hclust_3 <- hclust.res3$cluster
-    # meteo_fires_inside$cluster_id_hclust_4 <- hclust.res4$cluster
-    # meteo_fires_inside$cluster_id_hclust_5 <- hclust.res5$cluster
 
 
     freqs_wd_MB <- as.data.frame(meteo_fires_inside_wd_use%>%
@@ -1571,26 +1142,6 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
 
 
 
-
-    #
-    # freqs_wd_hclust_2 <- as.data.frame(meteo_fires_inside%>%
-    #                                      group_by(cluster_id_hclust_2,WD_use,WD_letter)%>%
-    #                                      summarise(Freq=n()/nrow(meteo_fires_inside)))
-    #
-    # freqs_wd_hclust_3 <- as.data.frame(meteo_fires_inside%>%
-    #                                      group_by(cluster_id_hclust_3,WD_use,WD_letter)%>%
-    #                                      summarise(Freq=n()/nrow(meteo_fires_inside)))
-    #
-    # freqs_wd_hclust_4 <- as.data.frame(meteo_fires_inside%>%
-    #                                      group_by(cluster_id_hclust_4,WD_use,WD_letter)%>%
-    #                                      summarise(Freq=n()/nrow(meteo_fires_inside)))
-    #
-    # freqs_wd_hclust_5 <- as.data.frame(meteo_fires_inside%>%
-    #                                      group_by(cluster_id_hclust_5,WD_use,WD_letter)%>%
-    #                                      summarise(Freq=n()/nrow(meteo_fires_inside)))
-
-
-
     freqs_wd_MB_use <- freqs_wd_MB[,c("cluster_id_MB","WD_letter","Freq")]
 
     freqs_wd_km_2_use <- freqs_wd_km_2[,c("cluster_id_km_2","WD_letter","Freq")]
@@ -1602,14 +1153,6 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
     freqs_wd_km_8_use <- freqs_wd_km_8[,c("cluster_id_km_8","WD_letter","Freq")]
     freqs_wd_km_9_use <- freqs_wd_km_9[,c("cluster_id_km_9","WD_letter","Freq")]
     freqs_wd_km_10_use <- freqs_wd_km_10[,c("cluster_id_km_10","WD_letter","Freq")]
-
-
-    # freqs_wd_hclust_2_use <- freqs_wd_hclust_2[,c("cluster_id_hclust_2","WD_letter","Freq")]
-    # freqs_wd_hclust_3_use <- freqs_wd_hclust_3[,c("cluster_id_hclust_3","WD_letter","Freq")]
-    # freqs_wd_hclust_4_use <- freqs_wd_hclust_4[,c("cluster_id_hclust_4","WD_letter","Freq")]
-    # freqs_wd_hclust_5_use <- freqs_wd_hclust_5[,c("cluster_id_hclust_5","WD_letter","Freq")]
-    #
-    # cluster5_hierar_use
 
 
   } else {
@@ -1671,167 +1214,7 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
 
   }
 
-  ###wind rose#####
 
-  # WindRose.R
-  #library(ggplot2)
-  #library(RColorBrewer)
-  #library(tidyquant)
-
-  plot.windrose <- function(data,
-                            spd,
-                            dir,
-                            spdres = 2,
-                            dirres = 45,
-                            spdmin = 2,
-                            spdmax = 50,
-                            spdseq = NULL,
-                            palette = "YlGnBu",
-                            countmax = NA,
-                            debug = 0){
-
-
-    # Look to see what data was passed in to the function
-    if (is.numeric(spd) & is.numeric(dir)){
-      # assume that we've been given vectors of the speed and direction vectors
-      data <- data.frame(spd = spd,
-                         dir = dir)
-      spd = "spd"
-      dir = "dir"
-    } else if (exists("data")){
-      # Assume that we've been given a data frame, and the name of the speed
-      # and direction columns. This is the format we want for later use.
-    }
-
-    # Tidy up input data ----
-    n.in <- NROW(data)
-    dnu <- (is.na(data[[spd]]) | is.na(data[[dir]]))
-    data[[spd]][dnu] <- NA
-    data[[dir]][dnu] <- NA
-
-    # figure out the wind speed bins ----
-    if (missing(spdseq)){
-      spdseq <- seq(spdmin,spdmax,spdres)
-    } else {
-      if (debug >0){
-        cat("Using custom speed bins \n")
-      }
-    }
-    # get some information about the number of bins, etc.
-    n.spd.seq <- length(spdseq)
-    n.colors.in.range <- n.spd.seq - 1
-
-    # create the color map
-    spd.colors <- colorRampPalette(brewer.pal(min(max(3,
-                                                      n.colors.in.range),
-                                                  min(9,
-                                                      n.colors.in.range)),
-                                              palette))(n.colors.in.range)
-
-    if (max(data[[spd]],na.rm = TRUE) > spdmax){
-      spd.breaks <- c(spdseq,
-                      max(data[[spd]],na.rm = TRUE))
-      spd.labels <- c(paste(c(spdseq[1:n.spd.seq-1]),
-                            '-',
-                            c(spdseq[2:n.spd.seq])),
-                      paste(spdmax,
-                            "-",
-                            max(data[[spd]],na.rm = TRUE)))
-      spd.colors <- c(spd.colors, "grey50")
-    } else{
-      spd.breaks <- spdseq
-      #spd.labels <- paste(c(spdseq[1:n.spd.seq-1]),
-      #                    '-',
-      #                    c(spdseq[2:n.spd.seq-1]))
-
-
-      n.spd.seq_use <- n.spd.seq-1
-
-      spd.labels <- c(paste(c(spdseq[-length(spdseq)][1:n.spd.seq_use-1]),
-                            '-',
-                            c(spdseq[-length(spdseq)][2:n.spd.seq_use])),
-                      paste(">",spdseq[n.spd.seq_use]))
-
-
-    }
-    data$spd.binned <- cut(x = data[[spd]],
-                           breaks = spd.breaks,
-                           labels = spd.labels,
-                           ordered_result = TRUE)
-    # clean up the data
-    data. <- na.omit(data)
-
-    # figure out the wind direction bins
-    dir.breaks <- c(-dirres/2,
-                    seq(dirres/2, 360-dirres/2, by = dirres),
-                    360+dirres/2)
-    dir.labels <- c(paste(360-dirres/2,"-",dirres/2),
-                    paste(seq(dirres/2, 360-3*dirres/2, by = dirres),
-                          "-",
-                          seq(3*dirres/2, 360-dirres/2, by = dirres)),
-                    paste(360-dirres/2,"-",dirres/2))
-    # assign each wind direction to a bin
-    dir.binned <- cut(data[[dir]],
-                      breaks = dir.breaks,
-                      ordered_result = TRUE)
-    levels(dir.binned) <- dir.labels
-    data$dir.binned <- dir.binned
-
-    # Run debug if required ----
-    if (debug>0){
-      cat(dir.breaks,"\n")
-      cat(dir.labels,"\n")
-      cat(levels(dir.binned),"\n")
-    }
-
-    # deal with change in ordering introduced somewhere around version 2.2
-    if(packageVersion("ggplot2") > "2.2"){
-      #cat("Hadley broke my code\n")
-      data$spd.binned = with(data, factor(spd.binned, levels = rev(levels(spd.binned))))
-      spd.colors = rev(spd.colors)
-    }
-
-    # create the plot ----
-    p.windrose <- ggplot(data = data,
-                         aes(x = dir.binned,
-                             fill = spd.binned)) +
-      geom_bar() +
-      scale_x_discrete(drop = FALSE,
-                       labels = c("N","NE", "E",
-                                  "SE",
-                                  "S","SW","W",
-                                  "NW")) +
-      coord_polar(start = -((dirres/2)/360) * 2*pi) +
-      # scale_x_discrete(drop = FALSE,
-      #                  labels = waiver()) +
-      # coord_polar(start = -((dirres/2)/360) * 2*pi) +
-      scale_fill_manual(name = "Wind Speed (km/h)",
-                        values = spd.colors,
-                        drop = FALSE) +
-      theme(axis.title.x = element_blank(),
-            plot.margin=grid::unit(c(0,0,0,0), "mm"))+
-      guides(fill = guide_legend(reverse = TRUE))+
-
-      #theme_classic()
-
-      # adjust axes if required
-      if (!is.na(countmax)){
-        p.windrose <- p.windrose +
-          ylim(c(0,countmax))
-      }
-
-    # print the plot
-    #print(p.windrose)
-
-    # return the handle to the wind rose
-    return(p.windrose)
-  }
-
-
-
-
-  #head(result_hours_final)
-  #tail (result_hours_final)
 
   result_hours_final[is.na(result_hours_final$WD),]
 
@@ -1862,7 +1245,7 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
 
 
 
-  p0 <- plot.windrose(spd = for_wind_rose_0ha_meteo_fires_inside$WS,
+  p0 <- plot_windrose(spd = for_wind_rose_0ha_meteo_fires_inside$WS,
                       dir = for_wind_rose_0ha_meteo_fires_inside$WD,
                       spdseq = c(0,3,6,12,20,100))
 
@@ -1884,7 +1267,7 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
 
 
 
-  p100 <- plot.windrose(spd = for_wind_rose_100ha_meteo_fires_inside$WS,
+  p100 <- plot_windrose(spd = for_wind_rose_100ha_meteo_fires_inside$WS,
                         dir = for_wind_rose_100ha_meteo_fires_inside$WD,
                         spdseq = c(0,3,6,12,20,100))
 
@@ -1902,7 +1285,7 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
   for_wind_rose_500ha_meteo_fires_inside <- result_hours_final_df_wind_rose[result_hours_final_df_wind_rose$ID %in% for_wind_rose_500ha$ID, ]
 
 
-  p500 <- plot.windrose(spd = for_wind_rose_500ha_meteo_fires_inside$WS,
+  p500 <- plot_windrose(spd = for_wind_rose_500ha_meteo_fires_inside$WS,
                         dir = for_wind_rose_500ha_meteo_fires_inside$WD,
                         spdseq = c(0,3,6,12,20,100))
 
@@ -1920,7 +1303,7 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
   for_wind_rose_1000ha_meteo_fires_inside <- result_hours_final_df_wind_rose[result_hours_final_df_wind_rose$ID %in% for_wind_rose_1000ha$ID, ]
 
 
-  p1000 <- plot.windrose(spd = for_wind_rose_1000ha_meteo_fires_inside$WS,
+  p1000 <- plot_windrose(spd = for_wind_rose_1000ha_meteo_fires_inside$WS,
                          dir = for_wind_rose_1000ha_meteo_fires_inside$WD,
                          spdseq = c(0,3,6,12,20,100))
 
@@ -1945,22 +1328,20 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
 
 
 
-  ###fazer report#####
-  #library(officer)
-  #library(flextable)
-  #library(magrittr)
+  #Build the report as a word file
+
 
   if (create.clusters == TRUE){
-    meteo1_use <- round(meteo1[,c("cluster","temperature_use","HR_use","WS_use", "size","mean_area_ha", "per95_area_ha" )],0) #"FWI_use"
-    meteo2_use <- round(meteo2[,c("cluster","temperature_use","HR_use","WS_use", "size","mean_area_ha", "per95_area_ha")],0)#"FWI_use"
-    meteo3_use <- round(meteo3[,c("cluster","temperature_use","HR_use","WS_use", "size","mean_area_ha", "per95_area_ha")],0)#"FWI_use"
-    meteo4_use <- round(meteo4[,c("cluster","temperature_use","HR_use","WS_use", "size","mean_area_ha", "per95_area_ha")],0)#"FWI_use"
-    meteo5_use <- round(meteo5[,c("cluster","temperature_use","HR_use","WS_use", "size","mean_area_ha", "per95_area_ha")],0)#"FWI_use"
-    meteo6_use <- round(meteo6[,c("cluster","temperature_use","HR_use","WS_use","size","mean_area_ha", "per95_area_ha")],0)#"FWI_use"
-    meteo7_use <- round(meteo7[,c("cluster","temperature_use","HR_use","WS_use", "size","mean_area_ha", "per95_area_ha")],0)#"FWI_use"
-    meteo8_use <- round(meteo8[,c("cluster","temperature_use","HR_use","WS_use", "size","mean_area_ha", "per95_area_ha")],0)#"FWI_use"
-    meteo9_use <- round(meteo9[,c("cluster","temperature_use","HR_use","WS_use", "size","mean_area_ha", "per95_area_ha")],0)#"FWI_use"
-    meteo10_use <- round(meteo10[,c("cluster","temperature_use","HR_use","WS_use", "size","mean_area_ha", "per95_area_ha")],0)#"FWI_use"
+    meteo1_use <- round(meteo1[,c("cluster","temperature_use","HR_use","WS_use", "size","mean_area_ha", "per95_area_ha" )],0)
+    meteo2_use <- round(meteo2[,c("cluster","temperature_use","HR_use","WS_use", "size","mean_area_ha", "per95_area_ha")],0)
+    meteo3_use <- round(meteo3[,c("cluster","temperature_use","HR_use","WS_use", "size","mean_area_ha", "per95_area_ha")],0)
+    meteo4_use <- round(meteo4[,c("cluster","temperature_use","HR_use","WS_use", "size","mean_area_ha", "per95_area_ha")],0)
+    meteo5_use <- round(meteo5[,c("cluster","temperature_use","HR_use","WS_use", "size","mean_area_ha", "per95_area_ha")],0)
+    meteo6_use <- round(meteo6[,c("cluster","temperature_use","HR_use","WS_use","size","mean_area_ha", "per95_area_ha")],0)
+    meteo7_use <- round(meteo7[,c("cluster","temperature_use","HR_use","WS_use", "size","mean_area_ha", "per95_area_ha")],0)
+    meteo8_use <- round(meteo8[,c("cluster","temperature_use","HR_use","WS_use", "size","mean_area_ha", "per95_area_ha")],0)
+    meteo9_use <- round(meteo9[,c("cluster","temperature_use","HR_use","WS_use", "size","mean_area_ha", "per95_area_ha")],0)
+    meteo10_use <- round(meteo10[,c("cluster","temperature_use","HR_use","WS_use", "size","mean_area_ha", "per95_area_ha")],0)
 
 
 
@@ -1982,7 +1363,6 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
     names(meteo1_use)[names(meteo1_use) == 'temperature_use'] <- 'T'
     names(meteo1_use)[names(meteo1_use) == 'HR_use'] <- 'RH'
     names(meteo1_use)[names(meteo1_use) == 'WS_use'] <- 'WS'
-    #names(meteo1_use)[names(meteo1_use) == 'FWI_use'] <- 'FWI'
     names(meteo1_use)[names(meteo1_use) == 'mean_area_ha'] <- 'Avg. Fire Size'
     names(meteo1_use)[names(meteo1_use) == 'per95_area_ha'] <- 'P95 Fire Size'
 
@@ -1992,7 +1372,6 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
     names(meteo2_use)[names(meteo2_use) == 'temperature_use'] <- 'T'
     names(meteo2_use)[names(meteo2_use) == 'HR_use'] <- 'RH'
     names(meteo2_use)[names(meteo2_use) == 'WS_use'] <- 'WS'
-    #names(meteo2_use)[names(meteo2_use) == 'FWI_use'] <- 'FWI'
     names(meteo2_use)[names(meteo2_use) == 'mean_area_ha'] <- 'Avg. Fire Size'
     names(meteo2_use)[names(meteo2_use) == 'per95_area_ha'] <- 'P95 Fire Size'
 
@@ -2001,7 +1380,6 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
     names(meteo3_use)[names(meteo3_use) == 'temperature_use'] <- 'T'
     names(meteo3_use)[names(meteo3_use) == 'HR_use'] <- 'RH'
     names(meteo3_use)[names(meteo3_use) == 'WS_use'] <- 'WS'
-    #names(meteo3_use)[names(meteo3_use) == 'FWI_use'] <- 'FWI'
     names(meteo3_use)[names(meteo3_use) == 'mean_area_ha'] <- 'Avg. Fire Size'
     names(meteo3_use)[names(meteo3_use) == 'per95_area_ha'] <- 'P95 Fire Size'
 
@@ -2010,7 +1388,6 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
     names(meteo4_use)[names(meteo4_use) == 'temperature_use'] <- 'T'
     names(meteo4_use)[names(meteo4_use) == 'HR_use'] <- 'RH'
     names(meteo4_use)[names(meteo4_use) == 'WS_use'] <- 'WS'
-    #names(meteo4_use)[names(meteo4_use) == 'FWI_use'] <- 'FWI'
     names(meteo4_use)[names(meteo4_use) == 'mean_area_ha'] <- 'Avg. Fire Size'
     names(meteo4_use)[names(meteo4_use) == 'per95_area_ha'] <- 'P95 Fire Size'
 
@@ -2019,7 +1396,6 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
     names(meteo5_use)[names(meteo5_use) == 'temperature_use'] <- 'T'
     names(meteo5_use)[names(meteo5_use) == 'HR_use'] <- 'RH'
     names(meteo5_use)[names(meteo5_use) == 'WS_use'] <- 'WS'
-    #names(meteo5_use)[names(meteo5_use) == 'FWI_use'] <- 'FWI'
     names(meteo5_use)[names(meteo5_use) == 'mean_area_ha'] <- 'Avg. Fire Size'
     names(meteo5_use)[names(meteo5_use) == 'per95_area_ha'] <- 'P95 Fire Size'
 
@@ -2028,7 +1404,6 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
     names(meteo6_use)[names(meteo6_use) == 'temperature_use'] <- 'T'
     names(meteo6_use)[names(meteo6_use) == 'HR_use'] <- 'RH'
     names(meteo6_use)[names(meteo6_use) == 'WS_use'] <- 'WS'
-    #names(meteo6_use)[names(meteo6_use) == 'FWI_use'] <- 'FWI'
     names(meteo6_use)[names(meteo6_use) == 'mean_area_ha'] <- 'Avg. Fire Size'
     names(meteo6_use)[names(meteo6_use) == 'per95_area_ha'] <- 'P95 Fire Size'
 
@@ -2037,7 +1412,6 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
     names(meteo7_use)[names(meteo7_use) == 'temperature_use'] <- 'T'
     names(meteo7_use)[names(meteo7_use) == 'HR_use'] <- 'RH'
     names(meteo7_use)[names(meteo7_use) == 'WS_use'] <- 'WS'
-    #names(meteo7_use)[names(meteo7_use) == 'FWI_use'] <- 'FWI'
     names(meteo7_use)[names(meteo7_use) == 'mean_area_ha'] <- 'Avg. Fire Size'
     names(meteo7_use)[names(meteo7_use) == 'per95_area_ha'] <- 'P95 Fire Size'
 
@@ -2046,7 +1420,6 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
     names(meteo8_use)[names(meteo8_use) == 'temperature_use'] <- 'T'
     names(meteo8_use)[names(meteo8_use) == 'HR_use'] <- 'RH'
     names(meteo8_use)[names(meteo8_use) == 'WS_use'] <- 'WS'
-    #names(meteo8_use)[names(meteo8_use) == 'FWI_use'] <- 'FWI'
     names(meteo8_use)[names(meteo8_use) == 'mean_area_ha'] <- 'Avg. Fire Size'
     names(meteo8_use)[names(meteo8_use) == 'per95_area_ha'] <- 'P95 Fire Size'
 
@@ -2055,7 +1428,6 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
     names(meteo9_use)[names(meteo9_use) == 'temperature_use'] <- 'T'
     names(meteo9_use)[names(meteo9_use) == 'HR_use'] <- 'RH'
     names(meteo9_use)[names(meteo9_use) == 'WS_use'] <- 'WS'
-    #names(meteo9_use)[names(meteo9_use) == 'FWI_use'] <- 'FWI'
     names(meteo9_use)[names(meteo9_use) == 'mean_area_ha'] <- 'Avg. Fire Size'
     names(meteo9_use)[names(meteo9_use) == 'per95_area_ha'] <- 'P95 Fire Size'
 
@@ -2064,22 +1436,16 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
     names(meteo10_use)[names(meteo10_use) == 'temperature_use'] <- 'T'
     names(meteo10_use)[names(meteo10_use) == 'HR_use'] <- 'RH'
     names(meteo10_use)[names(meteo10_use) == 'WS_use'] <- 'WS'
-    #names(meteo10_use)[names(meteo10_use) == 'FWI_use'] <- 'FWI'
     names(meteo10_use)[names(meteo10_use) == 'mean_area_ha'] <- 'Avg. Fire Size'
     names(meteo10_use)[names(meteo10_use) == 'per95_area_ha'] <- 'P95 Fire Size'
 
 
     if(length(unique(mc$classification))>1){
-      plot_uncer_modbas_src <- uncer_modbas #paste("uncer_modbas")
+      plot_uncer_modbas_src <- uncer_modbas
       plot_uncer_modbas_width <- 5
       plot_uncer_modbas_height <- 6
       plot_uncer_modbas_style<-"centered"
     } else {
-      #blank_plot <- plot(1, type="n", xlab="", ylab="", xlim=c(0, 10), ylim=c(0, 10))#plot(0, xaxt = 'n', yaxt = 'n', bty = 'n', pch = '', ylab = '', xlab = '')
-      #blank_plot_use <- tempfile(fileext = ".png")
-      #png(filename = blank_plot_use)
-      #plot(blank_plot)
-      #dev.off()
 
       plot_uncer_modbas_src <- pt_study_use
       plot_uncer_modbas_width <- 0.01
@@ -2088,10 +1454,8 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
     }
 
   } else {
-    #all_percentiles_use <- cbind(all_percentiles[,4],all_percentiles[,1:3])
     all_percentiles_use <- all_percentiles
 
-    #names(all_percentiles_use)[names(all_percentiles_use) == 'all_percentiles[, 4]'] <- 'percentile'
     names(all_percentiles_use)[names(all_percentiles_use) == 'temperature_use'] <- 'T'
     names(all_percentiles_use)[names(all_percentiles_use) == 'HR_use'] <- 'RH'
     names(all_percentiles_use)[names(all_percentiles_use) == 'WS_use'] <- 'WS'
@@ -2101,36 +1465,11 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
 
   }
 
-  #
-  # cluster2_hierar$size <- hclust.res2$size
-  # cluster3_hierar$size <- hclust.res3$size
-  # cluster4_hierar$size <- hclust.res4$size
-  # cluster5_hierar$size <- hclust.res5$size
-  #
-  # cluster2_hierar$method <- "hierarchical clustering ward.D2"
-  # cluster3_hierar$method <- "hierarchical clustering ward.D2"
-  # cluster4_hierar$method <- "hierarchical clustering ward.D2"
-  # cluster5_hierar$method <- "hierarchical clustering ward.D2"
-  #
-  # cluster2_hierar_use <- cluster2_hierar[,c("cluster","temperatura","HR","WS","method", "size")]
-  # cluster3_hierar_use <- cluster3_hierar[,c("cluster","temperatura","HR","WS","method", "size")]
-  # cluster4_hierar_use <- cluster4_hierar[,c("cluster","temperatura","HR","WS","method", "size")]
-  # cluster5_hierar_use <- cluster5_hierar[,c("cluster","temperatura","HR","WS","method", "size")]
 
 
   my_doc <- read_docx()
-  #styles_info(my_doc)
 
   setwd(output.folder)
-
-  #src <- tempfile(fileext = ".png")
-  #png(filename = src, width = 5, height = 6, units = 'in', res = 300)
-  #barplot(1:10, col = 1:10)
-  #dev.off()
-
-
-  #if(!exists("user.period")){
-  #  user.period <- 0}
 
 
 
@@ -2146,41 +1485,9 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
 
 
 
-  #
-  #
-  # cef_logo = "https://www.isa.ulisboa.pt/cef/wp-content/uploads/2021/09/Logo_CEF_VECTORIAL_v2-01.png"
-  # #download.file(y,'y.jpg', mode = 'wb')
-  #
-  # library(jpeg)
-  # library(png)
-  # library(RCurl)
-  # cef_logo_use <- readPNG(getURLContent(cef_logo))
-  # plot.new()
-  # rasterImage(cef_logo_use,0,0,1,1)
-  #
-  #
-  #
-  # cef_logo_use_use <- tempfile(fileext = ".png")
-  # png(filename = cef_logo_use_use, width = 2, height = 2, units = 'in', res = 300)
-  # dev.new(width=3, height=2)
-  # plot.new()
-  # #par(mar = c(4, 4, 0.1, 0.1))
-  # rasterImage(cef_logo_use,0,0,1,1)
-  # dev.off()
-  #
-  #
-  # detach("package:jpeg", unload=TRUE)
-  # detach("package:png", unload=TRUE)
-  # detach("package:RCurl", unload=TRUE)
-  #
-  #
-
   if (create.clusters==TRUE){
 
     my_doc <- my_doc %>%
-      #caracteriza??o do fogo
-
-      #body_add_img(src = cef_logo_use_use, width = 6, height = 6) %>%
 
       body_add_par("Conditions of the analysis", style = "heading 1") %>%
       body_add_par(paste("The following report was generated automatically by the 'MTTfireCAL' package. The results should be critically analyzed. For questions and comments please contact Bruno Aparicio (bruno.a.aparicio@gmail.com)"),style = "Normal") %>%
@@ -2202,14 +1509,10 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
       body_add_par(paste("Because the user defined the fire.aggregation as ", fire.aggregation," and the meteorological aggregation as ",meteo.aggregation, " the total number of meteorological data used for the meteorological clustering process is ",nrow(meteo_fires_inside),".", sep=""),style = "Normal") %>%
       body_add_par(paste(""),style = "Normal") %>%
 
-      #body_add_par(paste("The analysis considered the following meteorological aggregation:", meteo.aggregation,sep=" "),style = "Normal") %>%
-      #body_add_par(paste(""),style = "Normal") %>%
-
 
       body_add_par("") %>%
       body_add_par(paste("The figure below illustrates the location of the study area in Portugal (in black)"),style = "Normal") %>%
       body_add_par("") %>%
-      #body_add_par("Study area characterization", style = "heading 1") %>%
       body_add_img(src = pt_study_use, width = 4, height = 6, style = "centered") %>%
 
 
@@ -2217,7 +1520,6 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
 
 
       body_add_par("") %>%
-      #body_add_par("Study area characterization", style = "heading 1") %>%
       body_add_par(paste("The figure below illustrates the fire size distribution for the considered period in the study area"),style = "Normal") %>%
       body_add_par("") %>%
       body_add_img(src = size_dist_use, width = 6, height = 4, style = "centered") %>%
@@ -2243,9 +1545,6 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
       body_add_par(paste("A - Considering fire size > 0 ha; B - Considering fire size > 100 ha; C - Considering fire size > 500 ha; D - Considering fire size > 1000 ha"),style = "Normal") %>%
 
 
-
-
-      #model-based clustering
       body_add_par("")%>%
       body_add_par("Cluster analysis", style = "heading 2") %>%
 
@@ -2254,7 +1553,6 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
       body_add_par(paste("The figure below illustrates the Bayesian Information Criterion (BIC) to evaluate model appropriateness regarding the optimal number of clusters. In this particular case, model-based clustering indicates",optimal_mbc,"as the optimal number of clusters"),style = "Normal") %>%
       body_add_par("", style = "Normal") %>%
       body_add_img(src = BIC_modbas, width = 5, height = 6, style = "centered") %>%
-      #body_add_img(src = class_modbas, width = 5, height = 6, style = "centered") %>%
       body_add_par("", style = "Normal") %>%
 
       body_add_img(src = plot_uncer_modbas_src, width = plot_uncer_modbas_width, height = plot_uncer_modbas_height, style = "centered") %>%
@@ -2267,7 +1565,7 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
       body_add_par(paste("T represents the average temperature in each cluster; RH represents the average relative humidity in each cluster; WS represents average wind speed in each cluster; FWI represents the average FWI in each cluster; Cluster size represents the absolute size of the cluster (number of fire weathers in each cluster); Avg. Fire size represents the average fire size for fire events in each cluster; P95 Fire size represents the Percentile 95 of the fire size for fire events in each cluster; and Cluster RF represents the relative frequency of each cluster."),style = "Normal") %>%
       body_add_par("")%>%
 
-      #kmean - substituir as imagens
+
       body_add_par("K-means classification", style = "heading 2") %>%
       body_add_par("")%>%
       body_add_par(paste("Kmeans algorithm is an iterative algorithm that tries to partition the dataset into K pre-defined distinct non-overlapping clusters. It assigns data points to a cluster such that it minimizes the sum of the squared distance between the data points and the cluster's centroid (arithmetic mean). A lower variation represents a more homogeneous cluster. For more details on k-means clustering algorithm please refer to Likas et al. 2003 (https://doi.org/10.1016/S0031-3203(02)00060-2) and to Kodinariya and Makwana (2013). Review on determining number of Cluster in K-Means Clustering"),style = "Normal") %>%
@@ -2276,18 +1574,13 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
       body_add_par(paste("The silhouette value is a measure of how similar an object is to its own cluster (cohesion) compared to other clusters (separation). The silhouette ranges from -1 to +1, where a high value indicates that the object is well matched to its own cluster and poorly matched to neighboring clusters. If most objects have a high value, then the clustering configuration is appropriate. If many points have a low or negative value, then the clustering configuration may have too many or too few clusters."),style = "Normal") %>%
 
 
-      #body_add_par("Determining the optimal number of clusters using kmeans", style = "heading 1") %>%
+
       body_add_img(src = silhouette_use, width = 6, height = 4, style = "centered") %>%
-      #body_add_par(paste("The silhouette coefficient is a measure of how similar a data point is within-cluster (cohesion) compared to other clusters (separation)"),style = "Normal") %>%
       body_add_par(paste(""),style = "Normal") %>%
 
       body_add_img(src = elbow_use, width = 6, height = 4, style = "centered") %>%
       body_add_par(paste("The elbow method calculates the Within-Cluster-Sum of Squared Errors (WSS) for different values of k, and choose the k for which WSS first starts to diminish at a lower rate (smaller slope). The optimal number of clusters is found at the elbow, i.e. the point after which the total within sum of square starts to decrease in a linear way"),style = "Normal") %>%
       body_add_par(paste(""),style = "Normal") %>%
-
-      # body_add_img(src = gap_use, width = 6, height = 4, style = "centered") %>%
-      # body_add_par(paste("Gap statistics measures how different the total within intra-cluster variation can be between observed data and reference data with a random uniform distribution. A large gap statistics means the clustering structure is very far away from the random uniform distribution of points. The number of clusters can be chosen as the smallest value of k such that the gap statistic is within one standard deviation of the gap at k+1. The dashed line identifies this k."),style = "Normal") %>%
-      # body_add_par(paste(""),style = "Normal") %>%
 
 
 
@@ -2323,40 +1616,12 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
 
 
 
-
-
-    #hierarchical clustering
-    # body_add_par("",style = "Normal") %>%
-    #   body_add_par("Hierarchical clustering method", style = "heading 1") %>%
-    #   body_add_par("", style = "Normal") %>%
-    #   body_add_img(src = hierar_2_use, width = 6, height = 4, style = "centered") %>%
-    #   body_add_par("", style = "Normal") %>%
-    #   body_add_img(src = hierar_3_use, width = 6, height = 4, style = "centered") %>%
-    #   body_add_par("", style = "Normal") %>%
-    #   body_add_img(src = hierar_4_use, width = 6, height = 4, style = "centered") %>%
-    #   body_add_par("", style = "Normal") %>%
-    #   body_add_img(src = hierar_5_use, width = 6, height = 4, style = "centered")%>%
-    #
-    #   body_add_par("",style = "Normal") %>%
-    # body_add_par("Mean value of meteorological variables for each cluster identified by Hierarchical clustering method", style = "heading 2") %>%
-    #   body_add_table(cluster2_hierar_use, style = "table_template") %>%
-    #   body_add_par("", style = "Normal") %>%
-    #   body_add_table(cluster3_hierar_use, style = "table_template") %>%
-    #   body_add_par("", style = "Normal") %>%
-    #   body_add_table(cluster4_hierar_use, style = "table_template") %>%
-    #   body_add_par("", style = "Normal") %>%
-    #   body_add_table(cluster5_hierar_use, style = "table_template")
-    #
-
-
     print(my_doc, target = "Automatic report.docx")
 
   } else {
 
     my_doc <- my_doc %>%
-      #caracteriza??o do fogo
 
-      #body_add_img(src = cef_logo_use_use, width = 6, height = 6) %>%
 
       body_add_par("Conditions of the analysis", style = "heading 1") %>%
       body_add_par(paste("The following report was generated automatically by the 'MTTfireCAL' package. The results should be critically analyzed. For questions and comments please contact Bruno Aparicio (bruno.a.aparicio@gmail.com)"),style = "Normal") %>%
@@ -2378,14 +1643,10 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
       body_add_par(paste("Because the user defined the fire.aggregation as ", fire.aggregation," and the meteorological aggregation as ",meteo.aggregation, " the total number of meteorological data used for the meteorological clustering process is ",nrow(meteo_fires_inside),".", sep=""),style = "Normal") %>%
       body_add_par(paste(""),style = "Normal") %>%
 
-      #body_add_par(paste("The analysis considered the following meteorological aggregation:", meteo.aggregation,sep=" "),style = "Normal") %>%
-      #body_add_par(paste(""),style = "Normal") %>%
-
 
       body_add_par("") %>%
       body_add_par(paste("The figure below illustrates the location of the study area in Portugal (in black)"),style = "Normal") %>%
       body_add_par("") %>%
-      #body_add_par("Study area characterization", style = "heading 1") %>%
       body_add_img(src = pt_study_use, width = 4, height = 6, style = "centered") %>%
 
 
@@ -2393,7 +1654,6 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
 
 
       body_add_par("") %>%
-      #body_add_par("Study area characterization", style = "heading 1") %>%
       body_add_par(paste("The figure below illustrates the fire size distribution for the considered period in the study area"),style = "Normal") %>%
       body_add_par("") %>%
       body_add_img(src = size_dist_use, width = 6, height = 4, style = "centered") %>%
@@ -2440,40 +1700,12 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
 
 
 
-
-
-
-    #hierarchical clustering
-    # body_add_par("",style = "Normal") %>%
-    #   body_add_par("Hierarchical clustering method", style = "heading 1") %>%
-    #   body_add_par("", style = "Normal") %>%
-    #   body_add_img(src = hierar_2_use, width = 6, height = 4, style = "centered") %>%
-    #   body_add_par("", style = "Normal") %>%
-    #   body_add_img(src = hierar_3_use, width = 6, height = 4, style = "centered") %>%
-    #   body_add_par("", style = "Normal") %>%
-    #   body_add_img(src = hierar_4_use, width = 6, height = 4, style = "centered") %>%
-    #   body_add_par("", style = "Normal") %>%
-    #   body_add_img(src = hierar_5_use, width = 6, height = 4, style = "centered")%>%
-    #
-    #   body_add_par("",style = "Normal") %>%
-    # body_add_par("Mean value of meteorological variables for each cluster identified by Hierarchical clustering method", style = "heading 2") %>%
-    #   body_add_table(cluster2_hierar_use, style = "table_template") %>%
-    #   body_add_par("", style = "Normal") %>%
-    #   body_add_table(cluster3_hierar_use, style = "table_template") %>%
-    #   body_add_par("", style = "Normal") %>%
-    #   body_add_table(cluster4_hierar_use, style = "table_template") %>%
-    #   body_add_par("", style = "Normal") %>%
-    #   body_add_table(cluster5_hierar_use, style = "table_template")
-    #
-
-
     print(my_doc, target = "Automatic report.docx")
 
   }
 
 
   meteo_fires_inside$cluster_id_MB
-  #str(meteo_fires_inside)
 
   mainDir<- output.folder
 
@@ -2485,13 +1717,6 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
 
 
 
-
-
-
-  #install.packages("xlsx")
-  #install.packages("writexl")
-  #library (readxl)
-  #library(writexl)
 
   if (create.clusters == TRUE){
 
@@ -2545,9 +1770,7 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
 
 
 
-    ###Fazer o fms tendo em conta os dados de meteo no excel####
-    #setwd("C:/Users/Bruno Apar?cio/Desktop/autopackage/clusters_meteo")
-    #my_cluster <- read.csv("kmeans_6_clusters.csv")
+    #Create the FMS files based on the clustering or percentiles process
 
     mainDir<- output.folder
     subDir <- "clusters_meteo"
@@ -2557,9 +1780,6 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
     my_cluster_files <- list.files(path = paste(mainDir,subDir,sep="/"),pattern="clusters.csv|clustering.csv")
 
     setwd(file.path(mainDir,subDir))
-
-    #mainDir<- "C:/Users/Bruno Apar?cio/Desktop/autopackage"
-    #subDir <- "clusters_meteo"
 
 
     mc <- as.data.frame(1:256)
@@ -2652,9 +1872,6 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
     my_cluster_files <- list.files(path = paste(mainDir,subDir,sep="/"),pattern="percentile.csv|percentiles.csv")
 
     setwd(file.path(mainDir,subDir))
-
-    #mainDir<- "C:/Users/Bruno Apar?cio/Desktop/autopackage"
-    #subDir <- "clusters_meteo"
 
 
     mc <- as.data.frame(1:256)

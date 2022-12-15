@@ -23,8 +23,6 @@ check_BP_nxburned <- function (Folder.Outputs,
 
   setwd(Folder.Outputs)
   my_files <- list.files(pattern = "BP.asc")
-  #library (raster)
-  #library(ggplot2)
 
   obs.nxburned_use <- raster(obs.nxburned)
 
@@ -34,13 +32,6 @@ check_BP_nxburned <- function (Folder.Outputs,
 
   my_combos_file_order <- my_combos_file[order(my_combos_file$RMSE),]
 
-  # if (exists("choose.combos")==TRUE){
-  #   nCombos <- choose.combos
-  # } else {
-  #   #nCombos <- 1:nCombos
-  # #} else {
-  #   nCombos <- my_combos_file_order[1,1]
-  # }
 
 
   if (missing(choose.combos)) {
@@ -54,34 +45,12 @@ check_BP_nxburned <- function (Folder.Outputs,
 
 
 
-  #
-  # my_freqs$direction_val <- 0
-  # my_freqs$direction_val[my_freqs$direction=="N"] <- 0
-  # my_freqs$direction_val[my_freqs$direction=="NE"] <- 45
-  # my_freqs$direction_val[my_freqs$direction=="E"] <- 90
-  # my_freqs$direction_val[my_freqs$direction=="SE"] <- 135
-  # my_freqs$direction_val[my_freqs$direction=="S"] <- 180
-  # my_freqs$direction_val[my_freqs$direction=="SW"] <- 225
-  # my_freqs$direction_val[my_freqs$direction=="W"] <- 270
-  # my_freqs$direction_val[my_freqs$direction=="NW"] <- 315
-  #
-  #
-  # my_freqs_sort <- my_freqs[
-  #   with(my_freqs, order(cluster,direction_val)),
-  # ]
-
-
-
   names(my_freqs)[names(my_freqs)==names(my_freqs)[1]] <- 'cluster'
 
   my_freqs_sort <- my_freqs[
     with(my_freqs, order(cluster,WD_use)),
   ]
 
-  #datalist <- list()
-  #results <- data.frame(matrix(NA, nrow = ((nCombos * nIgn.per.combo)+5000), ncol = 2))
-
-  #library(tidyr)
 
   correlation_df <- matrix(ncol=2,nrow=length(nCombos))
 
@@ -132,8 +101,6 @@ check_BP_nxburned <- function (Folder.Outputs,
     my_data_dur_4 <- intersect(list.files(pattern = "\\.asc$"), list.files(pattern = paste("durval_",my_combos_file_loop_dur4,sep="")))
     my_data_dur_5 <- intersect(list.files(pattern = "\\.asc$"), list.files(pattern = paste("durval_",my_combos_file_loop_dur5,sep="")))
 
-    #armazenar cada uma das durações em tabelas diferentes
-
 
     my_data_i_dur1 <- grep("durclass_1", my_data_dur_1, value = TRUE)
     my_data_i_dur2 <- grep("durclass_2", my_data_dur_2, value = TRUE)
@@ -145,13 +112,10 @@ check_BP_nxburned <- function (Folder.Outputs,
 
 
 
-    #1_1
-
     my_data_i_dur1_cluster1 <- as.data.frame(grep("cluster_1", my_data_i_dur1, value = TRUE))
     colnames(my_data_i_dur1_cluster1)<- "name"
 
 
-    ##############
     my_data_i_dur1 <- as.data.frame(my_data_i_dur1)
     colnames(my_data_i_dur1)<- "name"
     cluster_id_temp <- sub("_durclass_.*", "", my_data_i_dur1$name)
@@ -174,21 +138,6 @@ check_BP_nxburned <- function (Folder.Outputs,
 
 
 
-
-
-    # my_data_i_dur1_cluster1$wd_id <- combo_id
-    #
-    #
-    #
-    # my_data_i_dur1_cluster1_sort <- my_data_i_dur1_cluster1[
-    #   with(my_data_i_dur1_cluster1, order(wd_id)),
-    # ]
-    #
-    #
-    # my_freqs_sort_cluster1 <- subset(my_freqs_sort,cluster==1)
-    #
-    # library(raster)
-
     s1_1 <- stack()
 
     for (j in 1:nrow(my_data_i_dur1_sort)){
@@ -196,12 +145,9 @@ check_BP_nxburned <- function (Folder.Outputs,
       multiply_my_i <- my_freqs_sort [j,"duration_1"]
 
       raster_i_multiplied <- raster_i*multiply_my_i
-      #assign(paste("raster_final_",j,sep=""),raster_i_multiplied)
 
       name_i <- paste("raster_final_",j,sep="")
 
-      #datalist[j]<-name_i
-      #results[j,]<-name_i
 
       s1_1 <- stack(s1_1,raster_i_multiplied)
 
@@ -210,13 +156,7 @@ check_BP_nxburned <- function (Folder.Outputs,
 
 
 
-    #2_2
 
-    #my_data_i_dur2_cluster1 <- as.data.frame(grep("cluster_1", my_data_i_dur2, value = TRUE))
-    #colnames(my_data_i_dur2_cluster1)<- "name"
-
-
-    ##############
     my_data_i_dur2 <- as.data.frame(my_data_i_dur2)
     colnames(my_data_i_dur2)<- "name"
     cluster_id_temp <- sub("_durclass_.*", "", my_data_i_dur2$name)
@@ -239,21 +179,6 @@ check_BP_nxburned <- function (Folder.Outputs,
 
 
 
-
-
-    # my_data_i_dur2_cluster2$wd_id <- combo_id
-    #
-    #
-    #
-    # my_data_i_dur2_cluster2_sort <- my_data_i_dur2_cluster2[
-    #   with(my_data_i_dur2_cluster2, order(wd_id)),
-    # ]
-    #
-    #
-    # my_freqs_sort_cluster2 <- subset(my_freqs_sort,cluster==2)
-    #
-    # library(raster)
-
     s2_1 <- stack()
 
     if(nrow(my_data_i_dur2_sort)>=1){
@@ -262,12 +187,9 @@ check_BP_nxburned <- function (Folder.Outputs,
         multiply_my_i <- my_freqs_sort [j,"duration_2"]
 
         raster_i_multiplied <- raster_i*multiply_my_i
-        #assign(paste("raster_final_",j,sep=""),raster_i_multiplied)
 
         name_i <- paste("raster_final_",j,sep="")
 
-        #datalist[j]<-name_i
-        #results[j,]<-name_i
 
         s2_1 <- stack(s2_1,raster_i_multiplied)
 
@@ -279,13 +201,6 @@ check_BP_nxburned <- function (Folder.Outputs,
 
 
 
-    #3_3
-
-    #my_data_i_dur3_cluster1 <- as.data.frame(grep("cluster_1", my_data_i_dur3, value = TRUE))
-    #colnames(my_data_i_dur3_cluster1)<- "name"
-
-
-    ##############
     my_data_i_dur3 <- as.data.frame(my_data_i_dur3)
     colnames(my_data_i_dur3)<- "name"
     cluster_id_temp <- sub("_durclass_.*", "", my_data_i_dur3$name)
@@ -308,21 +223,6 @@ check_BP_nxburned <- function (Folder.Outputs,
 
 
 
-
-
-    # my_data_i_dur3_cluster3$wd_id <- combo_id
-    #
-    #
-    #
-    # my_data_i_dur3_cluster3_sort <- my_data_i_dur3_cluster3[
-    #   with(my_data_i_dur3_cluster3, order(wd_id)),
-    # ]
-    #
-    #
-    # my_freqs_sort_cluster3 <- subset(my_freqs_sort,cluster==3)
-    #
-    # library(raster)
-
     s3_1 <- stack()
 
     if(nrow(my_data_i_dur3_sort)>=1){
@@ -331,12 +231,9 @@ check_BP_nxburned <- function (Folder.Outputs,
         multiply_my_i <- my_freqs_sort [j,"duration_3"]
 
         raster_i_multiplied <- raster_i*multiply_my_i
-        #assign(paste("raster_final_",j,sep=""),raster_i_multiplied)
 
         name_i <- paste("raster_final_",j,sep="")
 
-        #datalist[j]<-name_i
-        #results[j,]<-name_i
 
         s3_1 <- stack(s3_1,raster_i_multiplied)
 
@@ -349,14 +246,6 @@ check_BP_nxburned <- function (Folder.Outputs,
 
 
 
-
-    #4_4
-
-    #my_data_i_dur4_cluster1 <- as.data.frame(grep("cluster_1", my_data_i_dur4, value = TRUE))
-    #colnames(my_data_i_dur4_cluster1)<- "name"
-
-
-    ##############
     my_data_i_dur4 <- as.data.frame(my_data_i_dur4)
     colnames(my_data_i_dur4)<- "name"
     cluster_id_temp <- sub("_durclass_.*", "", my_data_i_dur4$name)
@@ -378,22 +267,6 @@ check_BP_nxburned <- function (Folder.Outputs,
 
 
 
-
-
-
-    # my_data_i_dur4_cluster4$wd_id <- combo_id
-    #
-    #
-    #
-    # my_data_i_dur4_cluster4_sort <- my_data_i_dur4_cluster4[
-    #   with(my_data_i_dur4_cluster4, order(wd_id)),
-    # ]
-    #
-    #
-    # my_freqs_sort_cluster4 <- subset(my_freqs_sort,cluster==4)
-    #
-    # library(raster)
-
     s4_1 <- stack()
 
     if(nrow(my_data_i_dur4_sort)>=1){
@@ -402,12 +275,8 @@ check_BP_nxburned <- function (Folder.Outputs,
         multiply_my_i <- my_freqs_sort [j,"duration_4"]
 
         raster_i_multiplied <- raster_i*multiply_my_i
-        #assign(paste("raster_final_",j,sep=""),raster_i_multiplied)
 
         name_i <- paste("raster_final_",j,sep="")
-
-        #datalist[j]<-name_i
-        #results[j,]<-name_i
 
         s4_1 <- stack(s4_1,raster_i_multiplied)
 
@@ -420,14 +289,6 @@ check_BP_nxburned <- function (Folder.Outputs,
 
 
 
-
-    #5_5
-
-    #my_data_i_dur5_cluster1 <- as.data.frame(grep("cluster_1", my_data_i_dur5, value = TRUE))
-    #colnames(my_data_i_dur5_cluster1)<- "name"
-
-
-    ##############
     my_data_i_dur5 <- as.data.frame(my_data_i_dur5)
     colnames(my_data_i_dur5)<- "name"
     cluster_id_temp <- sub("_durclass_.*", "", my_data_i_dur5$name)
@@ -450,21 +311,6 @@ check_BP_nxburned <- function (Folder.Outputs,
 
 
 
-
-
-    # my_data_i_dur5_cluster5$wd_id <- combo_id
-    #
-    #
-    #
-    # my_data_i_dur5_cluster5_sort <- my_data_i_dur5_cluster5[
-    #   with(my_data_i_dur5_cluster5, order(wd_id)),
-    # ]
-    #
-    #
-    # my_freqs_sort_cluster5 <- subset(my_freqs_sort,cluster==5)
-    #
-    # library(raster)
-
     s5_1 <- stack()
 
 
@@ -474,12 +320,9 @@ check_BP_nxburned <- function (Folder.Outputs,
         multiply_my_i <- my_freqs_sort [j,"duration_5"]
 
         raster_i_multiplied <- raster_i*multiply_my_i
-        #assign(paste("raster_final_",j,sep=""),raster_i_multiplied)
 
         name_i <- paste("raster_final_",j,sep="")
 
-        #datalist[j]<-name_i
-        #results[j,]<-name_i
 
         s5_1 <- stack(s5_1,raster_i_multiplied)
 
@@ -511,16 +354,9 @@ check_BP_nxburned <- function (Folder.Outputs,
     writeRaster(all_rasters_sum,paste("BP_combo_",i,".asc",sep=""))
 
 
-    #crop the Nx burned raster file
-
-
     r3 <- crop(obs.nxburned_use,extent(all_rasters_sum))
 
     r3[is.na(r3[])] <- 0
-
-    #plot(r3)
-    #plot(all_rasters_sum)
-    #plot(obs.nxburned)
 
 
     sim_vals <- getValues(all_rasters_sum)
@@ -541,9 +377,7 @@ check_BP_nxburned <- function (Folder.Outputs,
 
     if(export.plots==1){
       ggsave(filename=paste(Folder.Outputs,"/correlation_BP_NxBurned","/BP_nxburned_combo_",i,".jpg",sep=""), plot=boxplot_bp, width = 6, height = 5)
-      #png(paste(Folder.Outputs,"/BP_nxburned_combo_",i,".png",sep=""), width = 500, height = 400,)
-      #boxplot(all_rasters_sum,r3,main=paste("Combo",i), ylab='Simulated Burn Probability', xlab="Historical number of times burned")
-      #dev.off()
+
     }
 
 
