@@ -20,6 +20,9 @@ install_github("bmaparicio/MTTfireCAL")
 
 Please also refer to the [package pdf manual](https://github.com/bmaparicio/MTTfireCAL/blob/master/MTTfireCAL_1.0.0.pdf) for complete information on the functions and how to use them. 
 
+## Submitting a bug report
+If you encounter any issue using the package, please open a new [issue](https://github.com/bmaparicio/MTTfireCAL/issues). Please include a minimal, reproducible example of the bug, along with the exact error message or output you receive and the behavior you expect.
+
 ## Citation
 Please use the following citation when refering to this package:
 Aparício, B.A., Benali, A., Sá, A.C.L. (2023) ‘MTTfireCAL’ package for R – An innovative, comprehensive and fast procedure to calibrate the MTT fire spread modelling system. MethodsX.
