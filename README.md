@@ -9,6 +9,7 @@ To install MTTfireCAL from GitHub:
 library(devtools)
 install_github("bmaparicio/MTTfireCAL")
 ```
+If you are using Windows, you will need to have a version of Rtools installed that matches your version of R. Rtools can be downloaded from [here](https://cran.r-project.org/bin/windows/Rtools/).
 
 ## File Descriptions
 - get_fire_weather.R is the script that downloads [ERA5-Land reanalysis data](https://www.ecmwf.int/en/era5-land) and stores it in a csv file.
