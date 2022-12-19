@@ -22,8 +22,8 @@ If you are using Windows, you will need to have a version of Rtools installed th
 
 Please also refer to the [package pdf manual](https://github.com/bmaparicio/MTTfireCAL/blob/master/MTTfireCAL_1.0.0.pdf) for complete information on the functions and how to use them. 
 
-## Submitting a bug report
-If you encounter any issue using the package, please open a new [issue](https://github.com/bmaparicio/MTTfireCAL/issues). Please include a minimal, reproducible example of the bug, along with the exact error message or output you receive and the behavior you expect.
+## Community Feedback
+If you have any sugestion on how to improve MTTfireCAL package or if you encounter any issue using the package, please open a new [issue](https://github.com/bmaparicio/MTTfireCAL/issues). Please include a minimal, reproducible example of the bug, along with the exact error message or output you receive and the behavior you expect.
 
 ## Citation
 Please use the following citation when refering to this package:
