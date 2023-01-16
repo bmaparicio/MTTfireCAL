@@ -4,7 +4,7 @@
 \alias{fire_weather_nc}
 \title{Get meteorological variables from an existing netcdf file}
 \usage{
-fire_weather_nc(study.area, my.fires, nc.folder, output.folder)
+fire_weather_nc(study.area, my.fires, nc.folder, utc.zone, output.folder)
 }
 \arguments{
 \item{study.area}{Shapefile with the limits of the study area (polygon). Must not contain more than one polygon.}

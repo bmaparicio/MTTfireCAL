@@ -13,7 +13,7 @@
 #' my.fires="C:/user/my_fires.shp",nc.folder="C:/user/netdcf_file.nc",
 #' output.folder="C:/user/results")}
 #'
-fire_weather_nc <- function(study.area, my.fires,nc.folder,output.folder) {
+fire_weather_nc <- function(study.area, my.fires,nc.folder,utc.zone,output.folder) {
 
   my_fires <- readOGR(my.fires)
 
