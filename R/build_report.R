@@ -60,11 +60,11 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
 
 
 
-  country_identified<-suppressMessages(as.data.frame(st_intersects(my_study_area_t_plot_st,world_st)))
+  country_identified<-suppressMessages(base::as.data.frame(st_intersects(my_study_area_t_plot_st,world_st)))
 
   country_identified_final <- world_st[country_identified$col.id,"sovereignt"]
 
-  country_identified_final_1 <- as.data.frame(country_identified_final)
+  country_identified_final_1 <- base::as.data.frame(country_identified_final)
   country_identified_final_1 <- country_identified_final_1[,"sovereignt"]
   country_identified_use <- unique(country_identified_final_1)
 
@@ -97,7 +97,7 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
   if (min.overlap==0){
     fire_inside_study_area <- suppressMessages(suppressWarnings(st_intersects(my_study_area_t,my_fires_t_inter)))
 
-    fire_inside_study_area_df <- as.data.frame(fire_inside_study_area)
+    fire_inside_study_area_df <- base::as.data.frame(fire_inside_study_area)
 
     my_fires_t_inter_intersected <- my_fires_t_inter[fire_inside_study_area_df$col.id,]
 
@@ -132,7 +132,7 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
 
   my_fires_t_inter_intersected <- subset(my_fires_t_inter_intersected,Area_ha >=min.size)
 
-  my_fires_t_inter_intersected_export <- as.data.frame(my_fires_t_inter_intersected)
+  my_fires_t_inter_intersected_export <- base::as.data.frame(my_fires_t_inter_intersected)
   my_fires_t_inter_intersected_export <- my_fires_t_inter_intersected_export[,c("ID","Area_ha")]
   colnames(my_fires_t_inter_intersected_export) <- c("ID","Fire size")
 
@@ -154,8 +154,8 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
   percentage_above_1000_below_5000 <- sum(fires_above_1000_below_5000$Area_ha)/all_burned_area*100
   percentage_above_5000 <- sum(fires_above_5000$Area_ha)/all_burned_area*100
 
-  table_for_graph <- as.data.frame(rbind(percentage_below_100,percentage_above_100_below_500,percentage_above_500_below_1000,
-                                         percentage_above_1000_below_5000,percentage_above_5000))
+  table_for_graph <- base::as.data.frame(rbind(percentage_below_100,percentage_above_100_below_500,percentage_above_500_below_1000,
+                                               percentage_above_1000_below_5000,percentage_above_5000))
 
 
 
@@ -207,11 +207,11 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
 
 
 
-  freqs_my_fires_t_inter_intersected <- as.data.frame(my_fires_t_inter_intersected_all_fires %>%
-                                                        mutate (class=cut(Area_ha,c(-1,99.9,250,500,750,1000,2500,5000,10000,10000000))) %>%
-                                                        group_by(class) %>%
-                                                        summarize(Total_areas = n())%>%
-                                                        complete(class))
+  freqs_my_fires_t_inter_intersected <- base::as.data.frame(my_fires_t_inter_intersected_all_fires %>%
+                                                              mutate (class=cut(Area_ha,c(-1,99.9,250,500,750,1000,2500,5000,10000,10000000))) %>%
+                                                              group_by(class) %>%
+                                                              summarize(Total_areas = n())%>%
+                                                              complete(class))
 
   freqs_my_fires_t_inter_intersected[is.na(freqs_my_fires_t_inter_intersected)] <- 0
 
@@ -240,9 +240,9 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
 
 
 
-  BA_year_my_fires_t_inter_intersected <- as.data.frame(my_fires_t_inter_intersected_all_fires %>%
-                                                         group_by(Year) %>%
-                                                         summarize(Total_areas = sum(Area_ha)))
+  BA_year_my_fires_t_inter_intersected <- base::as.data.frame(my_fires_t_inter_intersected_all_fires %>%
+                                                                group_by(Year) %>%
+                                                                summarize(Total_areas = sum(Area_ha)))
 
 
 
@@ -252,7 +252,7 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
   colnames(my_BA_per_year)<- c("Year","Burned_area")
 
   head(my_BA_per_year)
-  my_BA_per_year <- as.data.frame(my_BA_per_year)
+  my_BA_per_year <- base::as.data.frame(my_BA_per_year)
 
   my_BA_per_year$Year <- min(BA_year_my_fires_t_inter_intersected$Year):max(BA_year_my_fires_t_inter_intersected$Year)
 
@@ -311,11 +311,11 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
 
   my_fires_t_inter_intersected$Area_ha <- as.numeric(my_fires_t_inter_intersected$Area_ha)
 
-  freqs_my_fires_t_inter_intersected_spikes <- as.data.frame(my_fires_t_inter_intersected %>%
-                                                               mutate (class=cut(Area_ha,unique(c(min.size,fire.size.intervals,10000000)))) %>%
-                                                               group_by(class) %>%
-                                                               summarize(Total_areas = n())%>%
-                                                               complete(class))
+  freqs_my_fires_t_inter_intersected_spikes <- base::as.data.frame(my_fires_t_inter_intersected %>%
+                                                                     mutate (class=cut(Area_ha,unique(c(min.size,fire.size.intervals,10000000)))) %>%
+                                                                     group_by(class) %>%
+                                                                     summarize(Total_areas = n())%>%
+                                                                     complete(class))
 
 
   freqs_my_fires_t_inter_intersected_spikes <- subset(freqs_my_fires_t_inter_intersected_spikes, !is.na(class))
@@ -389,7 +389,7 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
 
   if (length(manual.dur)>=1 ){
 
-    manual.dur_df <- as.data.frame(manual.dur)
+    manual.dur_df <- base::as.data.frame(manual.dur)
     colnames(manual.dur_df) <- "pos"
 
     manual.dur_df_position <- freqs_my_fires_t_inter_intersected_spikes[freqs_my_fires_t_inter_intersected_spikes$first_val %in% manual.dur_df$pos, ]
@@ -448,9 +448,9 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
 
   freqs_my_fires_t_inter_intersected_spikes_id$dur_ID <- na.locf(freqs_my_fires_t_inter_intersected_spikes_id$dur_ID)
 
-  frequency_per_duration_class <- as.data.frame(freqs_my_fires_t_inter_intersected_spikes_id %>%
-                                                  group_by(dur_ID) %>%
-                                                  summarise(sum = sum(freq_rel)))
+  frequency_per_duration_class <- base::as.data.frame(freqs_my_fires_t_inter_intersected_spikes_id %>%
+                                                        group_by(dur_ID) %>%
+                                                        summarise(sum = sum(freq_rel)))
 
 
 
@@ -458,7 +458,7 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
 
   class(result_hours_final)
 
-  result_hours_final_df<-as.data.frame(result_hours_final)
+  result_hours_final_df<-base::as.data.frame(result_hours_final)
 
 
   dated_fires <- st_read(my.dated.fires)
@@ -473,7 +473,7 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
 
     fire_inside_study_area_dated <- suppressMessages(suppressWarnings(st_intersects(my_study_area_t,dated_fires)))
 
-    fire_inside_study_area_dated_df <- as.data.frame(fire_inside_study_area_dated)
+    fire_inside_study_area_dated_df <- base::as.data.frame(fire_inside_study_area_dated)
 
 
 
@@ -492,7 +492,7 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
     fire_inside_study_area_dated <- suppressMessages(suppressWarnings(st_intersects(my_study_area_t,dated_fires)))
 
 
-    fire_inside_study_area_dated_df <- as.data.frame(fire_inside_study_area_dated)
+    fire_inside_study_area_dated_df <- base::as.data.frame(fire_inside_study_area_dated)
 
 
     dated_fires_intersected <- dated_fires[fire_inside_study_area_dated_df$col.id,]
@@ -577,12 +577,12 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
   }
 
   if(meteo.aggregation=="mean") {
-    meteo_fires_inside1 <- as.data.frame(meteo_fires_inside %>%
-                                           group_by(concat_use) %>%
-                                           summarise(temperature_use = mean(temperature),
-                                                     HR_use = mean(RH),
-                                                     WS_use = mean(WS),
-                                                     FWI_use= mean (FWI)))
+    meteo_fires_inside1 <- base::as.data.frame(meteo_fires_inside %>%
+                                                 group_by(concat_use) %>%
+                                                 summarise(temperature_use = mean(temperature),
+                                                           HR_use = mean(RH),
+                                                           WS_use = mean(WS),
+                                                           FWI_use= mean (FWI)))
 
     meteo_fires_inside1 <- left_join(meteo_fires_inside1,meteo_fires_inside_use_for_aggregation, by="concat_use",all.x=TRUE)
     meteo_fires_inside1 <- meteo_fires_inside1[!duplicated(meteo_fires_inside1),]
@@ -593,11 +593,11 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
 
 
   if(meteo.aggregation=="max.min") {
-  meteo_fires_inside1 <- as.data.frame(meteo_fires_inside %>%
-                                           group_by(concat_use) %>%
-                                           summarise(temperature_use = max(temperature),
-                                                     HR_use = min(RH),
-                                                     WS_use = max(WS)))
+    meteo_fires_inside1 <- base::as.data.frame(meteo_fires_inside %>%
+                                                 group_by(concat_use) %>%
+                                                 summarise(temperature_use = max(temperature),
+                                                           HR_use = min(RH),
+                                                           WS_use = max(WS)))
 
     meteo_fires_inside1 <- left_join(meteo_fires_inside1,meteo_fires_inside_use_for_aggregation, by="concat_use",all.x=TRUE)
     meteo_fires_inside1 <- meteo_fires_inside1[!duplicated(meteo_fires_inside1),]
@@ -609,15 +609,15 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
 
 
   if (fire.aggregation=="WS"){
-    meteo_fires_inside <- as.data.frame(meteo_fires_inside %>%
-                                          group_by(ID) %>%
-                                          slice(which.max(WS_use)))}
+    meteo_fires_inside <- base::as.data.frame(meteo_fires_inside %>%
+                                                group_by(ID) %>%
+                                                slice(which.max(WS_use)))}
 
 
   if (fire.aggregation=="FWI"){
-    meteo_fires_inside <- as.data.frame(meteo_fires_inside %>%
-                                          group_by(ID) %>%
-                                          slice(which.max(FWI_use)))}
+    meteo_fires_inside <- base::as.data.frame(meteo_fires_inside %>%
+                                                group_by(ID) %>%
+                                                slice(which.max(FWI_use)))}
 
   if (fire.aggregation=="none"){
     meteo_fires_inside <- meteo_fires_inside}
@@ -672,7 +672,7 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
 
 
 
-  meteo_fires_inside_summary_table <- as.data.frame(left_join(meteo_fires_inside_summary_table,dated_fires_intersected,by="ID"))
+  meteo_fires_inside_summary_table <- base::as.data.frame(left_join(meteo_fires_inside_summary_table,dated_fires_intersected,by="ID"))
 
 
   table_to_summary <- meteo_fires_inside_summary_table[c("ID","year","month","day","temperature_use","HR_use","WS_use","Area_ha")]
@@ -705,7 +705,7 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
     head(mc$classification,326)
 
 
-    meteoclust_MB  <- data.frame(newdata, mc$classification)
+    meteoclust_MB  <-base::data.frame(newdata, mc$classification)
     names(meteoclust_MB)
     clMB<-mc$classification
 
@@ -719,7 +719,7 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
 
 
     if (length(unique(mc$classification))>1){
-        class_fviz <- fviz_mclust(mc, "classification", geom = "point",
+      class_fviz <- fviz_mclust(mc, "classification", geom = "point",
                                 pointsize = 1.5, palette = "jco")
 
 
@@ -787,7 +787,7 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
 
     clKM3<-km.res3$cluster
 
-    meteoclust_KM3  <- data.frame(newdata, clKM3)
+    meteoclust_KM3  <-base::data.frame(newdata, clKM3)
     names(meteoclust_KM3)
 
 
@@ -804,7 +804,7 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
 
 
 
-    mc_df <- as.data.frame(mc$classification)
+    mc_df <- base::as.data.frame(mc$classification)
 
 
     mc_df_fin <- mc_df %>%
@@ -898,47 +898,47 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
 
 
 
-    freqs_wd_MB <- as.data.frame(meteo_fires_inside_wd_use%>%
-                                   group_by(cluster_id_MB,WD_use,WD_letter)%>%
-                                   summarise(Freq=n()/nrow(meteo_fires_inside_wd_use)))
+    freqs_wd_MB <- base::as.data.frame(meteo_fires_inside_wd_use%>%
+                                         group_by(cluster_id_MB,WD_use,WD_letter)%>%
+                                         summarise(Freq=n()/nrow(meteo_fires_inside_wd_use)))
 
 
-    freqs_wd_km_2 <- as.data.frame(meteo_fires_inside_wd_use%>%
-                                     group_by(cluster_id_km_2,WD_use,WD_letter)%>%
-                                     summarise(Freq=n()/nrow(meteo_fires_inside_wd_use)))
+    freqs_wd_km_2 <- base::as.data.frame(meteo_fires_inside_wd_use%>%
+                                           group_by(cluster_id_km_2,WD_use,WD_letter)%>%
+                                           summarise(Freq=n()/nrow(meteo_fires_inside_wd_use)))
 
-    freqs_wd_km_3 <- as.data.frame(meteo_fires_inside_wd_use%>%
-                                     group_by(cluster_id_km_3,WD_use,WD_letter)%>%
-                                     summarise(Freq=n()/nrow(meteo_fires_inside_wd_use)))
+    freqs_wd_km_3 <- base::as.data.frame(meteo_fires_inside_wd_use%>%
+                                           group_by(cluster_id_km_3,WD_use,WD_letter)%>%
+                                           summarise(Freq=n()/nrow(meteo_fires_inside_wd_use)))
 
-    freqs_wd_km_4 <- as.data.frame(meteo_fires_inside_wd_use%>%
-                                     group_by(cluster_id_km_4,WD_use,WD_letter)%>%
-                                     summarise(Freq=n()/nrow(meteo_fires_inside_wd_use)))
+    freqs_wd_km_4 <- base::as.data.frame(meteo_fires_inside_wd_use%>%
+                                           group_by(cluster_id_km_4,WD_use,WD_letter)%>%
+                                           summarise(Freq=n()/nrow(meteo_fires_inside_wd_use)))
 
-    freqs_wd_km_5 <- as.data.frame(meteo_fires_inside_wd_use%>%
-                                     group_by(cluster_id_km_5,WD_use,WD_letter)%>%
-                                     summarise(Freq=n()/nrow(meteo_fires_inside_wd_use)))
+    freqs_wd_km_5 <- base::as.data.frame(meteo_fires_inside_wd_use%>%
+                                           group_by(cluster_id_km_5,WD_use,WD_letter)%>%
+                                           summarise(Freq=n()/nrow(meteo_fires_inside_wd_use)))
 
 
-    freqs_wd_km_6 <- as.data.frame(meteo_fires_inside_wd_use%>%
-                                     group_by(cluster_id_km_6,WD_use,WD_letter)%>%
-                                     summarise(Freq=n()/nrow(meteo_fires_inside_wd_use)))
+    freqs_wd_km_6 <- base::as.data.frame(meteo_fires_inside_wd_use%>%
+                                           group_by(cluster_id_km_6,WD_use,WD_letter)%>%
+                                           summarise(Freq=n()/nrow(meteo_fires_inside_wd_use)))
 
-    freqs_wd_km_7 <- as.data.frame(meteo_fires_inside_wd_use%>%
-                                     group_by(cluster_id_km_7,WD_use,WD_letter)%>%
-                                     summarise(Freq=n()/nrow(meteo_fires_inside_wd_use)))
+    freqs_wd_km_7 <- base::as.data.frame(meteo_fires_inside_wd_use%>%
+                                           group_by(cluster_id_km_7,WD_use,WD_letter)%>%
+                                           summarise(Freq=n()/nrow(meteo_fires_inside_wd_use)))
 
-    freqs_wd_km_8 <- as.data.frame(meteo_fires_inside_wd_use%>%
-                                     group_by(cluster_id_km_8,WD_use,WD_letter)%>%
-                                     summarise(Freq=n()/nrow(meteo_fires_inside_wd_use)))
+    freqs_wd_km_8 <- base::as.data.frame(meteo_fires_inside_wd_use%>%
+                                           group_by(cluster_id_km_8,WD_use,WD_letter)%>%
+                                           summarise(Freq=n()/nrow(meteo_fires_inside_wd_use)))
 
-    freqs_wd_km_9 <- as.data.frame(meteo_fires_inside_wd_use%>%
-                                     group_by(cluster_id_km_9,WD_use,WD_letter)%>%
-                                     summarise(Freq=n()/nrow(meteo_fires_inside_wd_use)))
+    freqs_wd_km_9 <- base::as.data.frame(meteo_fires_inside_wd_use%>%
+                                           group_by(cluster_id_km_9,WD_use,WD_letter)%>%
+                                           summarise(Freq=n()/nrow(meteo_fires_inside_wd_use)))
 
-    freqs_wd_km_10 <- as.data.frame(meteo_fires_inside_wd_use%>%
-                                      group_by(cluster_id_km_10,WD_use,WD_letter)%>%
-                                      summarise(Freq=n()/nrow(meteo_fires_inside_wd_use)))
+    freqs_wd_km_10 <- base::as.data.frame(meteo_fires_inside_wd_use%>%
+                                            group_by(cluster_id_km_10,WD_use,WD_letter)%>%
+                                            summarise(Freq=n()/nrow(meteo_fires_inside_wd_use)))
 
 
 
@@ -1012,7 +1012,7 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
 
     my_fires_t_inter_intersected$ID<-as.numeric(my_fires_t_inter_intersected$ID)
 
-    my_fires_t_inter_intersected_clusters_get_area <- as.data.frame(left_join(dated_fires_intersected,meteo_fires_inside_wd_use,by="ID"))
+    my_fires_t_inter_intersected_clusters_get_area <- base::as.data.frame(left_join(dated_fires_intersected,meteo_fires_inside_wd_use,by="ID"))
     head(my_fires_t_inter_intersected_clusters_get_area)
 
     my_fires_t_inter_intersected_clusters_get_area <- subset(my_fires_t_inter_intersected_clusters_get_area, !is.na(cluster_id_MB))
@@ -1023,75 +1023,75 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
 
     }
 
-    area_per_cluster_id_MB <- as.data.frame(my_fires_t_inter_intersected_clusters_get_area %>%
-                                              group_by(cluster_id_MB) %>%
-                                              summarise(mean_area_ha=mean(Area_ha),
-                                                        per_95_area_ha=quantile(Area_ha,probs= c(0.95),na.rm=T),
-                                                        per_5_area_ha=quantile(Area_ha,probs= c(0.05),na.rm=T)))
+    area_per_cluster_id_MB <- base::as.data.frame(my_fires_t_inter_intersected_clusters_get_area %>%
+                                                    group_by(cluster_id_MB) %>%
+                                                    summarise(mean_area_ha=mean(Area_ha),
+                                                              per_95_area_ha=quantile(Area_ha,probs= c(0.95),na.rm=T),
+                                                              per_5_area_ha=quantile(Area_ha,probs= c(0.05),na.rm=T)))
 
 
-    area_per_cluster_id_km_2 <- as.data.frame(my_fires_t_inter_intersected_clusters_get_area %>%
-                                                group_by(cluster_id_km_2) %>%
-                                                summarise(mean_area_ha=mean(Area_ha),
-                                                          per_95_area_ha=quantile(Area_ha,probs= c(0.95),na.rm=T),
-                                                          per_5_area_ha=quantile(Area_ha,probs= c(0.05),na.rm=T)))
+    area_per_cluster_id_km_2 <- base::as.data.frame(my_fires_t_inter_intersected_clusters_get_area %>%
+                                                      group_by(cluster_id_km_2) %>%
+                                                      summarise(mean_area_ha=mean(Area_ha),
+                                                                per_95_area_ha=quantile(Area_ha,probs= c(0.95),na.rm=T),
+                                                                per_5_area_ha=quantile(Area_ha,probs= c(0.05),na.rm=T)))
 
 
-    area_per_cluster_id_km_3 <- as.data.frame(my_fires_t_inter_intersected_clusters_get_area %>%
-                                                group_by(cluster_id_km_3) %>%
-                                                summarise(mean_area_ha=mean(Area_ha),
-                                                          per_95_area_ha=quantile(Area_ha,probs= c(0.95),na.rm=T),
-                                                          per_5_area_ha=quantile(Area_ha,probs= c(0.05),na.rm=T)))
+    area_per_cluster_id_km_3 <- base::as.data.frame(my_fires_t_inter_intersected_clusters_get_area %>%
+                                                      group_by(cluster_id_km_3) %>%
+                                                      summarise(mean_area_ha=mean(Area_ha),
+                                                                per_95_area_ha=quantile(Area_ha,probs= c(0.95),na.rm=T),
+                                                                per_5_area_ha=quantile(Area_ha,probs= c(0.05),na.rm=T)))
 
 
-    area_per_cluster_id_km_4 <- as.data.frame(my_fires_t_inter_intersected_clusters_get_area %>%
-                                                group_by(cluster_id_km_4) %>%
-                                                summarise(mean_area_ha=mean(Area_ha),
-                                                          per_95_area_ha=quantile(Area_ha,probs= c(0.95),na.rm=T),
-                                                          per_5_area_ha=quantile(Area_ha,probs= c(0.05),na.rm=T)))
+    area_per_cluster_id_km_4 <- base::as.data.frame(my_fires_t_inter_intersected_clusters_get_area %>%
+                                                      group_by(cluster_id_km_4) %>%
+                                                      summarise(mean_area_ha=mean(Area_ha),
+                                                                per_95_area_ha=quantile(Area_ha,probs= c(0.95),na.rm=T),
+                                                                per_5_area_ha=quantile(Area_ha,probs= c(0.05),na.rm=T)))
 
 
 
-    area_per_cluster_id_km_5 <- as.data.frame(my_fires_t_inter_intersected_clusters_get_area %>%
-                                                group_by(cluster_id_km_5) %>%
-                                                summarise(mean_area_ha=mean(Area_ha),
-                                                          per_95_area_ha=quantile(Area_ha,probs= c(0.95),na.rm=T),
-                                                          per_5_area_ha=quantile(Area_ha,probs= c(0.05),na.rm=T)))
+    area_per_cluster_id_km_5 <- base::as.data.frame(my_fires_t_inter_intersected_clusters_get_area %>%
+                                                      group_by(cluster_id_km_5) %>%
+                                                      summarise(mean_area_ha=mean(Area_ha),
+                                                                per_95_area_ha=quantile(Area_ha,probs= c(0.95),na.rm=T),
+                                                                per_5_area_ha=quantile(Area_ha,probs= c(0.05),na.rm=T)))
 
 
-    area_per_cluster_id_km_6 <- as.data.frame(my_fires_t_inter_intersected_clusters_get_area %>%
-                                                group_by(cluster_id_km_6) %>%
-                                                summarise(mean_area_ha=mean(Area_ha),
-                                                          per_95_area_ha=quantile(Area_ha,probs= c(0.95),na.rm=T),
-                                                          per_5_area_ha=quantile(Area_ha,probs= c(0.05),na.rm=T)))
+    area_per_cluster_id_km_6 <- base::as.data.frame(my_fires_t_inter_intersected_clusters_get_area %>%
+                                                      group_by(cluster_id_km_6) %>%
+                                                      summarise(mean_area_ha=mean(Area_ha),
+                                                                per_95_area_ha=quantile(Area_ha,probs= c(0.95),na.rm=T),
+                                                                per_5_area_ha=quantile(Area_ha,probs= c(0.05),na.rm=T)))
 
 
-    area_per_cluster_id_km_7 <- as.data.frame(my_fires_t_inter_intersected_clusters_get_area %>%
-                                                group_by(cluster_id_km_7) %>%
-                                                summarise(mean_area_ha=mean(Area_ha),
-                                                          per_95_area_ha=quantile(Area_ha,probs= c(0.95),na.rm=T),
-                                                          per_5_area_ha=quantile(Area_ha,probs= c(0.05),na.rm=T)))
+    area_per_cluster_id_km_7 <- base::as.data.frame(my_fires_t_inter_intersected_clusters_get_area %>%
+                                                      group_by(cluster_id_km_7) %>%
+                                                      summarise(mean_area_ha=mean(Area_ha),
+                                                                per_95_area_ha=quantile(Area_ha,probs= c(0.95),na.rm=T),
+                                                                per_5_area_ha=quantile(Area_ha,probs= c(0.05),na.rm=T)))
 
 
-    area_per_cluster_id_km_8 <- as.data.frame(my_fires_t_inter_intersected_clusters_get_area %>%
-                                                group_by(cluster_id_km_8) %>%
-                                                summarise(mean_area_ha=mean(Area_ha),
-                                                          per_95_area_ha=quantile(Area_ha,probs= c(0.95),na.rm=T),
-                                                          per_5_area_ha=quantile(Area_ha,probs= c(0.05),na.rm=T)))
+    area_per_cluster_id_km_8 <- base::as.data.frame(my_fires_t_inter_intersected_clusters_get_area %>%
+                                                      group_by(cluster_id_km_8) %>%
+                                                      summarise(mean_area_ha=mean(Area_ha),
+                                                                per_95_area_ha=quantile(Area_ha,probs= c(0.95),na.rm=T),
+                                                                per_5_area_ha=quantile(Area_ha,probs= c(0.05),na.rm=T)))
 
 
-    area_per_cluster_id_km_9 <- as.data.frame(my_fires_t_inter_intersected_clusters_get_area %>%
-                                                group_by(cluster_id_km_9) %>%
-                                                summarise(mean_area_ha=mean(Area_ha),
-                                                          per_95_area_ha=quantile(Area_ha,probs= c(0.95),na.rm=T),
-                                                          per_5_area_ha=quantile(Area_ha,probs= c(0.05),na.rm=T)))
+    area_per_cluster_id_km_9 <- base::as.data.frame(my_fires_t_inter_intersected_clusters_get_area %>%
+                                                      group_by(cluster_id_km_9) %>%
+                                                      summarise(mean_area_ha=mean(Area_ha),
+                                                                per_95_area_ha=quantile(Area_ha,probs= c(0.95),na.rm=T),
+                                                                per_5_area_ha=quantile(Area_ha,probs= c(0.05),na.rm=T)))
 
 
-    area_per_cluster_id_km_10 <- as.data.frame(my_fires_t_inter_intersected_clusters_get_area %>%
-                                                 group_by(cluster_id_km_10) %>%
-                                                 summarise(mean_area_ha=mean(Area_ha),
-                                                           per_95_area_ha=quantile(Area_ha,probs= c(0.95),na.rm=T),
-                                                           per_5_area_ha=quantile(Area_ha,probs= c(0.05),na.rm=T)))
+    area_per_cluster_id_km_10 <- base::as.data.frame(my_fires_t_inter_intersected_clusters_get_area %>%
+                                                       group_by(cluster_id_km_10) %>%
+                                                       summarise(mean_area_ha=mean(Area_ha),
+                                                                 per_95_area_ha=quantile(Area_ha,probs= c(0.95),na.rm=T),
+                                                                 per_5_area_ha=quantile(Area_ha,probs= c(0.05),na.rm=T)))
 
 
 
@@ -1179,11 +1179,11 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
     HR_50 <- as.numeric(quantile(newdata$HR_use,0.5))
 
 
-    percentile_90 <- as.data.frame(cbind(temp_90,HR_10,WS_90))
-    percentile_80 <- as.data.frame(cbind(temp_80,HR_20,WS_80))
-    percentile_70 <- as.data.frame(cbind(temp_70,HR_30,WS_70))
-    percentile_60 <- as.data.frame(cbind(temp_60,HR_40,WS_60))
-    percentile_50 <- as.data.frame(cbind(temp_50,HR_50,WS_50))
+    percentile_90 <- base::as.data.frame(cbind(temp_90,HR_10,WS_90))
+    percentile_80 <- base::as.data.frame(cbind(temp_80,HR_20,WS_80))
+    percentile_70 <- base::as.data.frame(cbind(temp_70,HR_30,WS_70))
+    percentile_60 <- base::as.data.frame(cbind(temp_60,HR_40,WS_60))
+    percentile_50 <- base::as.data.frame(cbind(temp_50,HR_50,WS_50))
 
 
     colnames(percentile_90) <- c("temperature_use", "HR_use","WS_use")
@@ -1196,13 +1196,13 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
     all_percentiles <- rbind(percentile_50,percentile_60,percentile_70,percentile_80,percentile_90)
     all_percentiles$percentile <- c(50,60,70,80,90)
 
-    all_percentiles <- cbind(as.data.frame(all_percentiles[,4]),all_percentiles[,1:3])
+    all_percentiles <- cbind(base::as.data.frame(all_percentiles[,4]),all_percentiles[,1:3])
     colnames(all_percentiles) <- c("percentile","temperature_use", "HR_use","WS_use")
 
 
-    percentile_wd <- as.data.frame(meteo_fires_inside_wd_use %>%
-                                     group_by(WD_use,WD_letter) %>%
-                                     summarise(absolute_freq = n()))
+    percentile_wd <- base::as.data.frame(meteo_fires_inside_wd_use %>%
+                                           group_by(WD_use,WD_letter) %>%
+                                           summarise(absolute_freq = n()))
 
     percentile_wd$Freq <- percentile_wd$absolute_freq/sum(percentile_wd$absolute_freq)
     percentile_wd_use <- percentile_wd[,c(2,4)]
@@ -1266,11 +1266,15 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
 
 
 
-
-  p100 <- plot_windrose(spd = for_wind_rose_100ha_meteo_fires_inside$WS,
-                        dir = for_wind_rose_100ha_meteo_fires_inside$WD,
-                        spdseq = c(0,3,6,12,20,100))
-
+  if (nrow(for_wind_rose_100ha_meteo_fires_inside)>0){
+    p100 <- plot_windrose(spd = for_wind_rose_100ha_meteo_fires_inside$WS,
+                          dir = for_wind_rose_100ha_meteo_fires_inside$WD,
+                          spdseq = c(0,3,6,12,20,100))
+  }else{p100 <- ggplot() +
+    annotate("text", x = 0.5,  y = 0.5,
+             size = 3,
+             label = "No fire events with more than \n 100 ha burned recorded") + theme_void()
+  }
 
 
   wind_rose_100_use <- tempfile(fileext = ".png")
@@ -1284,10 +1288,15 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
   for_wind_rose_500ha$Area_ha <- as.numeric(for_wind_rose_500ha$Area_ha)
   for_wind_rose_500ha_meteo_fires_inside <- result_hours_final_df_wind_rose[result_hours_final_df_wind_rose$ID %in% for_wind_rose_500ha$ID, ]
 
-
-  p500 <- plot_windrose(spd = for_wind_rose_500ha_meteo_fires_inside$WS,
-                        dir = for_wind_rose_500ha_meteo_fires_inside$WD,
-                        spdseq = c(0,3,6,12,20,100))
+  if (nrow(for_wind_rose_500ha_meteo_fires_inside)>0){
+    p500 <- plot_windrose(spd = for_wind_rose_500ha_meteo_fires_inside$WS,
+                          dir = for_wind_rose_500ha_meteo_fires_inside$WD,
+                          spdseq = c(0,3,6,12,20,100))
+  } else{p500 <- ggplot() +
+    annotate("text", x = 0.5,  y = 0.5,
+             size = 3,
+             label = "No fire events with more than \n 500 ha burned recorded") + theme_void()
+  }
 
 
 
@@ -1302,10 +1311,16 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
   for_wind_rose_1000ha$Area_ha <- as.numeric(for_wind_rose_1000ha$Area_ha)
   for_wind_rose_1000ha_meteo_fires_inside <- result_hours_final_df_wind_rose[result_hours_final_df_wind_rose$ID %in% for_wind_rose_1000ha$ID, ]
 
-
-  p1000 <- plot_windrose(spd = for_wind_rose_1000ha_meteo_fires_inside$WS,
-                         dir = for_wind_rose_1000ha_meteo_fires_inside$WD,
-                         spdseq = c(0,3,6,12,20,100))
+  if (nrow(for_wind_rose_1000ha_meteo_fires_inside)>0){
+    p1000 <- plot_windrose(spd = for_wind_rose_1000ha_meteo_fires_inside$WS,
+                           dir = for_wind_rose_1000ha_meteo_fires_inside$WD,
+                           spdseq = c(0,3,6,12,20,100))
+  } else {
+    p1000 <- ggplot() +
+      annotate("text", x = 0.5,  y = 0.5,
+               size = 3,
+               label = "No fire events with more than \n 1,000 ha burned recorded") + theme_void()
+  }
 
 
 
@@ -1782,7 +1797,7 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
     setwd(file.path(mainDir,subDir))
 
 
-    mc <- as.data.frame(1:256)
+    mc <- base::as.data.frame(1:256)
     colnames(mc) <- "mc"
 
 
@@ -1874,7 +1889,7 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
     setwd(file.path(mainDir,subDir))
 
 
-    mc <- as.data.frame(1:256)
+    mc <- base::as.data.frame(1:256)
     colnames(mc) <- "mc"
 
 
