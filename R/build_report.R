@@ -17,7 +17,7 @@
 #'
 #' @return Returns fuel moisture file based on clustering or percentiles, a csv file with the meteorological values per clustering method, a csv file with a summary of meteorology per fire event, and a csv file with the fire size for the fires recorded in the study area in the period analysed.
 #' @export
-#' @import sf rgeos rgdal sp tibble tidyverse tseries ggpubr ggplot2 dplyr ggspatial rnaturalearth rnaturalearthdata RColorBrewer tidyquant factoextra car mclust officer flextable magrittr tidyr
+#' @import sf rgeos rgdal sp tibble tidyverse tseries ggpubr ggplot2 dplyr ggspatial rnaturalearth rnaturalearthdata RColorBrewer tidyquant factoextra car mclust officer flextable magrittr tidyr maps
 #'
 #' @examples
 #' \dontrun{build_report(study.area="C:/user/study_area.shp",
@@ -463,7 +463,7 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
 
 
   dated_fires <- st_read(my.dated.fires)
-
+  dated_fires <- st_make_valid(dated_fires)
 
   dated_fires <- st_transform(dated_fires, crs="EPSG:4326")
 
