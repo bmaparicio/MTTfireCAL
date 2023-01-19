@@ -461,14 +461,22 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
 
   result_hours_final_df<-base::as.data.frame(result_hours_final)
 
+  #old - need to re-check
+  # dated_fires <- st_read(my.dated.fires)
+  # dated_fires <- st_make_valid(dated_fires)
+  #
+  # dated_fires <- st_transform(dated_fires, crs="EPSG:4326")
+  #
+  # dated_fires <- subset(dated_fires,Data_ini != "NaN" & Data_end != "NaN")
 
-  dated_fires <- st_read(my.dated.fires)
-  dated_fires <- st_make_valid(dated_fires)
 
-  dated_fires <- st_transform(dated_fires, crs="EPSG:4326")
+  dated_fires <- readOGR(my.dated.fires)
+  dated_fires <- gBuffer(dated_fires,width=0,byid=TRUE)
+  dated_fires <- spTransform(dated_fires, CRS("+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0"))
+  dated_fires <- st_as_sf(dated_fires)
 
   dated_fires <- subset(dated_fires,Data_ini != "NaN" & Data_end != "NaN")
-
+  dated_fires <- st_make_valid(dated_fires)
 
   if (min.overlap==0){
 
@@ -488,7 +496,7 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
   } else {
 
     my_study_area_t <- suppressMessages(suppressWarnings(st_buffer(my_study_area_t,0)))
-    dated_fires <- suppressMessages(suppressWarnings(st_buffer(dated_fires,0)))
+    #dated_fires <- suppressMessages(suppressWarnings(st_buffer(dated_fires,0)))
 
     fire_inside_study_area_dated <- suppressMessages(suppressWarnings(st_intersects(my_study_area_t,dated_fires)))
 
