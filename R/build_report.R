@@ -55,6 +55,7 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
 
 
   world_st <- ne_countries(scale = "medium", returnclass = "sf")
+  world_st <- st_make_valid(world_st)
 
   my_study_area_t_plot_st <- st_as_sf(my_study_area_t_plot)
 
