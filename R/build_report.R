@@ -590,8 +590,7 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
                                                  group_by(concat_use) %>%
                                                  summarise(temperature_use = mean(temperature),
                                                            HR_use = mean(RH),
-                                                           WS_use = mean(WS),
-                                                           FWI_use= mean (FWI)))
+                                                           WS_use = mean(WS)))
 
     meteo_fires_inside1 <- left_join(meteo_fires_inside1,meteo_fires_inside_use_for_aggregation, by="concat_use",all.x=TRUE)
     meteo_fires_inside1 <- meteo_fires_inside1[!duplicated(meteo_fires_inside1),]
