@@ -47,9 +47,11 @@ get_fire_weather <- function(study.area, my.fires,output.folder,utc.zone,wf_user
   names(my_fires_t_inside_study_area)[names(my_fires_t_inside_study_area) == 'Date_ini'] <- 'Data_ini'
   names(my_fires_t_inside_study_area)[names(my_fires_t_inside_study_area) == 'Date_end'] <- 'Data_end'
 
+  str(my_fires_t_inside_study_area)
 
+  my_fires_t_dated <- subset(my_fires_t_inside_study_area, Data_ini!="NaN")
+  my_fires_t_dated <- subset(my_fires_t_dated, Data_end!="NaN")
 
-  my_fires_t_dated <- subset(my_fires_t_inside_study_area, Data_ini!="NaN" | Data_end!="NaN")
 
   length(my_fires_t_dated)
 
