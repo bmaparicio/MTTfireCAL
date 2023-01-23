@@ -40,3 +40,5 @@ Imports:
     flextable,
     magrittr,
     abind
+Depends: 
+    R (>= 2.10)
