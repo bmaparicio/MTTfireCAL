@@ -176,9 +176,12 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
   table_for_graph$label <- paste0(round (table_for_graph$V1,0), "%")
 
 
-  cols <- c("< 100" = "#FFFFCC", "100 - 500" = "#FFEDA0",
-            "500 - 1000" = "#FED976", "1000 - 5000" = "#FD8D3C",
-            "> 5000" = "#FC4E2A")
+  cols <- c("< 100" = "#FFFFCC", "100 - 500" = "#FDD976",
+            "500 - 1000" = "#FC8D3B", "1000 - 5000" = "#E21A1C",
+            "> 5000" = "#800025")
+
+  table_for_graph <- subset(table_for_graph,V1>0)
+
 
 
   plot_burned_area_per_class <- ggplot(table_for_graph, aes(ymax=ymax, ymin=ymin, xmax=4, xmin=3, fill=V2)) +
@@ -799,16 +802,16 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
     names(meteoclust_KM3)
 
 
-    meteo1<-aggregate(meteo_fires_inside, by=list(cluster=mc$classification), mean) ### model-based clusters
-    meteo2<-aggregate(meteo_fires_inside, by=list(cluster=km.res2$cluster), mean)  ### kmeans 2 clusters
-    meteo3<-aggregate(meteo_fires_inside, by=list(cluster=km.res3$cluster), mean) ### kmeans 3 clusters
-    meteo4<-aggregate(meteo_fires_inside, by=list(cluster=km.res4$cluster), mean) ### kmeans 4 clusters
-    meteo5<-aggregate(meteo_fires_inside, by=list(cluster=km.res5$cluster), mean) ### kmeans 5 clusters
-    meteo6<-aggregate(meteo_fires_inside, by=list(cluster=km.res6$cluster), mean) ### kmeans 6 clusters
-    meteo7<-aggregate(meteo_fires_inside, by=list(cluster=km.res7$cluster), mean) ### kmeans 7 clusters
-    meteo8<-aggregate(meteo_fires_inside, by=list(cluster=km.res8$cluster), mean) ### kmeans 8 clusters
-    meteo9<-aggregate(meteo_fires_inside, by=list(cluster=km.res9$cluster), mean) ### kmeans 9 clusters
-    meteo10<-aggregate(meteo_fires_inside, by=list(cluster=km.res10$cluster), mean) ### kmeans 10 clusters
+    meteo1<-suppressWarnings(aggregate(meteo_fires_inside, by=list(cluster=mc$classification), mean)) ### model-based clusters
+    meteo2<-suppressWarnings(aggregate(meteo_fires_inside, by=list(cluster=km.res2$cluster), mean))  ### kmeans 2 clusters
+    meteo3<-suppressWarnings(aggregate(meteo_fires_inside, by=list(cluster=km.res3$cluster), mean)) ### kmeans 3 clusters
+    meteo4<-suppressWarnings(aggregate(meteo_fires_inside, by=list(cluster=km.res4$cluster), mean)) ### kmeans 4 clusters
+    meteo5<-suppressWarnings(aggregate(meteo_fires_inside, by=list(cluster=km.res5$cluster), mean)) ### kmeans 5 clusters
+    meteo6<-suppressWarnings(aggregate(meteo_fires_inside, by=list(cluster=km.res6$cluster), mean)) ### kmeans 6 clusters
+    meteo7<-suppressWarnings(aggregate(meteo_fires_inside, by=list(cluster=km.res7$cluster), mean)) ### kmeans 7 clusters
+    meteo8<-suppressWarnings(aggregate(meteo_fires_inside, by=list(cluster=km.res8$cluster), mean)) ### kmeans 8 clusters
+    meteo9<-suppressWarnings(aggregate(meteo_fires_inside, by=list(cluster=km.res9$cluster), mean)) ### kmeans 9 clusters
+    meteo10<-suppressWarnings(aggregate(meteo_fires_inside, by=list(cluster=km.res10$cluster), mean)) ### kmeans 10 clusters
 
 
 
@@ -876,8 +879,13 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
     meteo_fires_inside$cluster_id_km_10 <- km.res10$cluster
 
 
-    n_unique <- length(unique(meteo_fires_inside_wd_use$concat_use))
-    n_reps <- nrow(meteo_fires_inside_wd_use)/n_unique
+    meteo_fires_inside_wd_use$concat_use_2 <- paste(meteo_fires_inside_wd_use$ID,
+                                                    meteo_fires_inside_wd_use$day_UTC_corrected,
+                                                    sep="_")
+
+
+
+    meteo_fires_inside_wd_use <- meteo_fires_inside_wd_use[!duplicated(meteo_fires_inside_wd_use), ]
 
 
     if (meteo.aggregation=="none"){
@@ -893,6 +901,12 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
       meteo_fires_inside_wd_use$cluster_id_km_10 <- km.res10$cluster
 
     } else {
+
+
+
+      n_unique <- length(unique(meteo_fires_inside_wd_use$concat_use))
+      n_reps <- nrow(meteo_fires_inside_wd_use)/n_unique
+
       meteo_fires_inside_wd_use$cluster_id_MB <- rep(meteoclust_MB, each = n_reps)
       meteo_fires_inside_wd_use$cluster_id_km_2 <- rep(km.res2$cluster,each=n_reps)
       meteo_fires_inside_wd_use$cluster_id_km_3 <- rep(km.res3$cluster,each=n_reps)
@@ -1255,7 +1269,7 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
 
   p0 <- plot_windrose(spd = for_wind_rose_0ha_meteo_fires_inside$WS,
                       dir = for_wind_rose_0ha_meteo_fires_inside$WD,
-                      spdseq = c(0,3,6,12,20,100))
+                      spdseq = c(0,3,6,12,20,ceiling(max(for_wind_rose_0ha_meteo_fires_inside$WS))))
 
 
 
@@ -1277,7 +1291,7 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
   if (nrow(for_wind_rose_100ha_meteo_fires_inside)>0){
     p100 <- plot_windrose(spd = for_wind_rose_100ha_meteo_fires_inside$WS,
                           dir = for_wind_rose_100ha_meteo_fires_inside$WD,
-                          spdseq = c(0,3,6,12,20,100))
+                          spdseq = c(0,3,6,12,20,ceiling(max(for_wind_rose_0ha_meteo_fires_inside$WS))))
   }else{p100 <- ggplot() +
     annotate("text", x = 0.5,  y = 0.5,
              size = 3,
@@ -1299,7 +1313,7 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
   if (nrow(for_wind_rose_500ha_meteo_fires_inside)>0){
     p500 <- plot_windrose(spd = for_wind_rose_500ha_meteo_fires_inside$WS,
                           dir = for_wind_rose_500ha_meteo_fires_inside$WD,
-                          spdseq = c(0,3,6,12,20,100))
+                          spdseq = c(0,3,6,12,20,ceiling(max(for_wind_rose_0ha_meteo_fires_inside$WS))))
   } else{p500 <- ggplot() +
     annotate("text", x = 0.5,  y = 0.5,
              size = 3,
@@ -1322,7 +1336,7 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
   if (nrow(for_wind_rose_1000ha_meteo_fires_inside)>0){
     p1000 <- plot_windrose(spd = for_wind_rose_1000ha_meteo_fires_inside$WS,
                            dir = for_wind_rose_1000ha_meteo_fires_inside$WD,
-                           spdseq = c(0,3,6,12,20,100))
+                           spdseq = c(0,3,6,12,20,ceiling(max(for_wind_rose_0ha_meteo_fires_inside$WS))))
   } else {
     p1000 <- ggplot() +
       annotate("text", x = 0.5,  y = 0.5,
