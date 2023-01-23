@@ -9,7 +9,7 @@
 #'
 #' @return Returns a raw netdcf file with all the hourly meteorological variables of temperature, relative humidity, wind speed and direction (same as simply using the wf_request function from the ecmwfr package; the request is stored at https://cds.climate.copernicus.eu/cdsapp#!/yourrequests). Also returns a csv file with the hourly meteorological data per fire perimeter in the study area (fire_weather_study_area.csv)
 #' @export
-#' @import lubridate sp tidyverse ecmwfr ncdf4 udunits2 sf rgdal raster rgeos stringr zoo lwgeom tibble abind foreach doParallel parallel
+#' @import lubridate sp tidyverse ecmwfr ncdf4 udunits2 sf rgdal raster rgeos stringr zoo lwgeom tibble abind foreach doParallel parallel gtools
 #' @examples
 #' \dontrun{get_fire_weather(study.area="C:/user/study_area.shp", my.fires="C:/user/my_fires.shp",
 #' utc.zone=+1,wf_user="12345",wf_key="123456ab-12a3-1234-1234-123ab4567891",
@@ -201,7 +201,28 @@ get_fire_weather <- function(study.area, my.fires,output.folder,utc.zone,wf_user
 
   my_nc_files <- list.files(pattern="*.nc")
 
-
+  library(gtools)
+  library(ncdf4)
+  library(lubridate)
+  library(sp)
+  library(tidyverse)
+  library(ecmwfr)
+  library(ncdf4)
+  library(udunits2)
+  library(sf)
+  library(rgdal)
+  library(raster)
+  library(rgeos)
+  library(stringr)
+  library(zoo)
+  library(lwgeom)
+  library(tibble)
+  library(abind)
+  library(foreach)
+  library(doParallel)
+  library(parallel)
+  library(gtools)
+  my_nc_files <- mixedsort(my_nc_files)
 
   for(z in 1:length(my_nc_files)){
 
@@ -362,9 +383,13 @@ get_fire_weather <- function(study.area, my.fires,output.folder,utc.zone,wf_user
     }
     if (utc.zone>0) {
       last_day <- nrow(results_pt)
-      last_day_use <- as.character(as.POSIXlt(results_pt$days_fire[last_day]) - 86400)
+      last_day_use <- as.character(as.POSIXlt(results_pt$days_fire[last_day], tz="GMT") - 86400)
       results_pt<-rbind(results_pt,last_day_use)
     }
+
+
+    results_pt <- as.data.frame(results_pt[!duplicated(results_pt), ])
+    colnames(results_pt) <- "days_fire"
 
 
     days_fire <- as.character(results_pt$days_fire)
