@@ -67,10 +67,15 @@ plot_windrose <- function(data,
 
     n.spd.seq_use <- n.spd.seq-1
 
-    spd.labels <- c(paste(c(spdseq[-length(spdseq)][1:n.spd.seq_use-1]),
-                          '-',
-                          c(spdseq[-length(spdseq)][2:n.spd.seq_use])),
-                    paste(">",spdseq[n.spd.seq_use]))
+
+    spd.labels <- character()
+
+    for (z in 1:length(spdseq)-1){
+
+      spd.labels_loop <- paste(spdseq[z], spdseq[z+1], sep = " - ")
+      spd.labels[z] <- spd.labels_loop
+    }
+
 
 
   }
@@ -146,4 +151,3 @@ plot_windrose <- function(data,
   # return the handle to the wind rose
   return(p.windrose)
 }
-

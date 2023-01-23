@@ -187,7 +187,8 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
   plot_burned_area_per_class <- ggplot(table_for_graph, aes(ymax=ymax, ymin=ymin, xmax=4, xmin=3, fill=V2)) +
     geom_rect() +
     geom_label(x=3.5, aes(y=labelPosition, label=label), size=5, show.legend = FALSE,label.size = NA,fill = NA) +
-    scale_fill_manual (values=cols)+
+    scale_fill_manual (values=cols,
+                       breaks=c('< 100', '100 - 500', '500 - 1000', '1000 - 5000', '> 5000'))+
     coord_polar(theta="y") +
     xlim(c(2, 4)) +
     theme_void() +
