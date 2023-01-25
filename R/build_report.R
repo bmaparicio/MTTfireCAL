@@ -682,7 +682,7 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
   meteo_fires_inside_summary_table$month <- month_x
   meteo_fires_inside_summary_table$day <- day_x
 
-
+  dated_fires_intersected$ID <- as.numeric(dated_fires_intersected$ID)
 
   meteo_fires_inside_summary_table <- base::as.data.frame(left_join(meteo_fires_inside_summary_table,dated_fires_intersected,by="ID"))
 
