@@ -24,7 +24,7 @@ build_report(
 \arguments{
 \item{study.area}{Shapefile with the limits of the study area (polygon). Must not contain more than one polygon.}
 
-\item{my.fires}{Polygon shapefile containing the fire perimeters (dated or not). This shapefile will be used to characterize the fire regime and to propose the durations to use in the MTT simulation. Must contain a field “Year”.}
+\item{my.fires}{Polygon shapefile containing the fire perimeters (dated or not). This shapefile will be used to characterize the fire regime and to propose the durations to use in the MTT simulation. Must contain the fields “Year”, "ID" and "Area_ha".}
 
 \item{my.dated.fires}{Polygon shapefile containing the dated fire perimeters. Same as the dated fire perimeters used in function get.fire.weather}
 
@@ -36,7 +36,7 @@ build_report(
 
 \item{meteo.aggregation}{How hourly data should be combined into daily data. Possible methods include: mean (computes the mean of each variable for the active.period), max.min (computes the maximum value of temperature and wind speed and the minimum relative humidity for the active.period), none (does not combine hourly data into daily data and uses all the data in the creation of clusters or percentiles).}
 
-\item{min.size}{Numerical. Minimum fire size to be considered in the analysis. Useful to subset the fire sample}
+\item{min.size}{Numerical. Minimum fire size to be considered in the analysis. Useful to subset the fire sample. Must be the same as the lowest value set in fire.size.intervals}
 
 \item{min.overlap}{Numerical. Minimal overlap (as percentage) between the fire perimeters and the study area to consider the fire perimeter in the analysis. Must range between 0 and 100.}
 

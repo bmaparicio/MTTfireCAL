@@ -451,6 +451,13 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
   freqs_my_fires_t_inter_intersected_spikes_id <- left_join(freqs_my_fires_t_inter_intersected_spikes,spike_detected_use,by=c("class"="pos"))
   freqs_my_fires_t_inter_intersected_spikes_id$cumsum_freq <- cumsum(freqs_my_fires_t_inter_intersected_spikes_id$freq_rel)
 
+
+  if(is.na(freqs_my_fires_t_inter_intersected_spikes_id[1,"dur_ID"])){
+    freqs_my_fires_t_inter_intersected_spikes_id[1,"dur_ID"]<-1
+    freqs_my_fires_t_inter_intersected_spikes_id[1,"val"]<-freqs_my_fires_t_inter_intersected_spikes_id[1,"cumsum_freq"]
+  }
+
+
   freqs_my_fires_t_inter_intersected_spikes_id$dur_ID <- na.locf(freqs_my_fires_t_inter_intersected_spikes_id$dur_ID)
 
   frequency_per_duration_class <- base::as.data.frame(freqs_my_fires_t_inter_intersected_spikes_id %>%
