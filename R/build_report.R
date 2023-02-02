@@ -362,7 +362,84 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
   dev.off()
 
 
+#plot user's BA piechart
 
+  store_mid_vals <- numeric()
+
+  for(jj in 1:length(fire.size.intervals)){
+
+    if (jj==1){
+      fires_below_100 <- subset(my_fires_t_inter_intersected_all_fires,Area_ha<fire.size.intervals[jj])
+      sum_ba_above_threshold_first <- sum(fires_below_100$Area_ha)/all_burned_area*100}
+
+    if (jj != 1){
+      fires_above_100_below_500 <- subset(my_fires_t_inter_intersected_all_fires,Area_ha >= fire.size.intervals[jj-1] & Area_ha <fire.size.intervals[jj])
+      sum_ba_above_threshold_mid <- sum(fires_above_100_below_500$Area_ha)/all_burned_area*100
+      store_mid_vals[jj-1] <- sum_ba_above_threshold_mid
+    }
+
+    if (jj ==length(fire.size.intervals)){
+      fires_above_5000 <- subset(my_fires_t_inter_intersected_all_fires,Area_ha>= fire.size.intervals[jj])
+      sum_ba_above_threshold_last <- sum(fires_above_5000$Area_ha)/all_burned_area*100
+    }
+
+
+  }
+
+
+  sum_ba_above_all_intervals <- as.data.frame(c(sum_ba_above_threshold_first,store_mid_vals,sum_ba_above_threshold_last))
+
+  sum_ba_above_all_intervals <- sum_ba_above_all_intervals[-1,]
+
+  sum_ba_above_all_intervals <- as.data.frame(cbind(fire.size.intervals, sum_ba_above_all_intervals))
+
+
+  sum_ba_above_all_intervals$order <- 1:nrow(sum_ba_above_all_intervals)
+
+  sum_ba_above_all_intervals$label <- paste(round(sum_ba_above_all_intervals$sum_ba_above_all_intervals,0),"%",sep="")
+
+  automatic_lables_final_ba_user <- gsub("-\n"," - ",automatic_lables_final)
+
+  automatic_lables_final_ba_user <- c(automatic_lables_final_ba_user,paste("> ",fire.size.intervals[length(fire.size.intervals)],sep=""))
+
+  sum_ba_above_all_intervals$V2 <- automatic_lables_final_ba_user
+
+
+  sum_ba_above_all_intervals$ymax = cumsum(sum_ba_above_all_intervals$sum_ba_above_all_intervals)
+
+  sum_ba_above_all_intervals$ymin = c(0, head(sum_ba_above_all_intervals$ymax, n=-1))
+
+  sum_ba_above_all_intervals$labelPosition <- (sum_ba_above_all_intervals$ymax + sum_ba_above_all_intervals$ymin) / 2
+
+  sum_ba_above_all_intervals$label <- paste0(round (sum_ba_above_all_intervals$sum_ba_above_all_intervals,0), "%")
+
+
+
+  table_for_graph_user <- subset(sum_ba_above_all_intervals,sum_ba_above_all_intervals>0)
+
+  table_for_graph_user$order <- 1:nrow(table_for_graph_user)
+
+
+  plot_burned_area_per_class_user <- ggplot(table_for_graph_user, aes(ymax=ymax, ymin=ymin, xmax=4, xmin=3, fill=V2)) +
+    geom_rect() +
+    geom_label(x=3.5, aes(y=labelPosition, label=label), size=5, show.legend = FALSE,label.size = NA,fill = NA) +
+    #scale_fill_brewer(palette="YlOrRd",breaks=table_for_graph_user$V2)+
+    scale_fill_manual (values=brewer.pal(nrow(table_for_graph_user), "YlOrRd"),
+                       breaks=table_for_graph_user$V2)+
+    coord_polar(theta="y") +
+    xlim(c(2, 4)) +
+    theme_void() +
+    theme(legend.position = "bottom")+
+    theme(legend.text=element_text(size=10),
+          legend.title=element_text(size=12))+
+    guides(fill=guide_legend(nrow=round(nrow(table_for_graph_user)/4),byrow=TRUE,title="Fire size (ha)"))
+
+
+
+  plot_burned_area_per_class_use_user <- tempfile(fileext = ".png")
+  png(filename = plot_burned_area_per_class_use_user, width = 6, height = 4, units = 'in', res = 300)
+  plot(plot_burned_area_per_class_user)
+  dev.off()
 
 
 
@@ -1529,6 +1606,12 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
     write_it <- paste("No active period was defined. All 24 hours of days with fire events were considered")}
 
 
+  if (max(freqs_my_fires_t_inter_intersected_spikes_id$dur_ID)==1){
+    write_warning <- paste("The figure below represents the identification of peaks in the distribution of fire size. The vertical red lines represent the number of peaks in the distribution of the fire size classes. There is",nrow(spike_detected_use),"recommended duration class to use in the calibration. WARNING: Note that it is highly unlikely that a single value for fire duration will accurately represent the entire fire size distribution (i.e fire sizes from ",freqs_my_fires_t_inter_intersected_spikes$first_val[spike_detected_use[1,1]]," and ",freqs_my_fires_t_inter_intersected_spikes$first_val[nrow(freqs_my_fires_t_inter_intersected_spikes)], "). The user should consider using the manual.dur option and manually set the duration classes to be used. More information about this topic can be found in the MTTfireCAL tutorial, available at https://github.com/bmaparicio/MTTfireCAL.",sep="")}
+
+  if (max(freqs_my_fires_t_inter_intersected_spikes_id$dur_ID)>1){
+    write_warning <- paste("The figure below represents the identification of peaks in the distribution of fire size (vertical red lines). There are",nrow(spike_detected_use),"recommended to use in the calibration to better reproduce the historical pattern of fire size distribution. For example, the first duration should represent fires with size between",freqs_my_fires_t_inter_intersected_spikes$first_val[spike_detected_use[1,1]],"and",freqs_my_fires_t_inter_intersected_spikes$first_val[spike_detected_use[2,1]], "hectares.",sep=" ")}
+
 
   if (create.clusters==TRUE){
 
@@ -1538,7 +1621,7 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
       body_add_par(paste("The following report was generated automatically by the 'MTTfireCAL' package. The results should be critically analyzed. For questions and comments please contact Bruno Aparicio (bruno.a.aparicio@gmail.com)"),style = "Normal") %>%
       body_add_par(paste("Please cite this package as Aparicio BA, Benali B, Sá A (2023) xxxxxxx"),style = "Normal") %>%
       body_add_par("") %>%
-      body_add_par(paste("This report was generated using the following definitions: "),style = "Normal") %>%
+      body_add_par(paste("This report was generated using the following settings: "),style = "Normal") %>%
 
       body_add_par(write_it,style = "Normal") %>%
       body_add_par(paste(""),style = "Normal") %>%
@@ -1546,11 +1629,11 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
       body_add_par(paste("The analysis considered a minimum fire size of", min.size, "ha",sep=" "),style = "Normal") %>%
       body_add_par(paste(""),style = "Normal") %>%
 
-      body_add_par(paste("The analysis considered only fire perimeters with at least ", min.overlap, "% of their area inside the study area",sep=""),style = "Normal") %>%
+      body_add_par(paste("The analysis considered only fire perimeters with at least ", min.overlap, "% of their area inside the limits of the study area",sep=""),style = "Normal") %>%
       body_add_par(paste(""),style = "Normal") %>%
 
       body_add_par("Fire regime analysis", style = "heading 1") %>%
-      body_add_par(paste("For the selected study area and using the conditions above, the total number of fire events used for the characterization of fire size distribution was ", n_fires_considered,". From these, ",length(unique(meteo_fires_inside$ID))," fires are dated and were used to extract the meteorological conditions during fire spread.", sep=""),style = "Normal") %>%
+      body_add_par(paste("For the selected study area and using the settings above, the total number of fire events used for the characterization of fire size distribution was ", n_fires_considered,". From these, ",length(unique(meteo_fires_inside$ID))," fires are dated and were used to extract the meteorological conditions during fire spread.", sep=""),style = "Normal") %>%
       body_add_par(paste("Because the user defined the fire.aggregation as ", fire.aggregation," and the meteorological aggregation as ",meteo.aggregation, " the total number of meteorological data used for the meteorological clustering process is ",nrow(meteo_fires_inside),".", sep=""),style = "Normal") %>%
       body_add_par(paste(""),style = "Normal") %>%
 
@@ -1580,6 +1663,12 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
       body_add_img(src = plot_burned_area_per_class_use, width = 6, height = 4, style = "centered") %>%
       body_add_par("")%>%
 
+      body_add_par(paste("The figure below illustrates the same as the figure above, but considering the intervals defined by the user",sep=""),style = "Normal") %>%
+      body_add_par("")%>%
+      body_add_img(src = plot_burned_area_per_class_use_user, width = 6, height = 4, style = "centered") %>%
+      body_add_par("")%>%
+
+
 
       body_add_par("Fire weather analysis", style = "heading 1") %>%
       body_add_par("")%>%
@@ -1596,6 +1685,7 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
       body_add_par(paste("Model-based cluster analysis (MBCA) was created to automatize the demanding model-selection procedure of traditional explorative clustering methods (e. g., hierarchical and k-means clustering). For a proper understanding of the outputs interpretation please see Stahl and Sallis, 2012 (https://doi.org/10.1002/wics.1204)."),style = "Normal") %>%
       body_add_par("")%>%
       body_add_par(paste("The figure below illustrates the Bayesian Information Criterion (BIC) to evaluate model appropriateness regarding the optimal number of clusters. In this particular case, model-based clustering indicates",optimal_mbc,"as the optimal number of clusters"),style = "Normal") %>%
+      body_add_par("Note that a warning message of too few points to calculate an ellipse might be generated when running the function. This does not represent an error and the clustering analysis was not compromised. The warning message only indicates that at least one cluster has few points (observations) and will not be displayed in the figure below.",style = "Normal") %>%
       body_add_par("", style = "Normal") %>%
       body_add_img(src = BIC_modbas, width = 5, height = 6, style = "centered") %>%
       body_add_par("", style = "Normal") %>%
@@ -1603,11 +1693,11 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
       body_add_img(src = plot_uncer_modbas_src, width = plot_uncer_modbas_width, height = plot_uncer_modbas_height, style = "centered") %>%
       body_add_par("", style = "Normal") %>%
 
-      body_add_par("Mean value (centroid) of each meteorological cluster", style = "heading 3") %>% # blank paragraph
+      body_add_par("Mean value (centroid) per meteorological cluster", style = "heading 3") %>% # blank paragraph
       body_add_par("")%>%
       body_add_table(meteo1_use, style = "table_template") %>%
       body_add_par("")%>%
-      body_add_par(paste("T represents the average temperature in each cluster; RH represents the average relative humidity in each cluster; WS represents average wind speed in each cluster; FWI represents the average FWI in each cluster; Cluster size represents the absolute size of the cluster (number of fire weathers in each cluster); Avg. Fire size represents the average fire size for fire events in each cluster; P95 Fire size represents the Percentile 95 of the fire size for fire events in each cluster; and Cluster RF represents the relative frequency of each cluster."),style = "Normal") %>%
+      body_add_par(paste("T represents the average temperature in each cluster; RH represents the average relative humidity in each cluster; WS represents average wind speed in each cluster; and Cluster RF represents the relative frequency of each cluster."),style = "Normal") %>% #FWI represents the average FWI in each cluster; Cluster size represents the absolute size of the cluster (number of fire weathers in each cluster); Avg. Fire size represents the average fire size for fire events in each cluster; P95 Fire size represents the Percentile 95 of the fire size for fire events in each cluster;
       body_add_par("")%>%
 
 
@@ -1654,9 +1744,13 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
       body_add_par("",style = "Normal") %>%
       body_add_par("",style = "Normal") %>%
       body_add_par("Number of durations to consider", style = "heading 1") %>%
-      body_add_par(paste("The figure below represents the identification of peaks in the distribution of fire size. The vertical red lines represent the number of peaks in the distribution of the fire size classes. There are",nrow(spike_detected_use),"recommended to use in the calibration to better reproduce the historical pattern of fire size distribution. For example, the first duration should represent fires with size between",freqs_my_fires_t_inter_intersected_spikes$first_val[spike_detected_use[1,1]],"and",freqs_my_fires_t_inter_intersected_spikes$first_val[spike_detected_use[2,1]], "hectares.",sep=" "),style = "Normal")%>%
+
+      body_add_par(write_warning,style = "Normal") %>%
+      #body_add_par(paste("The figure below represents the identification of peaks in the distribution of fire size (vertical red lines). There are",nrow(spike_detected_use),"recommended to use in the calibration to better reproduce the historical pattern of fire size distribution. For example, the first duration should represent fires with size between",freqs_my_fires_t_inter_intersected_spikes$first_val[spike_detected_use[1,1]],"and",freqs_my_fires_t_inter_intersected_spikes$first_val[spike_detected_use[2,1]], "hectares.",sep=" "),style = "Normal")%>%
       body_add_par("",style = "Normal") %>%
       body_add_img(src = size_dist_spike_use, width = 6, height = 4, style = "centered")
+      body_add_par("",style = "Normal") %>%
+      body_add_par("Note that each duration class is meant to represent a reasonable interval of fire sizes. For example, consider that the figure above returns one duration class for the fire size interval 10 hectares to 1000 hectares (i.e. it displays one red line at the 10 hectares and another one in the 1000 hectares), it is highly unlikely that a single value for fire duration will accurately represent the this interval of fire size distribution. If this is the case, the user should consider use the manual.dur option and set the duration classes to be used. More information about this topic can be found in the MTTfireCAL tutorial, available at https://github.com/bmaparicio/MTTfireCAL", style = "Normal")%>%
 
 
 
@@ -1685,7 +1779,7 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
 
       body_add_par("Fire regime analysis", style = "heading 1") %>%
       body_add_par(paste("For the selected study area and using the conditions above, the total number of fire events used for the characterization of fire size distribution was ", n_fires_considered,". From these, ",length(unique(meteo_fires_inside$ID))," fires are dated and were used to extract the meteorological conditions during fire spread.", sep=""),style = "Normal") %>%
-      body_add_par(paste("Because the user defined the fire.aggregation as ", fire.aggregation," and the meteorological aggregation as ",meteo.aggregation, " the total number of meteorological data used for the meteorological clustering process is ",nrow(meteo_fires_inside),".", sep=""),style = "Normal") %>%
+      body_add_par(paste("Because the user defined the fire.aggregation as ", fire.aggregation," and the meteorological aggregation as ",meteo.aggregation, " the total number of meteorological data used for the meteorological clustering classification is ",nrow(meteo_fires_inside),".", sep=""),style = "Normal") %>%
       body_add_par(paste(""),style = "Normal") %>%
 
 
@@ -1699,7 +1793,7 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
 
 
       body_add_par("") %>%
-      body_add_par(paste("The figure below illustrates the fire size distribution for the considered period in the study area"),style = "Normal") %>%
+      body_add_par(paste("The figure below illustrates the fire size distribution in terms of number of fire events for the considered period in the study area"),style = "Normal") %>%
       body_add_par("") %>%
       body_add_img(src = size_dist_use, width = 6, height = 4, style = "centered") %>%
       body_add_par("") %>%
@@ -1717,7 +1811,7 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
 
       body_add_par("Fire weather analysis", style = "heading 1") %>%
       body_add_par("")%>%
-      body_add_par(paste("The figure below illustrates the wind roses considering the days with fire occurrence"),style = "Normal") %>%
+      body_add_par(paste("The figure below illustrates the wind roses considering the days with dated fire spread"),style = "Normal") %>%
       body_add_par("")%>%
       body_add_img(src = wind_rose_all_use, width = 5, height = 6, style = "centered") %>%
       body_add_par("")%>%

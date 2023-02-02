@@ -19,9 +19,14 @@
 #' @examples
 #' \dontrun{Gen_ign(ign.raster="C:/user/ignition.tif",
 #' IgnitionData="C:/user/results/final_freqs/kmean_3_clusters_final_freqs.csv",
-#' fuelmap=c("C:/user/fuelmap_2000","C:/user/fuelmap_2010"),nIgnitions=5000,
-#' unburnable=c(98),LandCover.yr=c(2000,2010),LandCover.wgt=c(0.4,0.6),
-#' shapeOut=1,allow.zero=FALSE,random.ignitions=FALSE,
+#' fuelmap=c("C:/user/fuelmap_2000.asc", "C:/user/fuelmap_2010.asc"),
+#' nIgnitions=5000,
+#' unburnable=c(98),
+#' LandCover.yr=c(2000,2010),
+#' LandCover.wgt=c(0.4,0.6),
+#' shapeOut=1,
+#' allow.zero=FALSE,
+#' random.ignitions=FALSE,
 #' output.folder="C:/user/results")}
 
 Gen_ign <- function(ign.raster, IgnitionData, fuelmap, nIgnitions, unburnable, LandCover.yr, LandCover.wgt,
