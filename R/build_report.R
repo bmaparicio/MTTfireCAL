@@ -362,7 +362,7 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
   dev.off()
 
 
-#plot user's BA piechart
+  #plot user's BA piechart
 
   store_mid_vals <- numeric()
 
@@ -1748,9 +1748,9 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
       body_add_par(write_warning,style = "Normal") %>%
       #body_add_par(paste("The figure below represents the identification of peaks in the distribution of fire size (vertical red lines). There are",nrow(spike_detected_use),"recommended to use in the calibration to better reproduce the historical pattern of fire size distribution. For example, the first duration should represent fires with size between",freqs_my_fires_t_inter_intersected_spikes$first_val[spike_detected_use[1,1]],"and",freqs_my_fires_t_inter_intersected_spikes$first_val[spike_detected_use[2,1]], "hectares.",sep=" "),style = "Normal")%>%
       body_add_par("",style = "Normal") %>%
-      body_add_img(src = size_dist_spike_use, width = 6, height = 4, style = "centered")
+      body_add_img(src = size_dist_spike_use, width = 6, height = 4, style = "centered")%>%
       body_add_par("",style = "Normal") %>%
-      body_add_par("Note that each duration class is meant to represent a reasonable interval of fire sizes. For example, consider that the figure above returns one duration class for the fire size interval 10 hectares to 1000 hectares (i.e. it displays one red line at the 10 hectares and another one in the 1000 hectares), it is highly unlikely that a single value for fire duration will accurately represent the this interval of fire size distribution. If this is the case, the user should consider use the manual.dur option and set the duration classes to be used. More information about this topic can be found in the MTTfireCAL tutorial, available at https://github.com/bmaparicio/MTTfireCAL", style = "Normal")%>%
+      body_add_par("Note that each duration class is meant to represent a reasonable interval of fire sizes. For example, consider that the figure above returns one duration class for the fire size interval 10 hectares to 1000 hectares (i.e. it displays one red line at the 10 hectares and another one in the 1000 hectares), it is highly unlikely that a single value for fire duration will accurately represent this interval of fire size distribution. If this is the case, the user should consider use the manual.dur option and set the duration classes to be used. More information about this topic can be found in the MTTfireCAL tutorial, available at https://github.com/bmaparicio/MTTfireCAL", style = "Normal")
 
 
 
