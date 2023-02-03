@@ -17,7 +17,7 @@
 #'
 #' @return Returns fuel moisture file based on clustering or percentiles, a csv file with the meteorological values per clustering method, a csv file with a summary of meteorology per fire event, and a csv file with the fire size for the fires recorded in the study area in the period analysed.
 #' @export
-#' @import sf rgeos rgdal sp tibble tidyverse tseries ggpubr ggplot2 dplyr ggspatial rnaturalearth rnaturalearthdata RColorBrewer tidyquant factoextra car mclust officer flextable magrittr tidyr maps
+#' @import sf rgeos rgdal sp tibble tidyverse tseries ggpubr ggplot2 dplyr ggspatial rnaturalearth rnaturalearthdata RColorBrewer tidyquant factoextra car mclust officer flextable magrittr tidyr maps scales
 #'
 #' @examples
 #' \dontrun{build_report(study.area="C:/user/study_area.shp",
@@ -423,19 +423,21 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
 
   sum_ba_above_all_intervals$label <- paste0(round (sum_ba_above_all_intervals$sum_ba_above_all_intervals,0), "%")
 
-
+  sum_ba_above_all_intervals$label
+  sum_ba_above_all_intervals$label[sum_ba_above_all_intervals$label == "1%"] <- ""
 
   table_for_graph_user <- subset(sum_ba_above_all_intervals,sum_ba_above_all_intervals>0)
 
   table_for_graph_user$order <- 1:nrow(table_for_graph_user)
 
-  cc <- scales::seq_gradient_pal("#FFFECC", "#FD8D3C", "Lab")(seq(0,1,length.out=nrow(table_for_graph_user)/2))
+  cc <- scales::seq_gradient_pal("#FFFECC", "#FD8D3C", "Lab")(seq(0,1,length.out=nrow(table_for_graph_user)/2+1))
 
-  cc2 <- scales::seq_gradient_pal("#FD8D3C", "#800F26","Lab")(seq(0,1,length.out=nrow(table_for_graph_user)/2))
+  cc2 <- scales::seq_gradient_pal("#FC4E2A", "#800F26","Lab")(seq(0,1,length.out=nrow(table_for_graph_user)/2-1))
 
   cc_end <- c(cc,cc2)
 
   cc_end <- paste(unique(cc_end))
+
 
 
   plot_burned_area_per_class_user <- ggplot(table_for_graph_user, aes(ymax=ymax, ymin=ymin, xmax=4, xmin=3, fill=V2)) +
@@ -446,6 +448,7 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
     #                   breaks=table_for_graph_user$V2)+
     scale_fill_manual (values=cc_end,
                        breaks=table_for_graph_user$V2)+
+
     coord_polar(theta="y") +
     xlim(c(2, 4)) +
     theme_void() +
@@ -453,6 +456,7 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
     theme(legend.text=element_text(size=10),
           legend.title=element_text(size=12))+
     guides(fill=guide_legend(nrow=round(nrow(table_for_graph_user)/4),byrow=TRUE,title="Fire size (ha)"))
+
 
 
 
