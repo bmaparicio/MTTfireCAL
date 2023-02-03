@@ -209,7 +209,17 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
   myPal <- brewer.pal(8,"YlOrRd")
 
 
+  description_table_FS <- data.frame(min(my_fires_t_inter_intersected_all_fires$Area_ha),
+                                     max(my_fires_t_inter_intersected_all_fires$Area_ha),
+                                     #median(my_fires_t_inter_intersected_all_fires$Area_ha),
+                                     mean(my_fires_t_inter_intersected_all_fires$Area_ha),
+                                     sd(my_fires_t_inter_intersected_all_fires$Area_ha),
+                                     as.numeric(quantile(my_fires_t_inter_intersected_all_fires$Area_ha, prob=c(.25))),
+                                     as.numeric(quantile(my_fires_t_inter_intersected_all_fires$Area_ha, prob=c(.5))),
+                                     as.numeric(quantile(my_fires_t_inter_intersected_all_fires$Area_ha, prob=c(.75))),
+                                     as.numeric(quantile(my_fires_t_inter_intersected_all_fires$Area_ha, prob=c(.9))))
 
+  colnames(description_table_FS)<-c("Min","Max","Mean","SD","P25","Median","P75","P90")
 
 
   freqs_my_fires_t_inter_intersected <- base::as.data.frame(my_fires_t_inter_intersected_all_fires %>%
@@ -778,6 +788,36 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
   names(table_to_summary)[names(table_to_summary) == 'HR_use'] <- 'RH'
   names(table_to_summary)[names(table_to_summary) == 'WS_use'] <- 'WS'
   names(table_to_summary)[names(table_to_summary) == 'Area_ha'] <- 'Fire size'
+
+
+
+  if (my.fires!=my.dated.fires){
+
+
+    description_table_FS_meteo_data <- data.frame(min(dated_fires_intersected$Area_ha),
+                                                  max(dated_fires_intersected$Area_ha),
+                                                  #median(my_fires_t_inter_intersected_all_fires$Area_ha),
+                                                  mean(dated_fires_intersected$Area_ha),
+                                                  sd(dated_fires_intersected$Area_ha),
+                                                  as.numeric(quantile(dated_fires_intersected$Area_ha, prob=c(.25))),
+                                                  as.numeric(quantile(dated_fires_intersected$Area_ha, prob=c(.5))),
+                                                  as.numeric(quantile(dated_fires_intersected$Area_ha, prob=c(.75))),
+                                                  as.numeric(quantile(dated_fires_intersected$Area_ha, prob=c(.9))))
+
+    colnames(description_table_FS_meteo_data)<-c("Min","Max","Mean","SD","P25","Median","P75","P90")
+
+    description_table_FS$fires_used <- "All fires"
+    description_table_FS_meteo_data$fires_used <- "Dated fires"
+
+    description_table_FS_use <- rbind(description_table_FS,description_table_FS_meteo_data)
+
+    colnames(description_table_FS_use) <- c("Min","Max","Mean","SD","P25","Median","P75","P90","Fires used")
+
+  } else {
+    description_table_FS_use <- description_table_FS
+  }
+
+
 
 
   #clustering
@@ -1607,10 +1647,19 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
 
 
   if (max(freqs_my_fires_t_inter_intersected_spikes_id$dur_ID)==1){
-    write_warning <- paste("The figure below represents the identification of peaks in the distribution of fire size. The vertical red lines represent the number of peaks in the distribution of the fire size classes. There is",nrow(spike_detected_use),"recommended duration class to use in the calibration. WARNING: Note that it is highly unlikely that a single value for fire duration will accurately represent the entire fire size distribution (i.e fire sizes from ",freqs_my_fires_t_inter_intersected_spikes$first_val[spike_detected_use[1,1]]," and ",freqs_my_fires_t_inter_intersected_spikes$first_val[nrow(freqs_my_fires_t_inter_intersected_spikes)], "). The user should consider using the manual.dur option and manually set the duration classes to be used. More information about this topic can be found in the MTTfireCAL tutorial, available at https://github.com/bmaparicio/MTTfireCAL.",sep="")}
+    write_warning <- paste("The figure below represents the identification of peaks in the distribution of fire size. The vertical red lines represent the number of peaks in the distribution of the fire size classes. There is ",nrow(spike_detected_use)," recommended duration class to use in the calibration. WARNING: Note that it is highly unlikely that a single value for fire duration will accurately represent the entire fire size distribution (i.e fire sizes from ",freqs_my_fires_t_inter_intersected_spikes$first_val[spike_detected_use[1,1]]," and ",freqs_my_fires_t_inter_intersected_spikes$first_val[nrow(freqs_my_fires_t_inter_intersected_spikes)], "). The user should consider using the manual.dur option and manually set the duration classes to be used. More information about this topic can be found in the MTTfireCAL tutorial, available at https://github.com/bmaparicio/MTTfireCAL.",sep="")}
 
   if (max(freqs_my_fires_t_inter_intersected_spikes_id$dur_ID)>1){
     write_warning <- paste("The figure below represents the identification of peaks in the distribution of fire size (vertical red lines). There are",nrow(spike_detected_use),"recommended to use in the calibration to better reproduce the historical pattern of fire size distribution. For example, the first duration should represent fires with size between",freqs_my_fires_t_inter_intersected_spikes$first_val[spike_detected_use[1,1]],"and",freqs_my_fires_t_inter_intersected_spikes$first_val[spike_detected_use[2,1]], "hectares.",sep=" ")}
+
+
+  if (nrow(description_table_FS_use)>1){
+    write_table_stats <- paste("The table below statistically characterizes the fire size in the study area. Min, Max and Mean represent the minimum, maximum and mean fire size, respectively; SD represents the standard deviation of fire size; P25, Median, P75 and P90 represent the percentile 25, median, percentile 75 and percentile 90 of the fire size, respectively. Fires used represent the fires that were used for the statitical analysis: All fires indicate that all fires in the dataset were used, regardless of being dated; Dated fires indicate that only dated fires were used.",sep="")}
+
+  if (nrow(description_table_FS_use)==1){
+    write_table_stats <- paste("The table below statistically characterizes the fire size in the study area. Min, Max and Mean represent the minimum, maximum and mean fire size, respectively; SD represents the standard deviation of fire size; P25, Median, P75 and P90 represent the percentile 25, median, percentile 75 and percentile 90 of the fire size, respectively. All the values correspond to the dated fires shapefile.",sep="")}
+
+
 
 
   if (create.clusters==TRUE){
@@ -1671,6 +1720,9 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
 
 
       body_add_par("Fire weather analysis", style = "heading 1") %>%
+      body_add_par("")%>%
+      body_add_par(write_table_stats,style = "Normal") %>%
+      body_add_table(description_table_FS_use, style = "table_template") %>%
       body_add_par("")%>%
       body_add_par(paste("The figure below illustrates the wind roses considering the days with fire occurrence"),style = "Normal") %>%
       body_add_par("")%>%
@@ -1810,6 +1862,10 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
 
 
       body_add_par("Fire weather analysis", style = "heading 1") %>%
+      body_add_par("", style = "Normal") %>%
+      body_add_par(write_table_stats,style = "Normal") %>%
+      body_add_table(description_table_FS_use, style = "table_template") %>%
+
       body_add_par("")%>%
       body_add_par(paste("The figure below illustrates the wind roses considering the days with dated fire spread"),style = "Normal") %>%
       body_add_par("")%>%
@@ -1833,9 +1889,12 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
 
       body_add_par("",style = "Normal") %>%
       body_add_par("Number of durations to consider", style = "heading 1") %>%
-      body_add_par(paste("The figure below represents the identification of peaks in the distribution of fire size. The vertical red lines represent the number of peaks in the distribution of the fire size classes. There are",nrow(spike_detected_use),"recommended to use in the calibration to better reproduce the historical pattern of fire size distribution. For example, the first duration should represent fires with size between",freqs_my_fires_t_inter_intersected_spikes$first_val[spike_detected_use[1,1]],"and",freqs_my_fires_t_inter_intersected_spikes$first_val[spike_detected_use[2,1]], "hectares.",sep=" "),style = "Normal")%>%
+      body_add_par(write_warning,style = "Normal") %>%
+      #body_add_par(paste("The figure below represents the identification of peaks in the distribution of fire size (vertical red lines). There are",nrow(spike_detected_use),"recommended to use in the calibration to better reproduce the historical pattern of fire size distribution. For example, the first duration should represent fires with size between",freqs_my_fires_t_inter_intersected_spikes$first_val[spike_detected_use[1,1]],"and",freqs_my_fires_t_inter_intersected_spikes$first_val[spike_detected_use[2,1]], "hectares.",sep=" "),style = "Normal")%>%
       body_add_par("",style = "Normal") %>%
-      body_add_img(src = size_dist_spike_use, width = 6, height = 4, style = "centered")
+      body_add_img(src = size_dist_spike_use, width = 6, height = 4, style = "centered")%>%
+      body_add_par("",style = "Normal") %>%
+      body_add_par("Note that each duration class is meant to represent a reasonable interval of fire sizes. For example, consider that the figure above returns one duration class for the fire size interval 10 hectares to 1000 hectares (i.e. it displays one red line at the 10 hectares and another one in the 1000 hectares), it is highly unlikely that a single value for fire duration will accurately represent this interval of fire size distribution. If this is the case, the user should consider use the manual.dur option and set the duration classes to be used. More information about this topic can be found in the MTTfireCAL tutorial, available at https://github.com/bmaparicio/MTTfireCAL", style = "Normal")
 
 
 
