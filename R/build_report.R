@@ -209,15 +209,15 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
   myPal <- brewer.pal(8,"YlOrRd")
 
 
-  description_table_FS <- data.frame(min(my_fires_t_inter_intersected_all_fires$Area_ha),
-                                     max(my_fires_t_inter_intersected_all_fires$Area_ha),
+  description_table_FS <- data.frame(round(min(my_fires_t_inter_intersected_all_fires$Area_ha),0),
+                                     round(max(my_fires_t_inter_intersected_all_fires$Area_ha),0),
                                      #median(my_fires_t_inter_intersected_all_fires$Area_ha),
-                                     mean(my_fires_t_inter_intersected_all_fires$Area_ha),
-                                     sd(my_fires_t_inter_intersected_all_fires$Area_ha),
-                                     as.numeric(quantile(my_fires_t_inter_intersected_all_fires$Area_ha, prob=c(.25))),
-                                     as.numeric(quantile(my_fires_t_inter_intersected_all_fires$Area_ha, prob=c(.5))),
-                                     as.numeric(quantile(my_fires_t_inter_intersected_all_fires$Area_ha, prob=c(.75))),
-                                     as.numeric(quantile(my_fires_t_inter_intersected_all_fires$Area_ha, prob=c(.9))))
+                                     round(mean(my_fires_t_inter_intersected_all_fires$Area_ha),0),
+                                     round(sd(my_fires_t_inter_intersected_all_fires$Area_ha),0),
+                                     round(as.numeric(quantile(my_fires_t_inter_intersected_all_fires$Area_ha, prob=c(.25))),0),
+                                     round(as.numeric(quantile(my_fires_t_inter_intersected_all_fires$Area_ha, prob=c(.5))),0),
+                                     round(as.numeric(quantile(my_fires_t_inter_intersected_all_fires$Area_ha, prob=c(.75))),0),
+                                     round(as.numeric(quantile(my_fires_t_inter_intersected_all_fires$Area_ha, prob=c(.9))),0))
 
   colnames(description_table_FS)<-c("Min","Max","Mean","SD","P25","Median","P75","P90")
 
@@ -794,15 +794,15 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
   if (my.fires!=my.dated.fires){
 
 
-    description_table_FS_meteo_data <- data.frame(min(dated_fires_intersected$Area_ha),
-                                                  max(dated_fires_intersected$Area_ha),
+    description_table_FS_meteo_data <- data.frame(round(min(dated_fires_intersected$Area_ha),0),
+                                                  round(max(dated_fires_intersected$Area_ha),0),
                                                   #median(my_fires_t_inter_intersected_all_fires$Area_ha),
-                                                  mean(dated_fires_intersected$Area_ha),
-                                                  sd(dated_fires_intersected$Area_ha),
-                                                  as.numeric(quantile(dated_fires_intersected$Area_ha, prob=c(.25))),
-                                                  as.numeric(quantile(dated_fires_intersected$Area_ha, prob=c(.5))),
-                                                  as.numeric(quantile(dated_fires_intersected$Area_ha, prob=c(.75))),
-                                                  as.numeric(quantile(dated_fires_intersected$Area_ha, prob=c(.9))))
+                                                  round(mean(dated_fires_intersected$Area_ha),0),
+                                                  round(sd(dated_fires_intersected$Area_ha),0),
+                                                  round(as.numeric(quantile(dated_fires_intersected$Area_ha, prob=c(.25))),0),
+                                                  round(as.numeric(quantile(dated_fires_intersected$Area_ha, prob=c(.5))),0),
+                                                  round(as.numeric(quantile(dated_fires_intersected$Area_ha, prob=c(.75))),0),
+                                                  round(as.numeric(quantile(dated_fires_intersected$Area_ha, prob=c(.9))),0))
 
     colnames(description_table_FS_meteo_data)<-c("Min","Max","Mean","SD","P25","Median","P75","P90")
 
@@ -1722,6 +1722,7 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
       body_add_par("Fire weather analysis", style = "heading 1") %>%
       body_add_par("")%>%
       body_add_par(write_table_stats,style = "Normal") %>%
+      body_add_par("")%>%
       body_add_table(description_table_FS_use, style = "table_template") %>%
       body_add_par("")%>%
       body_add_par(paste("The figure below illustrates the wind roses considering the days with fire occurrence"),style = "Normal") %>%
@@ -1864,6 +1865,7 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
       body_add_par("Fire weather analysis", style = "heading 1") %>%
       body_add_par("", style = "Normal") %>%
       body_add_par(write_table_stats,style = "Normal") %>%
+      body_add_par("")%>%
       body_add_table(description_table_FS_use, style = "table_template") %>%
 
       body_add_par("")%>%
