@@ -670,6 +670,7 @@ check_fire_size <- function (Folder.Outputs,
 
   results_rmse<-results_rmse[, colSums(abs(results_rmse)) > 0]
 
+  results_rmse <- results_rmse[order(results_rmse$RMSE),]
 
   write.csv(results_rmse,file=paste(Folder.Outputs,"/rmse_combos.csv",sep=""), row.names = FALSE)
 

@@ -18,9 +18,9 @@ check_BP_nxburned(
 
 \item{freq.scenario}{Text file (csv) with the relative frequency of each meteorological and fuel map scenario used. If the function Gen_ign was used in the process, then the file to be used here should be “clusters_freqs_final.csv”, which is located in the ignition folder.}
 
-\item{choose.combos}{A text file (csv) with the numeric identification of the different combinations. If check_fire_size was run, then this file was stored as “rmse_combos.csv”.}
+\item{choose.combos}{Numerical vector. Specify the combinations to be tested. The numeric identification of the combinations is located in the combos.file. In alternative, select “all” to use all duration combinations or "best" to use only the combination with the lowest RMSE.}
 
-\item{combos.file}{Numerical vector. Specify the combinations to be tested. The numeric identification of the combinations is located in the combos.file. In alternative, use “all” to use all duration combinations.}
+\item{combos.file}{A text file (csv) with the numeric identification of the different combinations. If check_fire_size was run, then this file was stored as “rmse_combos.csv”.}
 
 \item{obs.nxburned}{Raster file with the historical number of times burned. This raster must have the same spatial resolution and alignment that the simulated burn probability rasters.}
 

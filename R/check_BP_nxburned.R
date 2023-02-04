@@ -2,8 +2,8 @@
 #' @description Combines and calculates the pearson correlation between the estimated burn probability that result from multiple duration combinations and the historical number of times burned.
 #' @param Folder.Outputs Path to the folder containing the outputs of the FConstMTT runs.
 #' @param freq.scenario Text file (csv) with the relative frequency of each meteorological and fuel map scenario used. If the function Gen_ign was used in the process, then the file to be used here should be “clusters_freqs_final.csv”, which is located in the ignition folder.
-#' @param choose.combos A text file (csv) with the numeric identification of the different combinations. If check_fire_size was run, then this file was stored as “rmse_combos.csv”.
-#' @param combos.file Numerical vector. Specify the combinations to be tested. The numeric identification of the combinations is located in the combos.file. In alternative, use “all” to use all duration combinations.
+#' @param choose.combos Numerical vector. Specify the combinations to be tested. The numeric identification of the combinations is located in the combos.file. In alternative, select “all” to use all duration combinations or "best" to use only the combination with the lowest RMSE.
+#' @param combos.file A text file (csv) with the numeric identification of the different combinations. If check_fire_size was run, then this file was stored as “rmse_combos.csv”.
 #' @param obs.nxburned Raster file with the historical number of times burned. This raster must have the same spatial resolution and alignment that the simulated burn probability rasters.
 #' @param export.plots Binary. If 1, then a boxplot showing the correlation between the estimated burn probability and the number of times burned is saved. If 0, no plot is saved.
 #'
@@ -42,6 +42,9 @@ check_BP_nxburned <- function (Folder.Outputs,
 
   if (choose.combos=="all") {
     nCombos <- my_combos_file_order[,1]}
+
+  if (choose.combos=="best") {
+    nCombos <- my_combos_file_order[1,1]}
 
 
 
