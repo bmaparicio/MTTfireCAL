@@ -163,6 +163,7 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
 
   if (missing(calibration.period)){
     final_period_analysis <- c(1,3000)
+    calibration_period_use <- "nothing"
   } else {
     calibration_period_use <- calibration.period
   }
@@ -2192,4 +2193,3 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
   }
 
 }
-
