@@ -1727,7 +1727,13 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
   if (nrow(description_table_FS_use)==1){
     write_table_stats <- paste("The table below statistically characterizes the fire size in the study area. Min, Max and Mean represent the minimum, maximum and mean fire size, respectively; SD represents the standard deviation of fire size; P25, Median, P75 and P90 represent the percentile 25, median, percentile 75 and percentile 90 of the fire size, respectively. All the values correspond to the dated fires shapefile.",sep="")}
 
+  if (nrow(description_table_FS_use)==1){
+    write_table_stats <- paste("The table below statistically characterizes the fire size in the study area. Min, Max and Mean represent the minimum, maximum and mean fire size, respectively; SD represents the standard deviation of fire size; P25, Median, P75 and P90 represent the percentile 25, median, percentile 75 and percentile 90 of the fire size, respectively. All the values correspond to the dated fires shapefile.",sep="")}
 
+
+  if (calibration_period_use=="nothing"){
+    write_period_analysis <- paste("the entire dataset")} else{
+      write_period_analysis <- paste(final_period_analysis[1],"-",final_period_analysis[2],sep="")}
 
 
   if (create.clusters==TRUE){
@@ -1746,7 +1752,7 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
       body_add_par(paste("The analysis considered a minimum fire size of", min.size, "ha",sep=" "),style = "Normal") %>%
       body_add_par(paste(""),style = "Normal") %>%
 
-      body_add_par(paste("The analysis considered only fire perimeters with at least ", min.overlap, "% of their area inside the limits of the study area. The period considered was ",final_period_analysis[1],"-",final_period_analysis[2],sep=""),style = "Normal") %>%
+      body_add_par(paste("The analysis considered only fire perimeters with at least ", min.overlap, "% of their area inside the limits of the study area. The period considered was ",write_period_analysis,sep=""),style = "Normal") %>%
       body_add_par(paste(""),style = "Normal") %>%
 
 
@@ -1766,12 +1772,12 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
 
 
       body_add_par("") %>%
-      body_add_par(paste("The figure below illustrates the fire size distribution for the considered period (",final_period_analysis[1],"-",final_period_analysis[2],") in the study area",sep=""),style = "Normal") %>%
+      body_add_par(paste("The figure below illustrates the fire size distribution for the considered period (",write_period_analysis,") in the study area",sep=""),style = "Normal") %>%
       body_add_par("") %>%
       body_add_img(src = size_dist_use, width = 6, height = 4, style = "centered") %>%
       body_add_par("") %>%
 
-      body_add_par(paste("The figure below illustrates the burned area per year in hectares (barplot) and the cumulative burned area as percentage (line) for the considered period (",final_period_analysis[1],"-",final_period_analysis[2],") in the study area",sep=""),style = "Normal") %>%
+      body_add_par(paste("The figure below illustrates the burned area per year in hectares (barplot) and the cumulative burned area as percentage (line) for the considered period (",write_period_analysis,") in the study area",sep=""),style = "Normal") %>%
       body_add_par("")%>%
       body_add_img(src = BA_dist_use, width = 6, height = 4, style = "centered") %>%
       body_add_par("")%>%
@@ -1915,12 +1921,12 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
 
 
       body_add_par("") %>%
-      body_add_par(paste("The figure below illustrates the fire size distribution for the considered period (",final_period_analysis[1],"-",final_period_analysis[2],") in the study area",sep=""),style = "Normal") %>%
+      body_add_par(paste("The figure below illustrates the fire size distribution for the considered period (",write_period_analysis,") in the study area",sep=""),style = "Normal") %>%
       body_add_par("") %>%
       body_add_img(src = size_dist_use, width = 6, height = 4, style = "centered") %>%
       body_add_par("") %>%
 
-      body_add_par(paste("The figure below illustrates the burned area per year in hectares (barplot) and the cumulative burned area as percentage (line) for the considered period (",final_period_analysis[1],"-",final_period_analysis[2],") in the study area",sep=""),style = "Normal") %>%
+      body_add_par(paste("The figure below illustrates the burned area per year in hectares (barplot) and the cumulative burned area as percentage (line) for the considered period (",write_period_analysis,") in the study area",sep=""),style = "Normal") %>%
       body_add_par("")%>%
       body_add_img(src = BA_dist_use, width = 6, height = 4, style = "centered") %>%
       body_add_par("")%>%
