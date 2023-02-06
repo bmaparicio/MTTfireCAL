@@ -30,7 +30,7 @@ check_BP_nxburned(
 \item{export.plots}{Binary. If 1, then a boxplot showing the correlation between the estimated burn probability and the number of times burned is saved. If 0, no plot is saved.}
 }
 \value{
-Returns a raster file with the simulated burn probability and a text file (csv) showing the pearson correlation between the simulated burn probability for each combination and the historical number of times burned. Optionally, it can also return a boxplot showing the same correlation.
+Returns a raster file with the simulated burn probability, a text file (csv) showing the pearson correlation between the simulated burn probability for each combination and the historical number of times burned, and a text file with the relative frequency per class of number of times burned. Optionally, it can also return a boxplot showing the same correlation.
 }
 \description{
 Combines and calculates the pearson correlation between the estimated burn probability that result from multiple duration combinations and the historical number of times burned.
