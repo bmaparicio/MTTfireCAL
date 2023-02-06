@@ -161,6 +161,11 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
   dated_fires_intersected <- subset(dated_fires_intersected,Area_ha >=min.size)
 
 
+  if (missing(calibration.period)){
+    final_period_analysis <- c(1,3000)
+  }
+
+
   if (class(calibration.period)=="character"){
     if (calibration.period=="coincident"){
       minimum_dated_fire <- min(as.numeric(unique(dated_fires_intersected$Year)))
@@ -230,9 +235,6 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
 
 
 
-  if (missing(calibration.period)){
-    final_period_analysis <- c(1,3000)
-  }
 
 
   my_fires_t_inter_intersected <- subset(my_fires_t_inter_intersected,Year >=final_period_analysis[1] & Year <= final_period_analysis[2])
