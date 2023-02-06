@@ -8,7 +8,7 @@
 #' @param group.nxburned.from A numeric value representing the maximum value of number of times burned that should be considered in the correlation analysis. A value of five means that cells with five or more number of times burned will be grouped together. Optional
 #' @param export.plots Binary. If 1, then a boxplot showing the correlation between the estimated burn probability and the number of times burned is saved. If 0, no plot is saved.
 #'
-#' @return Returns a raster file with the simulated burn probability and a text file (csv) showing the pearson correlation between the simulated burn probability for each combination and the historical number of times burned. Optionally, it can also return a boxplot showing the same correlation.
+#' @return Returns a raster file with the simulated burn probability, a text file (csv) showing the pearson correlation between the simulated burn probability for each combination and the historical number of times burned, and a text file with the relative frequency per class of number of times burned. Optionally, it can also return a boxplot showing the same correlation.
 #' @export
 #'
 #' @examples
