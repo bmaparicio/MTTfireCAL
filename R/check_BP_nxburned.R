@@ -58,7 +58,7 @@ check_BP_nxburned <- function (Folder.Outputs,
   ]
 
 
-  correlation_df <- matrix(ncol=2,nrow=length(nCombos))
+  correlation_df <- matrix(ncol=3,nrow=length(nCombos))
 
   for (k in 1:length(nCombos)){
     i <- nCombos[k]
@@ -366,6 +366,7 @@ check_BP_nxburned <- function (Folder.Outputs,
 
 
     sim_vals <- getValues(all_rasters_sum)
+    hist_vals_ori <- getValues(r3)
     hist_vals <- getValues(r3)
 
 
@@ -414,6 +415,7 @@ check_BP_nxburned <- function (Folder.Outputs,
     data_for_ggplot <- as.data.frame(cbind(hist_vals,sim_vals))
 
     store_cor <- cor(data_for_ggplot$hist_vals,data_for_ggplot$sim_vals)
+    store_cor_ori <- cor(hist_vals_ori,sim_vals)
 
 
     boxplot_bp <- ggplot(data_for_ggplot, aes(x=as.factor(hist_vals), y=as.numeric(sim_vals))) +
@@ -431,13 +433,13 @@ check_BP_nxburned <- function (Folder.Outputs,
 
 
     correlation_df[k,1] <- i
-    correlation_df[k,2]<-store_cor
-
+    correlation_df[k,2]<-store_cor_ori
+    correlation_df[k,3]<-store_cor
 
   }
 
 
-  colnames(correlation_df) <- c("combo","correlation burn probability - number of times burned")
+  colnames(correlation_df) <- c("combo","correlation burn probability - number of times burned using all dataset","correlation burn probability - number of times burned group.nxburned.from")
   write.csv(correlation_df,"correlation_BP_NxBurned.csv",row.names = FALSE)
 
 
