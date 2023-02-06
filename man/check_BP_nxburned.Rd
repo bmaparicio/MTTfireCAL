@@ -10,6 +10,7 @@ check_BP_nxburned(
   choose.combos,
   combos.file,
   obs.nxburned,
+  group.nxburned.from,
   export.plots
 )
 }
@@ -24,6 +25,8 @@ check_BP_nxburned(
 
 \item{obs.nxburned}{Raster file with the historical number of times burned. This raster must have the same spatial resolution and alignment that the simulated burn probability rasters.}
 
+\item{group.nxburned.from}{A numeric value representing the maximum value of number of times burned that should be considered in the correlation analysis. A value of five means that cells with five or more number of times burned will be grouped together. Optional}
+
 \item{export.plots}{Binary. If 1, then a boxplot showing the correlation between the estimated burn probability and the number of times burned is saved. If 0, no plot is saved.}
 }
 \value{
@@ -36,6 +39,7 @@ Combines and calculates the pearson correlation between the estimated burn proba
 \dontrun{check_BP_nxburned(Folder.Outputs="C:/user/fconstmtt/Outputs",
 freq.scenario="C:/user/results/ignitions/clusters_freqs_final.csv",
 choose.combos=c(1,2),combos.file="C:/user/fconstmtt/Outputs/rmse_combos.csv",
+group.nxburned.from = 5,
 obs.nxburned="C:/user/number_of_times_burned.tif",
 export.plots=1)}
 

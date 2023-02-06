@@ -5,6 +5,7 @@
 #' @param choose.combos Numerical vector. Specify the combinations to be tested. The numeric identification of the combinations is located in the combos.file. In alternative, select “all” to use all duration combinations or "best" to use only the combination with the lowest RMSE.
 #' @param combos.file A text file (csv) with the numeric identification of the different combinations. If check_fire_size was run, then this file was stored as “rmse_combos.csv”.
 #' @param obs.nxburned Raster file with the historical number of times burned. This raster must have the same spatial resolution and alignment that the simulated burn probability rasters.
+#' @param group.nxburned.from A numeric value representing the maximum value of number of times burned that should be considered in the correlation analysis. A value of five means that cells with five or more number of times burned will be grouped together. Optional
 #' @param export.plots Binary. If 1, then a boxplot showing the correlation between the estimated burn probability and the number of times burned is saved. If 0, no plot is saved.
 #'
 #' @return Returns a raster file with the simulated burn probability and a text file (csv) showing the pearson correlation between the simulated burn probability for each combination and the historical number of times burned. Optionally, it can also return a boxplot showing the same correlation.
@@ -14,11 +15,13 @@
 #' \dontrun{check_BP_nxburned(Folder.Outputs="C:/user/fconstmtt/Outputs",
 #' freq.scenario="C:/user/results/ignitions/clusters_freqs_final.csv",
 #' choose.combos=c(1,2),combos.file="C:/user/fconstmtt/Outputs/rmse_combos.csv",
+#' group.nxburned.from = 5,
 #' obs.nxburned="C:/user/number_of_times_burned.tif",
 #' export.plots=1)}
 #'
 check_BP_nxburned <- function (Folder.Outputs,
                                freq.scenario,choose.combos,combos.file,obs.nxburned,
+                               group.nxburned.from,
                                export.plots){
 
   setwd(Folder.Outputs)
@@ -366,6 +369,48 @@ check_BP_nxburned <- function (Folder.Outputs,
     hist_vals <- getValues(r3)
 
 
+    percentage_nxburned <- matrix(ncol=2,nrow=length(unique(hist_vals)))
+
+    for (aa in 0:max(hist_vals)){
+      hist_vals_loop <- length(hist_vals[hist_vals==aa])/length(hist_vals)*100
+      percentage_nxburned[aa+1,1] <- aa
+      percentage_nxburned[aa+1,2] <- hist_vals_loop
+    }
+
+    percentage_nxburned<- as.data.frame(percentage_nxburned)
+    colnames(percentage_nxburned)<-c("nxburned","percentage")
+
+    setwd(paste(Folder.Outputs,"/correlation_BP_NxBurned",sep=""))
+    write.csv(percentage_nxburned,"proportion_nxburned_original.csv",row.names = FALSE)
+
+
+
+    if (missing(group.nxburned.from)){
+      hist_vals <- hist_vals
+    } else {
+      hist_vals[hist_vals>group.nxburned.from] <- group.nxburned.from
+
+      percentage_nxburned <- matrix(ncol=2,nrow=length(unique(hist_vals)))
+
+      for (aa in 0:max(hist_vals)){
+        hist_vals_loop <- length(hist_vals[hist_vals==aa])/length(hist_vals)*100
+        percentage_nxburned[aa+1,1] <- aa
+        percentage_nxburned[aa+1,2] <- hist_vals_loop
+      }
+
+      percentage_nxburned<- as.data.frame(percentage_nxburned)
+      colnames(percentage_nxburned)<-c("nxburned","percentage")
+
+      percentage_nxburned[aa+1,1]<- ">=10"
+
+      setwd(paste(Folder.Outputs,"/correlation_BP_NxBurned",sep=""))
+      write.csv(percentage_nxburned,"proportion_nxburned_grouped.csv",row.names = FALSE)
+
+    }
+
+
+
+
     data_for_ggplot <- as.data.frame(cbind(hist_vals,sim_vals))
 
     store_cor <- cor(data_for_ggplot$hist_vals,data_for_ggplot$sim_vals)
@@ -376,7 +421,8 @@ check_BP_nxburned <- function (Folder.Outputs,
       scale_color_grey() + theme_classic()+
       theme(text = element_text(size = 16))+
       xlab("Historical number of times burned")+
-      ylab("Simulated Burn Probability")
+      ylab("Simulated Burn Probability")+
+      scale_x_discrete(labels=c(percentage_nxburned$nxburned))
 
     if(export.plots==1){
       ggsave(filename=paste(Folder.Outputs,"/correlation_BP_NxBurned","/BP_nxburned_combo_",i,".jpg",sep=""), plot=boxplot_bp, width = 6, height = 5)
