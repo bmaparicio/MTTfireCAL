@@ -1731,7 +1731,7 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
     write_table_stats <- paste("The table below statistically characterizes the fire size in the study area. Min, Max and Mean represent the minimum, maximum and mean fire size, respectively; SD represents the standard deviation of fire size; P25, Median, P75 and P90 represent the percentile 25, median, percentile 75 and percentile 90 of the fire size, respectively. All the values correspond to the dated fires shapefile.",sep="")}
 
 
-  if (calibration_period_use=="nothing"){
+  if (calibration_period_use[1]=="nothing"){
     write_period_analysis <- paste("the entire dataset")} else{
       write_period_analysis <- paste(final_period_analysis[1],"-",final_period_analysis[2],sep="")}
 
