@@ -163,11 +163,13 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
 
   if (missing(calibration.period)){
     final_period_analysis <- c(1,3000)
+  } else {
+    calibration_period_use <- calibration.period
   }
 
 
-  if (class(calibration.period)=="character"){
-    if (calibration.period=="coincident"){
+  if (class(calibration_period_use)=="character"){
+    if (calibration_period_use=="coincident"){
       minimum_dated_fire <- min(as.numeric(unique(dated_fires_intersected$Year)))
       maximum_dated_fire <- max(as.numeric(unique(dated_fires_intersected$Year)))
       period_dated_fire <- minimum_dated_fire:maximum_dated_fire
@@ -219,8 +221,8 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
 
 
   #meter o period
-  if (class(calibration.period)=="character"){
-    if (calibration.period=="coincident"){
+  if (class(calibration_period_use)=="character"){
+    if (calibration_period_use=="coincident"){
       minimum_size_dist_fire <- min(as.numeric(unique(my_fires_t_inter_intersected$Year)))
       maximum_size_dist_fire <- max(as.numeric(unique(my_fires_t_inter_intersected$Year)))
       period_size_dist_fire <- minimum_size_dist_fire:maximum_size_dist_fire
@@ -229,8 +231,8 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
     }}
 
 
-  if (class(calibration.period)!="character"){
-    final_period_analysis <- calibration.period
+  if (class(calibration_period_use)!="character"){
+    final_period_analysis <- calibration_period_use
   }
 
 
