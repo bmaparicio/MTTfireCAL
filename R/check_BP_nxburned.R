@@ -401,7 +401,7 @@ check_BP_nxburned <- function (Folder.Outputs,
       percentage_nxburned<- as.data.frame(percentage_nxburned)
       colnames(percentage_nxburned)<-c("nxburned","percentage")
 
-      percentage_nxburned[aa+1,1]<- ">=10"
+      percentage_nxburned[aa+1,1]<- paste(">=",percentage_nxburned[aa+1,1],sep="")
 
       setwd(paste(Folder.Outputs,"/correlation_BP_NxBurned",sep=""))
       write.csv(percentage_nxburned,"proportion_nxburned_grouped.csv",row.names = FALSE)
