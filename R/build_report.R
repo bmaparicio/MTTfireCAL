@@ -1238,120 +1238,122 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
 
     }
 
-    area_per_cluster_id_MB <- base::as.data.frame(my_fires_t_inter_intersected_clusters_get_area %>%
-                                                    group_by(cluster_id_MB) %>%
-                                                    summarise(mean_area_ha=mean(Area_ha),
-                                                              per_95_area_ha=quantile(Area_ha,probs= c(0.95),na.rm=T),
-                                                              per_5_area_ha=quantile(Area_ha,probs= c(0.05),na.rm=T)))
 
-
-    area_per_cluster_id_km_2 <- base::as.data.frame(my_fires_t_inter_intersected_clusters_get_area %>%
-                                                      group_by(cluster_id_km_2) %>%
-                                                      summarise(mean_area_ha=mean(Area_ha),
-                                                                per_95_area_ha=quantile(Area_ha,probs= c(0.95),na.rm=T),
-                                                                per_5_area_ha=quantile(Area_ha,probs= c(0.05),na.rm=T)))
-
-
-    area_per_cluster_id_km_3 <- base::as.data.frame(my_fires_t_inter_intersected_clusters_get_area %>%
-                                                      group_by(cluster_id_km_3) %>%
-                                                      summarise(mean_area_ha=mean(Area_ha),
-                                                                per_95_area_ha=quantile(Area_ha,probs= c(0.95),na.rm=T),
-                                                                per_5_area_ha=quantile(Area_ha,probs= c(0.05),na.rm=T)))
-
-
-    area_per_cluster_id_km_4 <- base::as.data.frame(my_fires_t_inter_intersected_clusters_get_area %>%
-                                                      group_by(cluster_id_km_4) %>%
-                                                      summarise(mean_area_ha=mean(Area_ha),
-                                                                per_95_area_ha=quantile(Area_ha,probs= c(0.95),na.rm=T),
-                                                                per_5_area_ha=quantile(Area_ha,probs= c(0.05),na.rm=T)))
-
-
-
-    area_per_cluster_id_km_5 <- base::as.data.frame(my_fires_t_inter_intersected_clusters_get_area %>%
-                                                      group_by(cluster_id_km_5) %>%
-                                                      summarise(mean_area_ha=mean(Area_ha),
-                                                                per_95_area_ha=quantile(Area_ha,probs= c(0.95),na.rm=T),
-                                                                per_5_area_ha=quantile(Area_ha,probs= c(0.05),na.rm=T)))
-
-
-    area_per_cluster_id_km_6 <- base::as.data.frame(my_fires_t_inter_intersected_clusters_get_area %>%
-                                                      group_by(cluster_id_km_6) %>%
-                                                      summarise(mean_area_ha=mean(Area_ha),
-                                                                per_95_area_ha=quantile(Area_ha,probs= c(0.95),na.rm=T),
-                                                                per_5_area_ha=quantile(Area_ha,probs= c(0.05),na.rm=T)))
-
-
-    area_per_cluster_id_km_7 <- base::as.data.frame(my_fires_t_inter_intersected_clusters_get_area %>%
-                                                      group_by(cluster_id_km_7) %>%
-                                                      summarise(mean_area_ha=mean(Area_ha),
-                                                                per_95_area_ha=quantile(Area_ha,probs= c(0.95),na.rm=T),
-                                                                per_5_area_ha=quantile(Area_ha,probs= c(0.05),na.rm=T)))
-
-
-    area_per_cluster_id_km_8 <- base::as.data.frame(my_fires_t_inter_intersected_clusters_get_area %>%
-                                                      group_by(cluster_id_km_8) %>%
-                                                      summarise(mean_area_ha=mean(Area_ha),
-                                                                per_95_area_ha=quantile(Area_ha,probs= c(0.95),na.rm=T),
-                                                                per_5_area_ha=quantile(Area_ha,probs= c(0.05),na.rm=T)))
-
-
-    area_per_cluster_id_km_9 <- base::as.data.frame(my_fires_t_inter_intersected_clusters_get_area %>%
-                                                      group_by(cluster_id_km_9) %>%
-                                                      summarise(mean_area_ha=mean(Area_ha),
-                                                                per_95_area_ha=quantile(Area_ha,probs= c(0.95),na.rm=T),
-                                                                per_5_area_ha=quantile(Area_ha,probs= c(0.05),na.rm=T)))
-
-
-    area_per_cluster_id_km_10 <- base::as.data.frame(my_fires_t_inter_intersected_clusters_get_area %>%
-                                                       group_by(cluster_id_km_10) %>%
-                                                       summarise(mean_area_ha=mean(Area_ha),
-                                                                 per_95_area_ha=quantile(Area_ha,probs= c(0.95),na.rm=T),
-                                                                 per_5_area_ha=quantile(Area_ha,probs= c(0.05),na.rm=T)))
-
-
-
-
-    meteo1$mean_area_ha <- area_per_cluster_id_MB$mean_area_ha
-    meteo1$per95_area_ha <- area_per_cluster_id_MB$per_95_area_ha
-    meteo1$per05_area_ha <- area_per_cluster_id_MB$per_5_area_ha
-
-
-    meteo2$mean_area_ha <- area_per_cluster_id_km_2$mean_area_ha
-    meteo2$per95_area_ha <- area_per_cluster_id_km_2$per_95_area_ha
-    meteo2$per05_area_ha <- area_per_cluster_id_km_2$per_5_area_ha
-
-    meteo3$mean_area_ha <- area_per_cluster_id_km_3$mean_area_ha
-    meteo3$per95_area_ha <- area_per_cluster_id_km_3$per_95_area_ha
-    meteo3$per05_area_ha <- area_per_cluster_id_km_3$per_5_area_ha
-
-    meteo4$mean_area_ha <- area_per_cluster_id_km_4$mean_area_ha
-    meteo4$per95_area_ha <- area_per_cluster_id_km_4$per_95_area_ha
-    meteo4$per05_area_ha <- area_per_cluster_id_km_4$per_5_area_ha
-
-    meteo5$mean_area_ha <- area_per_cluster_id_km_5$mean_area_ha
-    meteo5$per95_area_ha <- area_per_cluster_id_km_5$per_95_area_ha
-    meteo5$per05_area_ha <- area_per_cluster_id_km_5$per_5_area_ha
-
-    meteo6$mean_area_ha <- area_per_cluster_id_km_6$mean_area_ha
-    meteo6$per95_area_ha <- area_per_cluster_id_km_6$per_95_area_ha
-    meteo6$per05_area_ha <- area_per_cluster_id_km_6$per_5_area_ha
-
-    meteo7$mean_area_ha <- area_per_cluster_id_km_7$mean_area_ha
-    meteo7$per95_area_ha <- area_per_cluster_id_km_7$per_95_area_ha
-    meteo7$per05_area_ha <- area_per_cluster_id_km_7$per_5_area_ha
-
-    meteo8$mean_area_ha <- area_per_cluster_id_km_8$mean_area_ha
-    meteo8$per95_area_ha <- area_per_cluster_id_km_8$per_95_area_ha
-    meteo8$per05_area_ha <- area_per_cluster_id_km_8$per_5_area_ha
-
-    meteo9$mean_area_ha <- area_per_cluster_id_km_9$mean_area_ha
-    meteo9$per95_area_ha <- area_per_cluster_id_km_9$per_95_area_ha
-    meteo9$per05_area_ha <- area_per_cluster_id_km_9$per_5_area_ha
-
-    meteo10$mean_area_ha <- area_per_cluster_id_km_10$mean_area_ha
-    meteo10$per95_area_ha <- area_per_cluster_id_km_10$per_95_area_ha
-    meteo10$per05_area_ha <- area_per_cluster_id_km_10$per_5_area_ha
-
+    #this is for area. not used
+    # area_per_cluster_id_MB <- base::as.data.frame(my_fires_t_inter_intersected_clusters_get_area %>%
+    #                                                 group_by(cluster_id_MB) %>%
+    #                                                 summarise(mean_area_ha=mean(Area_ha),
+    #                                                           per_95_area_ha=quantile(Area_ha,probs= c(0.95),na.rm=T),
+    #                                                           per_5_area_ha=quantile(Area_ha,probs= c(0.05),na.rm=T)))
+    #
+    #
+    # area_per_cluster_id_km_2 <- base::as.data.frame(my_fires_t_inter_intersected_clusters_get_area %>%
+    #                                                   group_by(cluster_id_km_2) %>%
+    #                                                   summarise(mean_area_ha=mean(Area_ha),
+    #                                                             per_95_area_ha=quantile(Area_ha,probs= c(0.95),na.rm=T),
+    #                                                             per_5_area_ha=quantile(Area_ha,probs= c(0.05),na.rm=T)))
+    #
+    #
+    # area_per_cluster_id_km_3 <- base::as.data.frame(my_fires_t_inter_intersected_clusters_get_area %>%
+    #                                                   group_by(cluster_id_km_3) %>%
+    #                                                   summarise(mean_area_ha=mean(Area_ha),
+    #                                                             per_95_area_ha=quantile(Area_ha,probs= c(0.95),na.rm=T),
+    #                                                             per_5_area_ha=quantile(Area_ha,probs= c(0.05),na.rm=T)))
+    #
+    #
+    # area_per_cluster_id_km_4 <- base::as.data.frame(my_fires_t_inter_intersected_clusters_get_area %>%
+    #                                                   group_by(cluster_id_km_4) %>%
+    #                                                   summarise(mean_area_ha=mean(Area_ha),
+    #                                                             per_95_area_ha=quantile(Area_ha,probs= c(0.95),na.rm=T),
+    #                                                             per_5_area_ha=quantile(Area_ha,probs= c(0.05),na.rm=T)))
+    #
+    #
+    #
+    # area_per_cluster_id_km_5 <- base::as.data.frame(my_fires_t_inter_intersected_clusters_get_area %>%
+    #                                                   group_by(cluster_id_km_5) %>%
+    #                                                   summarise(mean_area_ha=mean(Area_ha),
+    #                                                             per_95_area_ha=quantile(Area_ha,probs= c(0.95),na.rm=T),
+    #                                                             per_5_area_ha=quantile(Area_ha,probs= c(0.05),na.rm=T)))
+    #
+    #
+    # area_per_cluster_id_km_6 <- base::as.data.frame(my_fires_t_inter_intersected_clusters_get_area %>%
+    #                                                   group_by(cluster_id_km_6) %>%
+    #                                                   summarise(mean_area_ha=mean(Area_ha),
+    #                                                             per_95_area_ha=quantile(Area_ha,probs= c(0.95),na.rm=T),
+    #                                                             per_5_area_ha=quantile(Area_ha,probs= c(0.05),na.rm=T)))
+    #
+    #
+    # area_per_cluster_id_km_7 <- base::as.data.frame(my_fires_t_inter_intersected_clusters_get_area %>%
+    #                                                   group_by(cluster_id_km_7) %>%
+    #                                                   summarise(mean_area_ha=mean(Area_ha),
+    #                                                             per_95_area_ha=quantile(Area_ha,probs= c(0.95),na.rm=T),
+    #                                                             per_5_area_ha=quantile(Area_ha,probs= c(0.05),na.rm=T)))
+    #
+    #
+    # area_per_cluster_id_km_8 <- base::as.data.frame(my_fires_t_inter_intersected_clusters_get_area %>%
+    #                                                   group_by(cluster_id_km_8) %>%
+    #                                                   summarise(mean_area_ha=mean(Area_ha),
+    #                                                             per_95_area_ha=quantile(Area_ha,probs= c(0.95),na.rm=T),
+    #                                                             per_5_area_ha=quantile(Area_ha,probs= c(0.05),na.rm=T)))
+    #
+    #
+    # area_per_cluster_id_km_9 <- base::as.data.frame(my_fires_t_inter_intersected_clusters_get_area %>%
+    #                                                   group_by(cluster_id_km_9) %>%
+    #                                                   summarise(mean_area_ha=mean(Area_ha),
+    #                                                             per_95_area_ha=quantile(Area_ha,probs= c(0.95),na.rm=T),
+    #                                                             per_5_area_ha=quantile(Area_ha,probs= c(0.05),na.rm=T)))
+    #
+    #
+    # area_per_cluster_id_km_10 <- base::as.data.frame(my_fires_t_inter_intersected_clusters_get_area %>%
+    #                                                    group_by(cluster_id_km_10) %>%
+    #                                                    summarise(mean_area_ha=mean(Area_ha),
+    #                                                              per_95_area_ha=quantile(Area_ha,probs= c(0.95),na.rm=T),
+    #                                                              per_5_area_ha=quantile(Area_ha,probs= c(0.05),na.rm=T)))
+    #
+    #
+    #
+    #
+    # meteo1$mean_area_ha <- area_per_cluster_id_MB$mean_area_ha
+    # meteo1$per95_area_ha <- area_per_cluster_id_MB$per_95_area_ha
+    # meteo1$per05_area_ha <- area_per_cluster_id_MB$per_5_area_ha
+    #
+    #
+    # meteo2$mean_area_ha <- area_per_cluster_id_km_2$mean_area_ha
+    # meteo2$per95_area_ha <- area_per_cluster_id_km_2$per_95_area_ha
+    # meteo2$per05_area_ha <- area_per_cluster_id_km_2$per_5_area_ha
+    #
+    # meteo3$mean_area_ha <- area_per_cluster_id_km_3$mean_area_ha
+    # meteo3$per95_area_ha <- area_per_cluster_id_km_3$per_95_area_ha
+    # meteo3$per05_area_ha <- area_per_cluster_id_km_3$per_5_area_ha
+    #
+    # meteo4$mean_area_ha <- area_per_cluster_id_km_4$mean_area_ha
+    # meteo4$per95_area_ha <- area_per_cluster_id_km_4$per_95_area_ha
+    # meteo4$per05_area_ha <- area_per_cluster_id_km_4$per_5_area_ha
+    #
+    # meteo5$mean_area_ha <- area_per_cluster_id_km_5$mean_area_ha
+    # meteo5$per95_area_ha <- area_per_cluster_id_km_5$per_95_area_ha
+    # meteo5$per05_area_ha <- area_per_cluster_id_km_5$per_5_area_ha
+    #
+    # meteo6$mean_area_ha <- area_per_cluster_id_km_6$mean_area_ha
+    # meteo6$per95_area_ha <- area_per_cluster_id_km_6$per_95_area_ha
+    # meteo6$per05_area_ha <- area_per_cluster_id_km_6$per_5_area_ha
+    #
+    # meteo7$mean_area_ha <- area_per_cluster_id_km_7$mean_area_ha
+    # meteo7$per95_area_ha <- area_per_cluster_id_km_7$per_95_area_ha
+    # meteo7$per05_area_ha <- area_per_cluster_id_km_7$per_5_area_ha
+    #
+    # meteo8$mean_area_ha <- area_per_cluster_id_km_8$mean_area_ha
+    # meteo8$per95_area_ha <- area_per_cluster_id_km_8$per_95_area_ha
+    # meteo8$per05_area_ha <- area_per_cluster_id_km_8$per_5_area_ha
+    #
+    # meteo9$mean_area_ha <- area_per_cluster_id_km_9$mean_area_ha
+    # meteo9$per95_area_ha <- area_per_cluster_id_km_9$per_95_area_ha
+    # meteo9$per05_area_ha <- area_per_cluster_id_km_9$per_5_area_ha
+    #
+    # meteo10$mean_area_ha <- area_per_cluster_id_km_10$mean_area_ha
+    # meteo10$per95_area_ha <- area_per_cluster_id_km_10$per_95_area_ha
+    # meteo10$per05_area_ha <- area_per_cluster_id_km_10$per_5_area_ha
+    #
 
 
 
@@ -1562,16 +1564,27 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
 
 
   if (create.clusters == TRUE){
-    meteo1_use <- round(meteo1[,c("cluster","temperature_use","HR_use","WS_use", "size","mean_area_ha", "per95_area_ha" )],0)
-    meteo2_use <- round(meteo2[,c("cluster","temperature_use","HR_use","WS_use", "size","mean_area_ha", "per95_area_ha")],0)
-    meteo3_use <- round(meteo3[,c("cluster","temperature_use","HR_use","WS_use", "size","mean_area_ha", "per95_area_ha")],0)
-    meteo4_use <- round(meteo4[,c("cluster","temperature_use","HR_use","WS_use", "size","mean_area_ha", "per95_area_ha")],0)
-    meteo5_use <- round(meteo5[,c("cluster","temperature_use","HR_use","WS_use", "size","mean_area_ha", "per95_area_ha")],0)
-    meteo6_use <- round(meteo6[,c("cluster","temperature_use","HR_use","WS_use","size","mean_area_ha", "per95_area_ha")],0)
-    meteo7_use <- round(meteo7[,c("cluster","temperature_use","HR_use","WS_use", "size","mean_area_ha", "per95_area_ha")],0)
-    meteo8_use <- round(meteo8[,c("cluster","temperature_use","HR_use","WS_use", "size","mean_area_ha", "per95_area_ha")],0)
-    meteo9_use <- round(meteo9[,c("cluster","temperature_use","HR_use","WS_use", "size","mean_area_ha", "per95_area_ha")],0)
-    meteo10_use <- round(meteo10[,c("cluster","temperature_use","HR_use","WS_use", "size","mean_area_ha", "per95_area_ha")],0)
+    #meteo1_use <- round(meteo1[,c("cluster","temperature_use","HR_use","WS_use", "size","mean_area_ha", "per95_area_ha" )],0)
+    #meteo2_use <- round(meteo2[,c("cluster","temperature_use","HR_use","WS_use", "size","mean_area_ha", "per95_area_ha")],0)
+    #meteo3_use <- round(meteo3[,c("cluster","temperature_use","HR_use","WS_use", "size","mean_area_ha", "per95_area_ha")],0)
+    #meteo4_use <- round(meteo4[,c("cluster","temperature_use","HR_use","WS_use", "size","mean_area_ha", "per95_area_ha")],0)
+    #meteo5_use <- round(meteo5[,c("cluster","temperature_use","HR_use","WS_use", "size","mean_area_ha", "per95_area_ha")],0)
+    #meteo6_use <- round(meteo6[,c("cluster","temperature_use","HR_use","WS_use","size","mean_area_ha", "per95_area_ha")],0)
+    #meteo7_use <- round(meteo7[,c("cluster","temperature_use","HR_use","WS_use", "size","mean_area_ha", "per95_area_ha")],0)
+    #meteo8_use <- round(meteo8[,c("cluster","temperature_use","HR_use","WS_use", "size","mean_area_ha", "per95_area_ha")],0)
+    #meteo9_use <- round(meteo9[,c("cluster","temperature_use","HR_use","WS_use", "size","mean_area_ha", "per95_area_ha")],0)
+    #meteo10_use <- round(meteo10[,c("cluster","temperature_use","HR_use","WS_use", "size","mean_area_ha", "per95_area_ha")],0)
+
+    meteo1_use <- round(meteo1[,c("cluster","temperature_use","HR_use","WS_use", "size")],0)
+    meteo2_use <- round(meteo2[,c("cluster","temperature_use","HR_use","WS_use", "size")],0)
+    meteo3_use <- round(meteo3[,c("cluster","temperature_use","HR_use","WS_use", "size")],0)
+    meteo4_use <- round(meteo4[,c("cluster","temperature_use","HR_use","WS_use", "size")],0)
+    meteo5_use <- round(meteo5[,c("cluster","temperature_use","HR_use","WS_use", "size")],0)
+    meteo6_use <- round(meteo6[,c("cluster","temperature_use","HR_use","WS_use","size")],0)
+    meteo7_use <- round(meteo7[,c("cluster","temperature_use","HR_use","WS_use", "size")],0)
+    meteo8_use <- round(meteo8[,c("cluster","temperature_use","HR_use","WS_use", "size")],0)
+    meteo9_use <- round(meteo9[,c("cluster","temperature_use","HR_use","WS_use", "size")],0)
+    meteo10_use <- round(meteo10[,c("cluster","temperature_use","HR_use","WS_use", "size")],0)
 
 
 
@@ -1593,8 +1606,8 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
     names(meteo1_use)[names(meteo1_use) == 'temperature_use'] <- 'T'
     names(meteo1_use)[names(meteo1_use) == 'HR_use'] <- 'RH'
     names(meteo1_use)[names(meteo1_use) == 'WS_use'] <- 'WS'
-    names(meteo1_use)[names(meteo1_use) == 'mean_area_ha'] <- 'Avg. Fire Size'
-    names(meteo1_use)[names(meteo1_use) == 'per95_area_ha'] <- 'P95 Fire Size'
+    #names(meteo1_use)[names(meteo1_use) == 'mean_area_ha'] <- 'Avg. Fire Size'
+    #names(meteo1_use)[names(meteo1_use) == 'per95_area_ha'] <- 'P95 Fire Size'
 
 
     names(meteo2_use)[names(meteo2_use) == 'size'] <- 'Cluster size'
@@ -1602,72 +1615,72 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
     names(meteo2_use)[names(meteo2_use) == 'temperature_use'] <- 'T'
     names(meteo2_use)[names(meteo2_use) == 'HR_use'] <- 'RH'
     names(meteo2_use)[names(meteo2_use) == 'WS_use'] <- 'WS'
-    names(meteo2_use)[names(meteo2_use) == 'mean_area_ha'] <- 'Avg. Fire Size'
-    names(meteo2_use)[names(meteo2_use) == 'per95_area_ha'] <- 'P95 Fire Size'
+    #names(meteo2_use)[names(meteo2_use) == 'mean_area_ha'] <- 'Avg. Fire Size'
+    #names(meteo2_use)[names(meteo2_use) == 'per95_area_ha'] <- 'P95 Fire Size'
 
     names(meteo3_use)[names(meteo3_use) == 'size'] <- 'Cluster size'
     names(meteo3_use)[names(meteo3_use) == 'freq'] <- 'Cluster RF'
     names(meteo3_use)[names(meteo3_use) == 'temperature_use'] <- 'T'
     names(meteo3_use)[names(meteo3_use) == 'HR_use'] <- 'RH'
     names(meteo3_use)[names(meteo3_use) == 'WS_use'] <- 'WS'
-    names(meteo3_use)[names(meteo3_use) == 'mean_area_ha'] <- 'Avg. Fire Size'
-    names(meteo3_use)[names(meteo3_use) == 'per95_area_ha'] <- 'P95 Fire Size'
+    #names(meteo3_use)[names(meteo3_use) == 'mean_area_ha'] <- 'Avg. Fire Size'
+    #names(meteo3_use)[names(meteo3_use) == 'per95_area_ha'] <- 'P95 Fire Size'
 
     names(meteo4_use)[names(meteo4_use) == 'size'] <- 'Cluster size'
     names(meteo4_use)[names(meteo4_use) == 'freq'] <- 'Cluster RF'
     names(meteo4_use)[names(meteo4_use) == 'temperature_use'] <- 'T'
     names(meteo4_use)[names(meteo4_use) == 'HR_use'] <- 'RH'
     names(meteo4_use)[names(meteo4_use) == 'WS_use'] <- 'WS'
-    names(meteo4_use)[names(meteo4_use) == 'mean_area_ha'] <- 'Avg. Fire Size'
-    names(meteo4_use)[names(meteo4_use) == 'per95_area_ha'] <- 'P95 Fire Size'
+    #names(meteo4_use)[names(meteo4_use) == 'mean_area_ha'] <- 'Avg. Fire Size'
+    #names(meteo4_use)[names(meteo4_use) == 'per95_area_ha'] <- 'P95 Fire Size'
 
     names(meteo5_use)[names(meteo5_use) == 'size'] <- 'Cluster size'
     names(meteo5_use)[names(meteo5_use) == 'freq'] <- 'Cluster RF'
     names(meteo5_use)[names(meteo5_use) == 'temperature_use'] <- 'T'
     names(meteo5_use)[names(meteo5_use) == 'HR_use'] <- 'RH'
     names(meteo5_use)[names(meteo5_use) == 'WS_use'] <- 'WS'
-    names(meteo5_use)[names(meteo5_use) == 'mean_area_ha'] <- 'Avg. Fire Size'
-    names(meteo5_use)[names(meteo5_use) == 'per95_area_ha'] <- 'P95 Fire Size'
+    #names(meteo5_use)[names(meteo5_use) == 'mean_area_ha'] <- 'Avg. Fire Size'
+    #names(meteo5_use)[names(meteo5_use) == 'per95_area_ha'] <- 'P95 Fire Size'
 
     names(meteo6_use)[names(meteo6_use) == 'size'] <- 'Cluster size'
     names(meteo6_use)[names(meteo6_use) == 'freq'] <- 'Cluster RF'
     names(meteo6_use)[names(meteo6_use) == 'temperature_use'] <- 'T'
     names(meteo6_use)[names(meteo6_use) == 'HR_use'] <- 'RH'
     names(meteo6_use)[names(meteo6_use) == 'WS_use'] <- 'WS'
-    names(meteo6_use)[names(meteo6_use) == 'mean_area_ha'] <- 'Avg. Fire Size'
-    names(meteo6_use)[names(meteo6_use) == 'per95_area_ha'] <- 'P95 Fire Size'
+    #names(meteo6_use)[names(meteo6_use) == 'mean_area_ha'] <- 'Avg. Fire Size'
+    #names(meteo6_use)[names(meteo6_use) == 'per95_area_ha'] <- 'P95 Fire Size'
 
     names(meteo7_use)[names(meteo7_use) == 'size'] <- 'Cluster size'
     names(meteo7_use)[names(meteo7_use) == 'freq'] <- 'Cluster RF'
     names(meteo7_use)[names(meteo7_use) == 'temperature_use'] <- 'T'
     names(meteo7_use)[names(meteo7_use) == 'HR_use'] <- 'RH'
     names(meteo7_use)[names(meteo7_use) == 'WS_use'] <- 'WS'
-    names(meteo7_use)[names(meteo7_use) == 'mean_area_ha'] <- 'Avg. Fire Size'
-    names(meteo7_use)[names(meteo7_use) == 'per95_area_ha'] <- 'P95 Fire Size'
+    #names(meteo7_use)[names(meteo7_use) == 'mean_area_ha'] <- 'Avg. Fire Size'
+    #names(meteo7_use)[names(meteo7_use) == 'per95_area_ha'] <- 'P95 Fire Size'
 
     names(meteo8_use)[names(meteo8_use) == 'size'] <- 'Cluster size'
     names(meteo8_use)[names(meteo8_use) == 'freq'] <- 'Cluster RF'
     names(meteo8_use)[names(meteo8_use) == 'temperature_use'] <- 'T'
     names(meteo8_use)[names(meteo8_use) == 'HR_use'] <- 'RH'
     names(meteo8_use)[names(meteo8_use) == 'WS_use'] <- 'WS'
-    names(meteo8_use)[names(meteo8_use) == 'mean_area_ha'] <- 'Avg. Fire Size'
-    names(meteo8_use)[names(meteo8_use) == 'per95_area_ha'] <- 'P95 Fire Size'
+    #names(meteo8_use)[names(meteo8_use) == 'mean_area_ha'] <- 'Avg. Fire Size'
+    #names(meteo8_use)[names(meteo8_use) == 'per95_area_ha'] <- 'P95 Fire Size'
 
     names(meteo9_use)[names(meteo9_use) == 'size'] <- 'Cluster size'
     names(meteo9_use)[names(meteo9_use) == 'freq'] <- 'Cluster RF'
     names(meteo9_use)[names(meteo9_use) == 'temperature_use'] <- 'T'
     names(meteo9_use)[names(meteo9_use) == 'HR_use'] <- 'RH'
     names(meteo9_use)[names(meteo9_use) == 'WS_use'] <- 'WS'
-    names(meteo9_use)[names(meteo9_use) == 'mean_area_ha'] <- 'Avg. Fire Size'
-    names(meteo9_use)[names(meteo9_use) == 'per95_area_ha'] <- 'P95 Fire Size'
+    #names(meteo9_use)[names(meteo9_use) == 'mean_area_ha'] <- 'Avg. Fire Size'
+    #names(meteo9_use)[names(meteo9_use) == 'per95_area_ha'] <- 'P95 Fire Size'
 
     names(meteo10_use)[names(meteo10_use) == 'size'] <- 'Cluster size'
     names(meteo10_use)[names(meteo10_use) == 'freq'] <- 'Cluster RF'
     names(meteo10_use)[names(meteo10_use) == 'temperature_use'] <- 'T'
     names(meteo10_use)[names(meteo10_use) == 'HR_use'] <- 'RH'
     names(meteo10_use)[names(meteo10_use) == 'WS_use'] <- 'WS'
-    names(meteo10_use)[names(meteo10_use) == 'mean_area_ha'] <- 'Avg. Fire Size'
-    names(meteo10_use)[names(meteo10_use) == 'per95_area_ha'] <- 'P95 Fire Size'
+    #names(meteo10_use)[names(meteo10_use) == 'mean_area_ha'] <- 'Avg. Fire Size'
+    #names(meteo10_use)[names(meteo10_use) == 'per95_area_ha'] <- 'P95 Fire Size'
 
 
     if(length(unique(mc$classification))>1){
