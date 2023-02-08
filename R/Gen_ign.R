@@ -41,6 +41,12 @@ Gen_ign <- function(ign.raster, IgnitionData, fuelmap, nIgnitions, unburnable, L
   if (missing(allow.zero)) {
     allow.zero <- FALSE }
 
+  if(random.ignitions==TRUE & missing(ign.raster)){
+    fuelmap_dummy <- raster(fuelmap[1])
+    ign.raster <- raster(ncol=ncol(fuelmap_dummy), nrow=nrow(fuelmap_dummy), xmn=xmin(fuelmap_dummy), xmx=xmax(fuelmap_dummy), ymn=ymin(fuelmap_dummy), ymx=ymax(fuelmap_dummy))
+    values(ign.raster) <- 1
+  }
+
 
   if (random.ignitions==FALSE){
     x <- raster(ign.raster)
@@ -49,6 +55,7 @@ Gen_ign <- function(ign.raster, IgnitionData, fuelmap, nIgnitions, unburnable, L
       x<-reclassify(x,c(-Inf,Inf,1))
       val <- as.vector(x[[1]])
     }
+
 
 
 
@@ -226,7 +233,7 @@ Gen_ign <- function(ign.raster, IgnitionData, fuelmap, nIgnitions, unburnable, L
         }
 
 
-        }}
+      }}
 
 
 
