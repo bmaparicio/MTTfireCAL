@@ -41,12 +41,22 @@ check_fire_size <- function (Folder.Outputs,
 
     combo_use <- paste(combo_id_temp,combo_id6,sep="_")
 
-    size <- as.data.frame(t [,4])/2.471 #from acres to hectares
+    if (nrow(t)>0){
+      size <- as.data.frame(t [,4])/2.471 #from acres to hectares
+    } else {
+      size <- 0
+    }
+
     row_numbers <- nrow(t)
     datalist[i] <- (nrow(t))
     NonNAindex <- which(is.na(results))
     start_row <- min(NonNAindex)
     end_row <- start_row + row_numbers - 1
+
+    if(end_row < start_row){
+      end_row <- start_row
+    }
+
     results[start_row:end_row,1]<- size
     results[start_row:end_row,2]<- combo_use
   }
@@ -738,7 +748,7 @@ check_fire_size <- function (Folder.Outputs,
                              labels= c(automatic_lables_final,paste(">",intervals[length(intervals)],sep="")))+
 
 
-        theme_tq()+
+          theme_tq()+
           theme(panel.grid.minor = element_blank(), axis.title=element_text(size=12),
                 panel.grid.major.x = element_blank(), axis.text = element_text(size = 8),
                 plot.title = element_text(size = 16))+
@@ -792,7 +802,7 @@ check_fire_size <- function (Folder.Outputs,
                              labels= c(automatic_lables_final,paste(">",intervals[length(intervals)],sep="")))+
 
 
-        theme_tq()+
+          theme_tq()+
           theme(panel.grid.minor = element_blank(), axis.title=element_text(size=12),
                 panel.grid.major.x = element_blank(), axis.text = element_text(size = 8),
                 plot.title = element_text(size = 16))+
@@ -858,7 +868,7 @@ check_fire_size <- function (Folder.Outputs,
                              labels= c(automatic_lables_final,paste(">",intervals[length(intervals)],sep="")))+
 
 
-        theme_tq()+
+          theme_tq()+
           theme(panel.grid.minor = element_blank(), axis.title=element_text(size=12),
                 panel.grid.major.x = element_blank(), axis.text = element_text(size = 8),
                 plot.title = element_text(size = 16))+
@@ -910,7 +920,7 @@ check_fire_size <- function (Folder.Outputs,
                              labels= c(automatic_lables_final,paste(">",intervals[length(intervals)],sep="")))+
 
 
-        theme_tq()+
+          theme_tq()+
           theme(panel.grid.minor = element_blank(), axis.title=element_text(size=12),
                 panel.grid.major.x = element_blank(), axis.text = element_text(size = 8),
                 plot.title = element_text(size = 16))+
