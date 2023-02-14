@@ -759,6 +759,21 @@ check_fire_size <- function (Folder.Outputs,
 
 
       }
+
+      all_for_plot_for_saving <- all_for_plot
+
+      all_for_plot_for_saving$label <- c(automatic_lables_final,paste(">",intervals[length(intervals)],sep=""))
+      all_for_plot_for_saving$label <- gsub("\n"," ",all_for_plot_for_saving$label)
+      all_for_plot_for_saving$label <- paste0(" ", all_for_plot_for_saving$label)
+
+      colnames(all_for_plot_for_saving)<- c("relative frequency", "combo", "class","area")
+
+      all_for_plot_for_saving <- as.data.frame(cbind(all_for_plot_for_saving$class,all_for_plot_for_saving$area,all_for_plot_for_saving$combo,all_for_plot_for_saving$`relative frequency`))
+      colnames(all_for_plot_for_saving)<- c("class","area","combo","relative frequency")
+
+      write.csv(all_for_plot_for_saving,paste(Folder.Outputs,"/simulated_frequencies_fire_size.csv",sep=""),row.names = FALSE)
+
+
     } else {
       total_figures <- 1
 
@@ -813,6 +828,20 @@ check_fire_size <- function (Folder.Outputs,
 
 
       }
+      all_for_plot_for_saving <- all_for_plot
+
+      all_for_plot_for_saving$label <- c(automatic_lables_final,paste(">",intervals[length(intervals)],sep=""))
+      all_for_plot_for_saving$label <- gsub("\n"," ",all_for_plot_for_saving$label)
+      all_for_plot_for_saving$label <- paste0(" ", all_for_plot_for_saving$label)
+
+      colnames(all_for_plot_for_saving)<- c("relative frequency", "combo", "class","area")
+
+      all_for_plot_for_saving <- as.data.frame(cbind(all_for_plot_for_saving$class,all_for_plot_for_saving$area,all_for_plot_for_saving$combo,all_for_plot_for_saving$`relative frequency`))
+      colnames(all_for_plot_for_saving)<- c("class","area","combo","relative frequency")
+
+      write.csv(all_for_plot_for_saving,paste(Folder.Outputs,"/simulated_frequencies_fire_size.csv",sep=""),row.names = FALSE)
+
+
     }}
 
 
@@ -879,6 +908,19 @@ check_fire_size <- function (Folder.Outputs,
 
 
       }
+      all_for_plot_for_saving <- all_for_plot
+
+      all_for_plot_for_saving$label <- c(automatic_lables_final,paste(">",intervals[length(intervals)],sep=""))
+      all_for_plot_for_saving$label <- gsub("\n"," ",all_for_plot_for_saving$label)
+      all_for_plot_for_saving$label <- paste0(" ", all_for_plot_for_saving$label)
+
+      colnames(all_for_plot_for_saving)<- c("relative frequency", "combo", "class","area")
+
+      all_for_plot_for_saving <- as.data.frame(cbind(all_for_plot_for_saving$class,all_for_plot_for_saving$area,all_for_plot_for_saving$combo,all_for_plot_for_saving$`relative frequency`))
+      colnames(all_for_plot_for_saving)<- c("class","area","combo","relative frequency")
+
+      write.csv(all_for_plot_for_saving,paste(Folder.Outputs,"/simulated_frequencies_fire_size.csv",sep=""),row.names = FALSE)
+
     } else {
       total_figures <- 1
 
@@ -931,6 +973,20 @@ check_fire_size <- function (Folder.Outputs,
 
 
       }
+
+      all_for_plot_for_saving <- all_for_plot
+
+      all_for_plot_for_saving$label <- c(automatic_lables_final,paste(">",intervals[length(intervals)],sep=""))
+      all_for_plot_for_saving$label <- gsub("\n"," ",all_for_plot_for_saving$label)
+      all_for_plot_for_saving$label <- paste0(" ", all_for_plot_for_saving$label)
+
+      colnames(all_for_plot_for_saving)<- c("relative frequency", "combo", "class","area")
+
+      all_for_plot_for_saving <- as.data.frame(cbind(all_for_plot_for_saving$class,all_for_plot_for_saving$area,all_for_plot_for_saving$combo,all_for_plot_for_saving$`relative frequency`))
+      colnames(all_for_plot_for_saving)<- c("class","area","combo","relative frequency")
+
+      write.csv(all_for_plot_for_saving,paste(Folder.Outputs,"/simulated_frequencies_fire_size.csv",sep=""),row.names = FALSE)
+
     }}
 
 
