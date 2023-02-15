@@ -292,6 +292,10 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
 
   table_for_graph$label <- paste0(round (table_for_graph$V1,0), "%")
   table_for_graph$label[table_for_graph$label == "1%"] <- ""
+  table_for_graph$label[table_for_graph$label == "2%"] <- ""
+  table_for_graph$label[table_for_graph$label == "3%"] <- ""
+  table_for_graph$label[table_for_graph$label == "4%"] <- ""
+
 
 
   cols <- c("< 100" = "#FFFFCC", "100 - 500" = "#FDD976",
