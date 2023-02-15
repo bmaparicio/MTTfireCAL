@@ -291,10 +291,9 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
   table_for_graph$labelPosition <- (table_for_graph$ymax + table_for_graph$ymin) / 2
 
   table_for_graph$label <- paste0(round (table_for_graph$V1,0), "%")
+  table_for_graph$label[table_for_graph$label == "0%"] <- ""
   table_for_graph$label[table_for_graph$label == "1%"] <- ""
   table_for_graph$label[table_for_graph$label == "2%"] <- ""
-  table_for_graph$label[table_for_graph$label == "3%"] <- ""
-  table_for_graph$label[table_for_graph$label == "4%"] <- ""
 
 
 
@@ -546,7 +545,9 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
   sum_ba_above_all_intervals$label <- paste0(round (sum_ba_above_all_intervals$sum_ba_above_all_intervals,0), "%")
 
   #sum_ba_above_all_intervals$label
+  sum_ba_above_all_intervals$label[sum_ba_above_all_intervals$label == "0%"] <- ""
   sum_ba_above_all_intervals$label[sum_ba_above_all_intervals$label == "1%"] <- ""
+  sum_ba_above_all_intervals$label[sum_ba_above_all_intervals$label == "2%"] <- ""
 
   table_for_graph_user <- subset(sum_ba_above_all_intervals,sum_ba_above_all_intervals>0)
 
@@ -1799,12 +1800,12 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
       body_add_img(src = BA_dist_use, width = 6, height = 4, style = "centered") %>%
       body_add_par("")%>%
 
-      body_add_par(paste("The figure below illustrates the contribution of burned area in each fire size class to the overall burned area. For instance, fires that burned less than 100 ha contributed with ", round(table_for_graph[1,1],0),"% to the total burned area; fires that burned between 100 and 500 ha contributed with ", round(table_for_graph[2,1],0),"% to the total burned area, etc. The fire size classes are in hectares. Labels are only shown for fire size classes that represent at least 2% of the total burned area",sep=""),style = "Normal") %>%
+      body_add_par(paste("The figure below illustrates the contribution of burned area in each fire size class to the overall burned area. For instance, fires that burned less than 100 ha contributed with ", round(table_for_graph[1,1],0),"% to the total burned area; fires that burned between 100 and 500 ha contributed with ", round(table_for_graph[2,1],0),"% to the total burned area, etc. The fire size classes are in hectares. Labels are only shown for fire size classes that represent at least 3% of the total burned area",sep=""),style = "Normal") %>%
       body_add_par("")%>%
       body_add_img(src = plot_burned_area_per_class_use, width = 6, height = 4, style = "centered") %>%
       body_add_par("")%>%
 
-      body_add_par(paste("The figure below illustrates the same as the figure above, but considering the intervals defined by the user",sep=""),style = "Normal") %>%
+      body_add_par(paste("The figure below illustrates the same as the figure above, but considering the intervals defined by the user. Labels are only shown for fire size classes that represent at least 3% of the total burned area.",sep=""),style = "Normal") %>%
       body_add_par("")%>%
       body_add_img(src = plot_burned_area_per_class_use_user, width = 6, height = 4, style = "centered") %>%
       body_add_par("")%>%
