@@ -9,6 +9,7 @@
 #'
 #' @return Returns figures showing the historical and simulated fire size distribution for all the combinations. Also saves a csv file containing the RMSE and person correlation of each combination of durations and the historical fire size.
 #' @export
+#' @import Metrics ie2misc forestmangr
 #'
 #' @examples
 #'\dontrun{check_fire_size(Folder.Outputs="C:/user/fconstmtt/Outputs",
@@ -516,7 +517,7 @@ check_fire_size <- function (Folder.Outputs,
   nrow(results)
 
 
-  results_rmse <- matrix(ncol=8, nrow= nrow(results_inter_expanded))
+  results_rmse <- matrix(ncol=12, nrow= nrow(results_inter_expanded))
   nrow(results_rmse)
 
   for (t in 1:nrow(results_inter_expanded)){
@@ -633,6 +634,15 @@ check_fire_size <- function (Folder.Outputs,
 
     cor_i <- cor(test_obs$V1,test_obs$V1_sim)
 
+    per_nrmse_i <- rmse_per(test_obs, y="V1",yhat="V1_sim")
+
+
+    mae_i <- mae(test_obs$V1,test_obs$V1_sim)
+    rae_i <- rae(test_obs$V1,test_obs$V1_sim)
+
+    nse_i <- vnse(test_obs$V1_sim,test_obs$V1)
+
+
 
     NAindex <- which(is.na(results))
     firstNA <- min(NAindex)
@@ -666,6 +676,10 @@ check_fire_size <- function (Folder.Outputs,
     results_rmse[start_results_rmse:end_results_rmse,6]<- as.numeric(gsub("durval_","",all_dur_loop$durval_5[1]))
     results_rmse[start_results_rmse:end_results_rmse,7]<- as.numeric(rmse_i)
     results_rmse[start_results_rmse:end_results_rmse,8]<- as.numeric(cor_i)
+    results_rmse[start_results_rmse:end_results_rmse,9]<- as.numeric(per_nrmse_i)
+    results_rmse[start_results_rmse:end_results_rmse,10]<- as.numeric(mae_i)
+    results_rmse[start_results_rmse:end_results_rmse,11]<- as.numeric(rae_i)
+    results_rmse[start_results_rmse:end_results_rmse,12]<- as.numeric(nse_i)
 
   }
 
@@ -676,7 +690,7 @@ check_fire_size <- function (Folder.Outputs,
 
   results_rmse <- as.data.frame(results_rmse)
   results_rmse <- na.omit(results_rmse)
-  colnames(results_rmse) <- c("combo", "durval1","durval2","durval3","durval4","durval5","RMSE","Correlation")
+  colnames(results_rmse) <- c("combo", "durval1","durval2","durval3","durval4","durval5","RMSE","Correlation","percentage NRMSE","MAE","RAE","NSE")
 
   results_rmse<-results_rmse[, colSums(abs(results_rmse)) > 0]
 
