@@ -12,14 +12,14 @@
 #' @export
 #'
 #' @examples
-#' \dontrun{check_BP_nxburned(Folder.Outputs="C:/user/fconstmtt/Outputs",
+#' \dontrun{evaluate_BP_nxburned(Folder.Outputs="C:/user/fconstmtt/Outputs",
 #' freq.scenario="C:/user/results/ignitions/clusters_freqs_final.csv",
 #' choose.combos=c(1,2),combos.file="C:/user/fconstmtt/Outputs/rmse_combos.csv",
 #' group.nxburned.from = 5,
 #' obs.nxburned="C:/user/number_of_times_burned.tif",
 #' export.plots=1)}
 #'
-check_BP_nxburned <- function (Folder.Outputs,
+evaluate_BP_nxburned <- function (Folder.Outputs,
                                freq.scenario,choose.combos,combos.file,obs.nxburned,
                                group.nxburned.from,
                                export.plots){

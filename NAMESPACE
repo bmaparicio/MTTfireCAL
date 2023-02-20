@@ -2,8 +2,8 @@
 
 export(Gen_ign)
 export(build_report)
-export(check_BP_nxburned)
-export(check_fire_size)
+export(evaluate_BP_nxburned)
+export(evaluate_fire_size)
 export(fire_weather_nc)
 export(get_fire_weather)
 export(run_fconstmtt)
