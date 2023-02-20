@@ -25,7 +25,7 @@
 #' @export
 #'
 #' @examples
-#' \dontrun{run_fconstmtt(Folder="C:/user",landscape="C:/user/landscape_files",
+#' \dontrun{run_fconstmtt(Folder="C:/user",Folder.fconstmtt="C:/user/bin",landscape="C:/user/landscape_files",
 #' CrownFireMethod=1,customfmd="C/user/my_fmd.fmd",
 #' FmsFolder="C:/user/results/FMS_files/kmeans_3_clusters",
 #' Resolution=100,GridDistanceUnits=0,
@@ -37,12 +37,11 @@
 #' Duration.5=c(min,max,by),
 #' WS_unit="kmh",
 #' FireListFile="C:/user/results/ignitions",SpotProbability=0.05,
-#' output.folder="C:/user/fconstmtt/Outputs",
 #' OutputFirePerims=1,MetricFLP=0,
 #' Run.fconstmtt=1)}
 #'
 
-run_fconstmtt <- function(Folder,landscape,CrownFireMethod,
+run_fconstmtt <- function(Folder.fconstmtt,Folder,landscape,CrownFireMethod,
                           customfmd,FmsFolder,
                           Resolution,GridDistanceUnits,MeteoFile,
                           Duration.1,
@@ -52,7 +51,7 @@ run_fconstmtt <- function(Folder,landscape,CrownFireMethod,
                           Duration.5,
                           WS_unit,
                           FireListFile,SpotProbability,
-                          output.folder,
+                          #output.folder,
                           OutputFirePerims,MetricFLP,
                           Run.fconstmtt) {
 
@@ -69,7 +68,7 @@ run_fconstmtt <- function(Folder,landscape,CrownFireMethod,
 
   SpotProbability_correct <- as.numeric(SpotProbability)
   ThreadsPerFire_correct <- as.numeric(1)
-  OutputsFolder_correct <-gsub("/", paste("\\\\"), output.folder)
+  #OutputsFolder_correct <-gsub("/", paste("\\\\"), output.folder)
   ProgressFilePathName_correct <- gsub("/", paste("\\\\"), "./fconstProgress.txt")
   OutputFirePerims_correct <- as.numeric (OutputFirePerims)
   MetricFLP_correct <- as.numeric(MetricFLP)
@@ -143,6 +142,8 @@ run_fconstmtt <- function(Folder,landscape,CrownFireMethod,
   dir.create(file.path(mainDir, subDir_outs), showWarnings = FALSE)
   dir.create(file.path(mainDir, subDir_FMS), showWarnings = FALSE)
   setwd(file.path(mainDir, subDir_FMS))
+
+  OutputsFolder_correct <-file.path(mainDir, subDir_FMS)
 
 
 
@@ -381,7 +382,7 @@ run_fconstmtt <- function(Folder,landscape,CrownFireMethod,
 
       for(k in 1:nrow(dur_loop)){
         FireListFile_correct_final <- dur_loop[k,"fullName"]
-        Folder_right <- gsub("/", paste("\\\\"), Folder)
+        Folder_right <- gsub("/", paste("\\\\"), Folder.fconstmtt)
 
         FireListFile_right <-gsub("/", paste("\\\\"), FireListFile)
 
@@ -402,7 +403,7 @@ run_fconstmtt <- function(Folder,landscape,CrownFireMethod,
 
         OutputsName_correct <- paste0(OutputsFolder_correct,"\\durval_",Duration_correct,"_cluster_",cluster_id,"_durclass_",1,"_",WindDirection_correct,"_land_cover_",land_cover_id,sep="")
 
-        Folder_right <- gsub("/", paste("\\\\"), Folder)
+        Folder_right <- gsub("/", paste("\\\\"), Folder.fconstmtt)
         Folder_right_landscape <- gsub("/", paste("\\\\"), landscape)
         landscape_correct_loop_full_name <- paste0(Folder_right_landscape,"\\",landscape_correct_loop)
         FmsFolder_right <- gsub("/", paste("\\\\"), FmsFolder)
@@ -453,7 +454,7 @@ run_fconstmtt <- function(Folder,landscape,CrownFireMethod,
 
       for(k in 1:nrow(dur_loop2)){
         FireListFile_correct_final <- dur_loop2[k,"fullName"]
-        Folder_right <- gsub("/", paste("\\\\"), Folder)
+        Folder_right <- gsub("/", paste("\\\\"), Folder.fconstmtt)
 
         FireListFile_right <-gsub("/", paste("\\\\"), FireListFile)
 
@@ -474,7 +475,7 @@ run_fconstmtt <- function(Folder,landscape,CrownFireMethod,
         OutputsName_correct <- paste0(OutputsFolder_correct,"\\durval_",Duration_correct,"_cluster_",cluster_id,"_durclass_",2,"_",WindDirection_correct,"_land_cover_",land_cover_id,sep="")
 
 
-        Folder_right <- gsub("/", paste("\\\\"), Folder)
+        Folder_right <- gsub("/", paste("\\\\"), Folder.fconstmtt)
         Folder_right_landscape <- gsub("/", paste("\\\\"), landscape)
         landscape_correct_loop_full_name <- paste0(Folder_right_landscape,"\\",landscape_correct_loop)
         FmsFolder_right <- gsub("/", paste("\\\\"), FmsFolder)
@@ -520,7 +521,7 @@ run_fconstmtt <- function(Folder,landscape,CrownFireMethod,
 
       for(k in 1:nrow(dur_loop3)){
         FireListFile_correct_final <- dur_loop3[k,"fullName"]
-        Folder_right <- gsub("/", paste("\\\\"), Folder)
+        Folder_right <- gsub("/", paste("\\\\"), Folder.fconstmtt)
 
         FireListFile_right <-gsub("/", paste("\\\\"), FireListFile)
 
@@ -540,7 +541,7 @@ run_fconstmtt <- function(Folder,landscape,CrownFireMethod,
 
         OutputsName_correct <- paste0(OutputsFolder_correct,"\\durval_",Duration_correct,"_cluster_",cluster_id,"_durclass_",3,"_",WindDirection_correct,"_land_cover_",land_cover_id,sep="")
 
-        Folder_right <- gsub("/", paste("\\\\"), Folder)
+        Folder_right <- gsub("/", paste("\\\\"), Folder.fconstmtt)
         Folder_right_landscape <- gsub("/", paste("\\\\"), landscape)
         landscape_correct_loop_full_name <- paste0(Folder_right_landscape,"\\",landscape_correct_loop)
         FmsFolder_right <- gsub("/", paste("\\\\"), FmsFolder)
@@ -588,7 +589,7 @@ run_fconstmtt <- function(Folder,landscape,CrownFireMethod,
 
       for(k in 1:nrow(dur_loop4)){
         FireListFile_correct_final <- dur_loop4[k,"fullName"]
-        Folder_right <- gsub("/", paste("\\\\"), Folder)
+        Folder_right <- gsub("/", paste("\\\\"), Folder.fconstmtt)
 
         FireListFile_right <-gsub("/", paste("\\\\"), FireListFile)
 
@@ -608,7 +609,7 @@ run_fconstmtt <- function(Folder,landscape,CrownFireMethod,
 
         OutputsName_correct <- paste0(OutputsFolder_correct,"\\durval_",Duration_correct,"_cluster_",cluster_id,"_durclass_",4,"_",WindDirection_correct,"_land_cover_",land_cover_id,sep="")
 
-        Folder_right <- gsub("/", paste("\\\\"), Folder)
+        Folder_right <- gsub("/", paste("\\\\"), Folder.fconstmtt)
         Folder_right_landscape <- gsub("/", paste("\\\\"), landscape)
         landscape_correct_loop_full_name <- paste0(Folder_right_landscape,"\\",landscape_correct_loop)
         FmsFolder_right <- gsub("/", paste("\\\\"), FmsFolder)
@@ -660,7 +661,7 @@ run_fconstmtt <- function(Folder,landscape,CrownFireMethod,
 
       for(k in 1:nrow(dur_loop5)){
         FireListFile_correct_final <- dur_loop5[k,"fullName"]
-        Folder_right <- gsub("/", paste("\\\\"), Folder)
+        Folder_right <- gsub("/", paste("\\\\"), Folder.fconstmtt)
 
         FireListFile_right <-gsub("/", paste("\\\\"), FireListFile)
 
@@ -680,7 +681,7 @@ run_fconstmtt <- function(Folder,landscape,CrownFireMethod,
 
         OutputsName_correct <- paste0(OutputsFolder_correct,"\\durval_",Duration_correct,"_cluster_",cluster_id,"_durclass_",5,"_",WindDirection_correct,"_land_cover_",land_cover_id,sep="")
 
-        Folder_right <- gsub("/", paste("\\\\"), Folder)
+        Folder_right <- gsub("/", paste("\\\\"), Folder.fconstmtt)
         Folder_right_landscape <- gsub("/", paste("\\\\"), landscape)
         landscape_correct_loop_full_name <- paste0(Folder_right_landscape,"\\",landscape_correct_loop)
         FmsFolder_right <- gsub("/", paste("\\\\"), FmsFolder)
@@ -716,7 +717,7 @@ run_fconstmtt <- function(Folder,landscape,CrownFireMethod,
 
 
   all.nameInp_final <- rbind(all.nameInp,all.nameInp2,all.nameInp3,all.nameInp4,all.nameInp5)
-  Folder_right <- gsub("/", paste("\\\\"), Folder)
+  Folder_right <- gsub("/", paste("\\\\"), Folder.fconstmtt)
   batfile <- cbind (paste0(Folder_right,"\\bin\\FConstMTT"),all.nameInp_final)
 
 
