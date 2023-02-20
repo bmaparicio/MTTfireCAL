@@ -726,7 +726,7 @@ run_fconstmtt <- function(Folder.fconstmtt,Folder,landscape,CrownFireMethod,
 
   if(Run.fconstmtt==1){
 
-    shell.exec(paste0(Folder_right,"\\",subDir_FMS,"\\my_batch_1.bat"))
+    shell.exec(paste0(OutputsFolder_correct,"\\my_batch_1.bat"))
     return("Fconsmtt running! Take a break and come back soon")}
 
   return("Files generated!")
