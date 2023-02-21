@@ -28,7 +28,9 @@ run_fconstmtt(
 )
 }
 \arguments{
-\item{Folder}{Path to the folder containing the bin folder with the FContMTT executable. This will also be the folder where the input and the batch files will be saved.}
+\item{Folder.fconstmtt}{Path to the folder containing the bin folder with the FContMTT executable.}
+
+\item{Folder}{Path to the folder where the the input and output folder will be created.}
 
 \item{landscape}{Path to the folder contained the landscape file(s) to be used (either .tif or .lcp)}
 
@@ -65,8 +67,6 @@ run_fconstmtt(
 \item{MetricFLP}{If 1, then the outputs of flame length probability (FLP file) are stored in meters. If 0, then the FLP files are stored in feet.}
 
 \item{Run.fconstmtt}{Binary. If 1, then FConstMTT will automatically start running after creating the required files. If 0, then the .input and batch files are created but FConstMTT does not start running.}
-
-\item{output.folder}{Path to the folder where the outputs should be saved.}
 }
 \value{
 Returns the input and batch files required to run FConstMTT for all the combinations to be tested. Optionally, FConstMTT might be run from R after the creation of the required files.
