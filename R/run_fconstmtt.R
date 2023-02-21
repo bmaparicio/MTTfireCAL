@@ -146,6 +146,7 @@ run_fconstmtt <- function(Folder.fconstmtt,Folder,landscape,CrownFireMethod,
   OutputsFolder_correct <-file.path(mainDir, subDir_outs)
   OutputsFolder_correct <-gsub("/", paste("\\\\"), OutputsFolder_correct)
 
+  batchFolder <- gsub("/",paste("\\\\"),file.path(mainDir, subDir_FMS))
 
   FireListFile_correct_df <- as.data.frame(FireListFile_correct)
 
@@ -726,7 +727,7 @@ run_fconstmtt <- function(Folder.fconstmtt,Folder,landscape,CrownFireMethod,
 
   if(Run.fconstmtt==1){
     setwd(file.path(mainDir, subDir_FMS))
-    shell.exec(paste0("\\my_batch_1.bat"))
+    shell.exec(paste0(batchFolder,"\\my_batch_1.bat"))
     #shell.exec(paste0(OutputsFolder_correct,"\\my_batch_1.bat"))
     return("Fconsmtt running! Take a break and come back soon")}
 
