@@ -143,8 +143,8 @@ run_fconstmtt <- function(Folder.fconstmtt,Folder,landscape,CrownFireMethod,
   dir.create(file.path(mainDir, subDir_FMS), showWarnings = FALSE)
   setwd(file.path(mainDir, subDir_FMS))
 
-  OutputsFolder_correct <-file.path(mainDir, subDir_FMS)
-
+  OutputsFolder_correct <-file.path(mainDir, subDir_outs)
+  OutputsFolder_correct <-gsub("/", paste("\\\\"), OutputsFolder_correct)
 
 
   FireListFile_correct_df <- as.data.frame(FireListFile_correct)
