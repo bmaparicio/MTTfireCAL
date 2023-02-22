@@ -23,6 +23,8 @@ evaluate_fire_size(
 \item{hist.fire.sizes}{Text file (csv) containing the historical fire size. If the function get_fire_weather was used in the process, then the file to be used should be “summary fire size.csv”.}
 
 \item{freqs.durclass}{Text file (csv) with the relative frequency of each meteorological and fuel map scenario used. If the function Gen_ign was used in the process, then the file to be used here should be “clusters_freqs_final.csv”, which is located in the ignition folder.}
+
+\item{plot.all}{Logical. If TRUE, then the fire size distribution of all combinations will be plotted and exported in multiple png files. If FALSE, only the combination with the lowest RMSE is plotted and exported in a single png file.}
 }
 \value{
 Returns figures showing the historical and simulated fire size distribution for all the combinations. Also saves a csv file containing the RMSE and person correlation of each combination of durations and the historical fire size.
