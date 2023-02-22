@@ -794,6 +794,28 @@ evaluate_fire_size <-  function (Folder.Outputs,
       write.csv(all_for_plot_for_saving,paste(Folder.Outputs,"/simulated_frequencies_fire_size.csv",sep=""),row.names = FALSE)
 
 
+      plot_partially <- all_for_plot[all_for_plot$combo %in% results_rmse[1,1], ]
+
+      plot_partially_use <- rbind(historical_use_always,plot_partially)
+
+      temp_plot <- ggplot(plot_partially_use, aes(x=x_axis, y=V1, group=factor(combo),fill = factor(combo))) +
+                       geom_bar(data = filter(plot_partially_use, combo  == 0), aes(fill="Historical"),col="black",stat = "identity") +
+                       scale_fill_manual("",values=c("Historical" = "grey80"))+
+                       geom_line(data = filter(plot_partially_use, combo  != 0), aes(col = factor(combo) , group = factor(combo)),size=1)+
+                       scale_color_brewer(palette="Spectral",
+                                    name="Combination")+
+                       scale_x_continuous(breaks= c(1:nrow(historical_use_always)),
+                                  labels= c(automatic_lables_final,paste(">",intervals[length(intervals)],sep="")))+
+
+                       theme_tq()+
+                       theme(panel.grid.minor = element_blank(), axis.title=element_text(size=12),
+                       panel.grid.major.x = element_blank(), axis.text = element_text(size = 8),
+                       plot.title = element_text(size = 16))+
+                       ylab("Relative frequency") + xlab("Fire size class (ha)")
+                       ggsave(temp_plot, file=paste(Folder.Outputs,"/fire size distribution with lowest RMSE.png",sep=""), width = 17, height = 10, units = "cm")
+
+
+
     } else {
       total_figures <- 1
 
@@ -860,6 +882,29 @@ evaluate_fire_size <-  function (Folder.Outputs,
       colnames(all_for_plot_for_saving)<- c("class","area","combo","relative frequency")
 
       write.csv(all_for_plot_for_saving,paste(Folder.Outputs,"/simulated_frequencies_fire_size.csv",sep=""),row.names = FALSE)
+
+
+      plot_partially <- all_for_plot[all_for_plot$combo %in% results_rmse[1,1], ]
+
+      plot_partially_use <- rbind(historical_use_always,plot_partially)
+
+      temp_plot <- ggplot(plot_partially_use, aes(x=x_axis, y=V1, group=factor(combo),fill = factor(combo))) +
+        geom_bar(data = filter(plot_partially_use, combo  == 0), aes(fill="Historical"),col="black",stat = "identity") +
+        scale_fill_manual("",values=c("Historical" = "grey80"))+
+        geom_line(data = filter(plot_partially_use, combo  != 0), aes(col = factor(combo) , group = factor(combo)),size=1)+
+        scale_color_brewer(palette="Spectral",
+                           name="Combination")+
+        scale_x_continuous(breaks= c(1:nrow(historical_use_always)),
+                           labels= c(automatic_lables_final,paste(">",intervals[length(intervals)],sep="")))+
+
+        theme_tq()+
+        theme(panel.grid.minor = element_blank(), axis.title=element_text(size=12),
+              panel.grid.major.x = element_blank(), axis.text = element_text(size = 8),
+              plot.title = element_text(size = 16))+
+        ylab("Relative frequency") + xlab("Fire size class (ha)")
+      ggsave(temp_plot, file=paste(Folder.Outputs,"/fire size distribution with lowest RMSE.png",sep=""), width = 17, height = 10, units = "cm")
+
+
 
 
     }}
@@ -941,6 +986,30 @@ evaluate_fire_size <-  function (Folder.Outputs,
 
       write.csv(all_for_plot_for_saving,paste(Folder.Outputs,"/simulated_frequencies_fire_size.csv",sep=""),row.names = FALSE)
 
+
+      plot_partially <- all_for_plot[all_for_plot$combo %in% results_rmse[1,1], ]
+
+      plot_partially_use <- rbind(historical_use_always,plot_partially)
+
+      temp_plot <- ggplot(plot_partially_use, aes(x=x_axis, y=V1, group=factor(combo),fill = factor(combo))) +
+        geom_bar(data = filter(plot_partially_use, combo  == 0), aes(fill="Historical"),col="black",stat = "identity") +
+        scale_fill_manual("",values=c("Historical" = "grey80"))+
+        geom_line(data = filter(plot_partially_use, combo  != 0), aes(col = factor(combo) , group = factor(combo)),size=1)+
+        scale_color_brewer(palette="Spectral",
+                           name="Combination")+
+        scale_x_continuous(breaks= c(1:nrow(historical_use_always)),
+                           labels= c(automatic_lables_final,paste(">",intervals[length(intervals)],sep="")))+
+
+        theme_tq()+
+        theme(panel.grid.minor = element_blank(), axis.title=element_text(size=12),
+              panel.grid.major.x = element_blank(), axis.text = element_text(size = 8),
+              plot.title = element_text(size = 16))+
+        ylab("Relative frequency") + xlab("Fire size class (ha)")
+      ggsave(temp_plot, file=paste(Folder.Outputs,"/fire size distribution with lowest RMSE.png",sep=""), width = 17, height = 10, units = "cm")
+
+
+
+
     } else {
       total_figures <- 1
 
@@ -1006,6 +1075,30 @@ evaluate_fire_size <-  function (Folder.Outputs,
       colnames(all_for_plot_for_saving)<- c("class","area","combo","relative frequency")
 
       write.csv(all_for_plot_for_saving,paste(Folder.Outputs,"/simulated_frequencies_fire_size.csv",sep=""),row.names = FALSE)
+
+
+      plot_partially <- all_for_plot[all_for_plot$combo %in% results_rmse[1,1], ]
+
+      plot_partially_use <- rbind(historical_use_always,plot_partially)
+
+      temp_plot <- ggplot(plot_partially_use, aes(x=x_axis, y=V1, group=factor(combo),fill = factor(combo))) +
+        geom_bar(data = filter(plot_partially_use, combo  == 0), aes(fill="Historical"),col="black",stat = "identity") +
+        scale_fill_manual("",values=c("Historical" = "grey80"))+
+        geom_line(data = filter(plot_partially_use, combo  != 0), aes(col = factor(combo) , group = factor(combo)),size=1)+
+        scale_color_brewer(palette="Spectral",
+                           name="Combination")+
+        scale_x_continuous(breaks= c(1:nrow(historical_use_always)),
+                           labels= c(automatic_lables_final,paste(">",intervals[length(intervals)],sep="")))+
+
+        theme_tq()+
+        theme(panel.grid.minor = element_blank(), axis.title=element_text(size=12),
+              panel.grid.major.x = element_blank(), axis.text = element_text(size = 8),
+              plot.title = element_text(size = 16))+
+        ylab("Relative frequency") + xlab("Fire size class (ha)")
+      ggsave(temp_plot, file=paste(Folder.Outputs,"/fire size distribution with lowest RMSE.png",sep=""), width = 17, height = 10, units = "cm")
+
+
+
 
     }}
 
