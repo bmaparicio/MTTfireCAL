@@ -39,6 +39,17 @@ Imports:
     officer,
     flextable,
     magrittr,
-    abind
+    abind,
+    tseries,
+    tidyr,
+    maps,
+    scales,
+    foreach,
+    doParallel,
+    parallel,
+    gtools,
+    Metrics,
+    ie2misc,
+    forestmangr
 Depends: 
     R (>= 2.10)
