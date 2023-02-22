@@ -17,9 +17,10 @@
 #'hist.fire.sizes="C:/user/summary fire size.csv",
 #'freqs.durclass="C:/user/results/ignitions/clusters_freqs_final.csv")}
 #'
-evaluate_fire_size <- function (Folder.Outputs,
-                             intervals,all.dist,
-                             hist.fire.sizes,freqs.durclass){
+evaluate_fire_size <-  function (Folder.Outputs,
+                                 intervals,all.dist,
+                                 hist.fire.sizes,freqs.durclass,
+                                 plot.all){
 
   setwd(Folder.Outputs)
   my_files <- list.files(pattern = "\\.FireList$")
@@ -711,7 +712,11 @@ evaluate_fire_size <- function (Folder.Outputs,
 
   total_combos <- max(all_for_plot$combo)
 
-  if (all.dist==TRUE){
+
+
+
+
+  if (plot.all==TRUE & all.dist==TRUE){
 
     if (total_combos > 11) {
       total_figures <- ceiling(total_combos/11)
@@ -863,7 +868,7 @@ evaluate_fire_size <- function (Folder.Outputs,
 
 
 
-  if (all.dist==FALSE){
+  if (plot.all==TRUE & all.dist==FALSE){
 
     if (total_combos > 11) {
       total_figures <- ceiling(total_combos/11)
@@ -1004,6 +1009,160 @@ evaluate_fire_size <- function (Folder.Outputs,
     }}
 
 
+
+
+  if (plot.all==FALSE & all.dist==TRUE){
+
+    total_figures <- 1
+
+    for(b in 1:total_figures) {
+      historical_use_always <- subset(all_for_plot,combo==0)
+
+      #final_val <- 11*b
+      #start_value <- final_val-10
+
+      plot_partially <- all_for_plot[all_for_plot$combo %in% results_rmse[1,1], ]
+
+      plot_partially_use <- rbind(historical_use_always,plot_partially)
+
+
+
+
+
+      automatic_lables_final <- numeric()
+
+      first_interval <- paste(0,intervals[1],sep="-")
+
+      for (i in 1:(length(intervals)-1)){
+        automatic_lables <- paste(intervals[i],intervals[i+1],sep="-")
+        automatic_lables_final <- c(automatic_lables_final,automatic_lables)
+      }
+
+      automatic_lables_final <- c(first_interval,automatic_lables_final)
+
+      automatic_lables_final <- gsub("-","-\n",automatic_lables_final)
+
+
+
+
+      temp_plot <- ggplot(plot_partially_use, aes(x=x_axis, y=V1, group=factor(combo),fill = factor(combo))) +
+
+
+        geom_bar(data = filter(plot_partially_use, combo  == 0), aes(fill="Historical"),col="black",stat = "identity") +
+
+
+        scale_fill_manual("",values=c("Historical" = "grey80"))+
+
+        geom_line(data = filter(plot_partially_use, combo  != 0), aes(col = factor(combo) , group = factor(combo)),size=1)+
+        scale_color_brewer(palette="Spectral",
+                           name="Combination")+
+
+        scale_x_continuous(breaks= c(1:nrow(historical_use_always)),
+                           labels= c(automatic_lables_final,paste(">",intervals[length(intervals)],sep="")))+
+
+
+        theme_tq()+
+        theme(panel.grid.minor = element_blank(), axis.title=element_text(size=12),
+              panel.grid.major.x = element_blank(), axis.text = element_text(size = 8),
+              plot.title = element_text(size = 16))+
+        ylab("Relative frequency") + xlab("Fire size class (ha)")
+
+      ggsave(temp_plot, file=paste(Folder.Outputs,"/fire size distribution part",b,".png",sep=""), width = 17, height = 10, units = "cm")
+
+
+
+    }
+
+    all_for_plot_for_saving <- all_for_plot
+
+    all_for_plot_for_saving$label <- c(automatic_lables_final,paste(">",intervals[length(intervals)],sep=""))
+    all_for_plot_for_saving$label <- gsub("\n"," ",all_for_plot_for_saving$label)
+    all_for_plot_for_saving$label <- paste0(" ", all_for_plot_for_saving$label)
+
+    colnames(all_for_plot_for_saving)<- c("relative frequency", "combo", "class","area")
+
+    all_for_plot_for_saving <- as.data.frame(cbind(all_for_plot_for_saving$class,all_for_plot_for_saving$area,all_for_plot_for_saving$combo,all_for_plot_for_saving$`relative frequency`))
+    colnames(all_for_plot_for_saving)<- c("class","area","combo","relative frequency")
+
+    write.csv(all_for_plot_for_saving,paste(Folder.Outputs,"/simulated_frequencies_fire_size.csv",sep=""),row.names = FALSE)
+
+
+  }
+
+
+
+
+
+
+  if (plot.all==FALSE & all.dist==FALSE){
+
+    for(b in 1:total_figures) {
+      historical_use_always <- subset(all_for_plot,combo==0)
+
+      #final_val <- 11*b
+      #start_value <- final_val-10
+
+      plot_partially <- all_for_plot[all_for_plot$combo %in% results_rmse[1,1], ]
+
+      plot_partially_use <- rbind(historical_use_always,plot_partially)
+
+
+
+
+      automatic_lables_final <- numeric()
+
+      first_interval <- paste(0,intervals[1],sep="-")
+
+      for (i in 1:(length(intervals)-1)){
+        automatic_lables <- paste(intervals[i],intervals[i+1],sep="-")
+        automatic_lables_final <- c(automatic_lables_final,automatic_lables)
+      }
+
+      automatic_lables_final <- gsub("-","-\n",automatic_lables_final)
+
+
+
+
+      temp_plot <- ggplot(plot_partially_use, aes(x=x_axis, y=V1, group=factor(combo),fill = factor(combo))) +
+
+
+        geom_bar(data = filter(plot_partially_use, combo  == 0), aes(fill="Historical"),col="black",stat = "identity") +
+
+        scale_fill_manual("",values=c("Historical" = "grey80"))+
+
+        geom_line(data = filter(plot_partially_use, combo  != 0), aes(col = factor(combo) , group = factor(combo)),size=1)+
+        scale_color_brewer(palette="Spectral",
+                           name="Combination")+
+
+        scale_x_continuous(breaks= c(1:nrow(historical_use_always)),
+                           labels= c(automatic_lables_final,paste(">",intervals[length(intervals)],sep="")))+
+
+
+        theme_tq()+
+        theme(panel.grid.minor = element_blank(), axis.title=element_text(size=12),
+              panel.grid.major.x = element_blank(), axis.text = element_text(size = 8),
+              plot.title = element_text(size = 16))+
+        ylab("Relative frequency") + xlab("Fire size class (ha)")
+
+      ggsave(temp_plot, file=paste(Folder.Outputs,"/fire size distribution part",b,".png",sep=""), width = 17, height = 10, units = "cm")
+
+
+
+    }
+    all_for_plot_for_saving <- all_for_plot
+
+    all_for_plot_for_saving$label <- c(automatic_lables_final,paste(">",intervals[length(intervals)],sep=""))
+    all_for_plot_for_saving$label <- gsub("\n"," ",all_for_plot_for_saving$label)
+    all_for_plot_for_saving$label <- paste0(" ", all_for_plot_for_saving$label)
+
+    colnames(all_for_plot_for_saving)<- c("relative frequency", "combo", "class","area")
+
+    all_for_plot_for_saving <- as.data.frame(cbind(all_for_plot_for_saving$class,all_for_plot_for_saving$area,all_for_plot_for_saving$combo,all_for_plot_for_saving$`relative frequency`))
+    colnames(all_for_plot_for_saving)<- c("class","area","combo","relative frequency")
+
+    write.csv(all_for_plot_for_saving,paste(Folder.Outputs,"/simulated_frequencies_fire_size.csv",sep=""),row.names = FALSE)
+
+  }
 
 
 

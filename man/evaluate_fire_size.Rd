@@ -9,7 +9,8 @@ evaluate_fire_size(
   intervals,
   all.dist,
   hist.fire.sizes,
-  freqs.durclass
+  freqs.durclass,
+  plot.all
 )
 }
 \arguments{
