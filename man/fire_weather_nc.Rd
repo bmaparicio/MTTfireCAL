@@ -13,6 +13,8 @@ fire_weather_nc(study.area, my.fires, nc.folder, utc.zone, output.folder)
 
 \item{nc.folder}{Path to the folder with the netcdf file.}
 
+\item{utc.zone}{Numeric. Represents the UTC time zone in the study area. Should be set to the time zone during the fire season (i.e. the user should consider the daylight saving time). E.g. for Portugal, the utc.zone should be set to +1.}
+
 \item{output.folder}{Path to the folder where the outputs should be saved.}
 }
 \value{

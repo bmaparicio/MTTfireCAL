@@ -3,6 +3,7 @@
 #' @param study.area Shapefile with the limits of the study area (polygon). Must not contain more than one polygon.
 #' @param my.fires Polygon shapefile containing the dated fire perimeters. The shapefile must contain a field with a unique id per fire perimeter (ID), a field with the burned area per perimeter in hectares (Area_ha), a field with the date of start of the fire (Date_ini) and the end of the fire (Date_end). The fields Date_ini and Date_end must follow the format yyyy-mm-dd.
 #' @param nc.folder Path to the folder with the netcdf file.
+#' @param utc.zone Numeric. Represents the UTC time zone in the study area. Should be set to the time zone during the fire season (i.e. the user should consider the daylight saving time). E.g. for Portugal, the utc.zone should be set to +1.
 #' @param output.folder Path to the folder where the outputs should be saved.
 #'
 #' @return Returns a csv file with the hourly meteorological data per fire perimeter in the study area (fire_weather_study_area.csv)
@@ -14,6 +15,8 @@
 #' output.folder="C:/user/results")}
 #'
 fire_weather_nc <- function(study.area, my.fires,nc.folder,utc.zone,output.folder) {
+
+
 
   my_fires <- readOGR(my.fires)
 
@@ -37,14 +40,18 @@ fire_weather_nc <- function(study.area, my.fires,nc.folder,utc.zone,output.folde
 
   my_fires_t_inside_study_area <- my_fires_t[my_fires_t$ID_use %in% fire_inside_study_area_df$col.id,]
 
+
+
   names(my_fires_t_inside_study_area)[names(my_fires_t_inside_study_area) == 'Date_ini'] <- 'Data_ini'
   names(my_fires_t_inside_study_area)[names(my_fires_t_inside_study_area) == 'Date_end'] <- 'Data_end'
 
+  str(my_fires_t_inside_study_area)
 
-  my_fires_t_dated <- subset(my_fires_t_inside_study_area, Data_ini!="NaN" | Data_end!="NaN")
+  my_fires_t_dated <- subset(my_fires_t_inside_study_area, Data_ini!="NaN")
+  my_fires_t_dated <- subset(my_fires_t_dated, Data_end!="NaN")
+
 
   length(my_fires_t_dated)
-
 
   my_fires_t_dated$date_diff <- as.Date(as.character(my_fires_t_dated$Data_end), format="%Y-%m-%d")-
     as.Date(as.character(my_fires_t_dated$Data_ini), format="%Y-%m-%d")
@@ -136,11 +143,32 @@ fire_weather_nc <- function(study.area, my.fires,nc.folder,utc.zone,output.folde
 
 
 
-  setwd(output.folder)
+  setwd(nc.folder)
 
-  my_nc_files <- list.files(pattern="*.nc")
+  my_nc_files <- list.files(pattern="\\.nc$")
 
-
+  library(gtools)
+  library(ncdf4)
+  library(lubridate)
+  library(sp)
+  library(tidyverse)
+  library(ecmwfr)
+  library(ncdf4)
+  library(udunits2)
+  library(sf)
+  library(rgdal)
+  library(raster)
+  library(rgeos)
+  library(stringr)
+  library(zoo)
+  library(lwgeom)
+  library(tibble)
+  library(abind)
+  library(foreach)
+  library(doParallel)
+  library(parallel)
+  library(gtools)
+  my_nc_files <- mixedsort(my_nc_files)
 
   for(z in 1:length(my_nc_files)){
 
@@ -301,9 +329,13 @@ fire_weather_nc <- function(study.area, my.fires,nc.folder,utc.zone,output.folde
     }
     if (utc.zone>0) {
       last_day <- nrow(results_pt)
-      last_day_use <- as.character(as.POSIXlt(results_pt$days_fire[last_day]) - 86400)
+      last_day_use <- as.character(as.POSIXlt(results_pt$days_fire[last_day], tz="GMT") - 86400)
       results_pt<-rbind(results_pt,last_day_use)
     }
+
+
+    results_pt <- as.data.frame(results_pt[!duplicated(results_pt), ])
+    colnames(results_pt) <- "days_fire"
 
 
     days_fire <- as.character(results_pt$days_fire)

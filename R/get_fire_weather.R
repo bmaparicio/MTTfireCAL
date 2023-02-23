@@ -199,7 +199,7 @@ get_fire_weather <- function(study.area, my.fires,output.folder,utc.zone,wf_user
 
   setwd(output.folder)
 
-  my_nc_files <- list.files(pattern="*.nc")
+  my_nc_files <- list.files(pattern="\\.nc$")
 
   library(gtools)
   library(ncdf4)
