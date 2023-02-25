@@ -698,7 +698,7 @@ evaluate_fire_size <-  function (Folder.Outputs,
 
   results_rmse <- results_rmse[order(results_rmse$RMSE),]
 
-  write.csv(results_rmse,file=paste(Folder.Outputs,"/rmse_combos.csv",sep=""), row.names = FALSE)
+  write.csv(results_rmse,file=paste(Folder.Outputs,"/performance_combos.csv",sep=""), row.names = FALSE)
 
 
 

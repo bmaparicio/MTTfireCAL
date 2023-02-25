@@ -445,4 +445,78 @@ evaluate_BP_nxburned <- function (Folder.Outputs,
 
 
 
+
+
+
+
+  #figure
+  obs.nxburned_use <- rasterToPoints(obs.nxburned_use)
+  obs.nxburned_df <-  data.frame(obs.nxburned_use)
+  colnames(obs.nxburned_df) <- c("lon", "lat", "Nburned")
+
+
+  sim_BP_use <- rasterToPoints(all_rasters_sum)
+  sim_BP_df <- data.frame(sim_BP_use)
+  colnames(sim_BP_df) <- c("lon", "lat", "BP")
+
+
+  #set the zeros as NA
+  obs.nxburned_df[obs.nxburned_df == 0] <- NA
+  sim_BP_df[sim_BP_df == 0] <- NA
+
+
+  #plot
+  Ntimes_burned <- ggplot() +
+    geom_raster(data = obs.nxburned_df, aes(lon, lat, fill = factor(Nburned))) +
+    scale_fill_brewer(palette="YlOrRd",
+                      na.value = "grey80",
+                      name = "N times burned")+
+    theme_void()+
+    theme(legend.position="bottom",plot.title = element_text(hjust = 0.5))+
+    xlab("Longitude") + ylab("Latitude")+
+    coord_fixed(xlim = c(extent(sim_BP)[1],extent(sim_BP)[2]),
+                ylim = c(extent(sim_BP)[3],extent(sim_BP)[4]))+
+    ggtitle("Historical Number of Times Burned")
+
+
+
+  mid <- max(sim_BP_df$BP, na.rm = T)/2
+
+  burn_probability <- ggplot() +
+    geom_raster(data = sim_BP_df, aes(lon, lat, fill = BP)) +
+    scale_fill_gradient2(low = "#FFFFB2",
+                         mid = "#FD8D3C",
+                         high = "#BD0026",
+                         midpoint = mid,
+                         na.value = "grey80",
+                         name = "Burn Probability")+
+    theme_void()+
+    theme(legend.position="bottom",plot.title = element_text(hjust = 0.5))+
+    xlab("Longitude") + ylab("Latitude")+
+    coord_fixed(xlim = c(extent(sim_BP)[1],extent(sim_BP)[2]),
+                ylim = c(extent(sim_BP)[3],extent(sim_BP)[4]))+
+    ggtitle("Estimated Burn Probability")
+
+
+  width_measured <- extent(sim_BP)[2]-extent(sim_BP)[1]
+  height_measured <- extent(sim_BP)[4]-extent(sim_BP)[3]
+
+  ratio_use <- width_measured/height_measured
+
+  theme_get()$plot.margin
+
+  #join the two plots
+  library(ggpubr)
+  final_figure <- ggarrange(Ntimes_burned, burn_probability,
+                            ncol = 2, align = "h")
+
+
+  #save it as a figure
+  ggsave(paste(Folder.Outputs,"/correlation_BP_NxBurned","/Nxburned_and_BP.jpeg",sep=""),
+         final_figure,
+         width = 20*ratio_use, height = 20, dpi = 150, units = "cm")
+
+
+
+
 }
