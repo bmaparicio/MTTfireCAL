@@ -737,11 +737,12 @@ fire_weather_nc <- function(study.area, my.fires,nc.folder,utc.zone,output.folde
 
     result_hours_final_df <- result_hours_final_df[result_hours_final_df$day_UTC_corrected %in% results_pt_hours$Var3,]
 
-    write.csv(result_hours_final_df,"fire_weather_study_area.csv",row.names = FALSE)
+
 
 
 
   }
 
+  write.csv(result_hours_final_df,"fire_weather_study_area.csv",row.names = FALSE)
 
 }
