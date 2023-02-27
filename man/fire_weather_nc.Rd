@@ -25,7 +25,7 @@ Get meteorological variables from an existing netcdf file and stores it in a csv
 }
 \examples{
 \dontrun{fire_weather_nc(study.area="C:/user/study_area.shp",
-my.fires="C:/user/my_fires.shp",nc.folder="C:/user/netdcf_file.nc",
+my.fires="C:/user/my_fires.shp",nc.folder="C:/user/netdcf_folder",
 utc.zone=+1,
 output.folder="C:/user/results")}
 

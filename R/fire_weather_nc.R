@@ -11,7 +11,7 @@
 #' @import lubridate sp tidyverse ecmwfr ncdf4 udunits2 sf rgdal raster rgeos stringr zoo lwgeom tibble abind
 #' @examples
 #' \dontrun{fire_weather_nc(study.area="C:/user/study_area.shp",
-#' my.fires="C:/user/my_fires.shp",nc.folder="C:/user/netdcf_file.nc",
+#' my.fires="C:/user/my_fires.shp",nc.folder="C:/user/netdcf_folder",
 #' utc.zone=+1,
 #' output.folder="C:/user/results")}
 #'
