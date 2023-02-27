@@ -12,6 +12,7 @@
 #' @examples
 #' \dontrun{fire_weather_nc(study.area="C:/user/study_area.shp",
 #' my.fires="C:/user/my_fires.shp",nc.folder="C:/user/netdcf_file.nc",
+#' utc.zone=+1,
 #' output.folder="C:/user/results")}
 #'
 fire_weather_nc <- function(study.area, my.fires,nc.folder,utc.zone,output.folder) {
