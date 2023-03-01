@@ -1454,7 +1454,7 @@ if (length(active.period)==1 & is.character(active.period)==TRUE){
 }
 
 if (length(active.period)==2 & is.numeric(active.period)==TRUE){
-  meteo_fires_inside <- meteo_fires_inside[grep(paste(active.period[1]:active.period[2],collapse="$|","$",sep=""), meteo_fires_inside$day_UTC_corrected ), ]
+  result_hours_final_df_wind_rose <- result_hours_final_df[grep(paste(active.period[1]:active.period[2],collapse="$|","$",sep=""), result_hours_final_df$day_UTC_corrected ), ]
   }
 
 
