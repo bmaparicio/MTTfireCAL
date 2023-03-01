@@ -714,17 +714,17 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
 
   nrow(meteo_fires_inside)
 
-
+if (length(active.period)==1 & is.character(active.period)==TRUE){
   if(active.period=="all") {
     meteo_fires_inside <- meteo_fires_inside
   }
 
   if(active.period=="energy") {
     meteo_fires_inside <- meteo_fires_inside[grep("12$|13$|14$|15$|16$|17$|18$|19$|20$", meteo_fires_inside$day_UTC_corrected ), ]
-  }
+  }}
 
-  if(active.period=="user") {
-    meteo_fires_inside <- meteo_fires_inside[grep(paste(user.period,collapse="$|","$",sep=""), meteo_fires_inside$day_UTC_corrected ), ]
+if (length(active.period)==2 & is.numeric(active.period)==TRUE){
+  meteo_fires_inside <- meteo_fires_inside[grep(paste(active.period[1]:active.period[2],collapse="$|","$",sep=""), meteo_fires_inside$day_UTC_corrected ), ]
   }
 
 
@@ -1443,7 +1443,7 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
 
 
 
-
+if (length(active.period)==1 & is.character(active.period)==TRUE){
   if(active.period=="all") {
     result_hours_final_df_wind_rose <- result_hours_final_df
   }
@@ -1451,9 +1451,10 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
   if(active.period=="energy") {
     result_hours_final_df_wind_rose <- result_hours_final_df[grep("12$|13$|14$|15$|16$|17$|18$|19$|20$", result_hours_final_df$day_UTC_corrected ), ]
   }
+}
 
-  if(active.period=="user") {
-    result_hours_final_df_wind_rose <- result_hours_final_df[grep(paste(user.period,collapse="$|","$",sep=""), result_hours_final_df$day_UTC_corrected ), ]
+if (length(active.period)==2 & is.numeric(active.period)==TRUE){
+  meteo_fires_inside <- meteo_fires_inside[grep(paste(active.period[1]:active.period[2],collapse="$|","$",sep=""), meteo_fires_inside$day_UTC_corrected ), ]
   }
 
 
