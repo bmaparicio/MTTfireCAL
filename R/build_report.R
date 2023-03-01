@@ -1722,14 +1722,14 @@ if (length(active.period)==2 & is.numeric(active.period)==TRUE){
 
 
 
-  if (active.period=='user') {
-    write_it <- paste("Active period was defined by the user as the interval of the following hours:", user.period, sep=" ")}
+  if (length(active.period)==2 & is.numeric(active.period)==TRUE){
+    write_it <- paste("Active period was defined by the user as the interval of the following hours:", active.period[1], "-",active.period[2], sep=" ")}
 
-  if (active.period=="energy") {
+  if (active.period[1]=="energy") {
     write_it <- paste("Active period was defined by the average energy released during fire spread, which peaks from 12h to 20h (for more information contact Akli Benali: aklibenali@gmail.com)", sep=" ")}
 
 
-  if (active.period=="all") {
+  if (active.period[1]=="all") {
     write_it <- paste("No active period was defined. All 24 hours of days with fire events were considered")}
 
 
