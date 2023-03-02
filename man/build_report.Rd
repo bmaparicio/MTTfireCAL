@@ -10,7 +10,6 @@ build_report(
   my.dated.fires,
   meteo.data,
   active.period,
-  user.period,
   meteo.aggregation,
   min.size,
   min.overlap,
@@ -33,8 +32,6 @@ build_report(
 
 \item{active.period}{The most common active period of fire spread. Will be used to select the interval of meteorological values to be used in the creation of clusters or percentiles.}
 
-\item{user.period}{Optional. Numerical vector with the hours to be used in the fire weather characterization.}
-
 \item{meteo.aggregation}{How hourly data should be combined into daily data. Possible methods include: mean (computes the mean of each variable for the active.period), max.min (computes the maximum value of temperature and wind speed and the minimum relative humidity for the active.period), none (does not combine hourly data into daily data and uses all the data in the creation of clusters or percentiles).}
 
 \item{min.size}{Numerical. Minimum fire size to be considered in the analysis. Useful to subset the fire sample. Must be the same as the lowest value set in fire.size.intervals}
@@ -43,7 +40,7 @@ build_report(
 
 \item{output.folder}{Path to the folder where the outputs should be saved.}
 
-\item{fire.aggregation}{How the meteorology of different points inside the same fire perimeter should be combined. Possible methods include: WS (wind speed; the point falling inside the fire perimeter with highest wind speed is kept and the other ignored), none (uses all the points falling inside the fire perimeter).}
+\item{fire.aggregation}{How the meteorology of different points from the ERA5-Land grid that fall inside of the same fire perimeter should be combined. Possible methods include: WS (wind speed; the ERA5-Land grid point falling inside the fire perimeter with highest wind speed is kept and the others ignored), none (uses all the ERA5-Land grid points falling inside the fire perimeter).}
 
 \item{fire.size.intervals}{Numeric vector with the fire size classes to be considered in the characterization of the study area.}
 
@@ -63,7 +60,7 @@ Creates files with meteorological characterization of the study area during fire
 \dontrun{build_report(study.area="C:/user/study_area.shp",
 my.fires="C:/user/my_fires.shp",my.dated.fires="C:/user/my_dated_fires.shp",
 meteo.data="fire_weather_study_area.csv",active.period="energy",
-user.period=c(14,15,16),meteo.aggregation="max.min",
+meteo.aggregation="max.min",
 min.size=100,min.overlap=50,fire.aggregation="WS",
 fire.size.intervals=c(100,250,500,750,1000,2500,5000,10000),
 create.clusters=TRUE,output.folder="C:/user/results")}
