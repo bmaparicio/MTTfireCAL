@@ -20,9 +20,9 @@
 #' export.plots=1)}
 #'
 evaluate_BP_nxburned <- function (Folder.Outputs,
-                               freq.scenario,choose.combos,combos.file,obs.nxburned,
-                               group.nxburned.from,
-                               export.plots){
+                                  freq.scenario,choose.combos,combos.file,obs.nxburned,
+                                  group.nxburned.from,
+                                  export.plots){
 
   setwd(Folder.Outputs)
   my_files <- list.files(pattern = "BP.asc")
@@ -427,7 +427,7 @@ evaluate_BP_nxburned <- function (Folder.Outputs,
       scale_x_discrete(labels=c(percentage_nxburned$nxburned))
 
     if(export.plots==1){
-      ggsave(filename=paste(Folder.Outputs,"/correlation_BP_NxBurned","/BP_nxburned_combo_",i,".jpg",sep=""), plot=boxplot_bp, width = 6, height = 5)
+      ggsave(filename=paste(Folder.Outputs,"/correlation_BP_NxBurned","/correlation_BP_nxburned_combo_",i,".jpg",sep=""), plot=boxplot_bp, width = 6, height = 5)
 
     }
 
@@ -474,8 +474,8 @@ evaluate_BP_nxburned <- function (Folder.Outputs,
     theme_void()+
     theme(legend.position="bottom",plot.title = element_text(hjust = 0.5))+
     xlab("Longitude") + ylab("Latitude")+
-    coord_fixed(xlim = c(extent(sim_BP)[1],extent(sim_BP)[2]),
-                ylim = c(extent(sim_BP)[3],extent(sim_BP)[4]))+
+    coord_fixed(xlim = c(extent(all_rasters_sum)[1],extent(all_rasters_sum)[2]),
+                ylim = c(extent(all_rasters_sum)[3],extent(all_rasters_sum)[4]))+
     ggtitle("Historical Number of Times Burned")
 
 
@@ -493,13 +493,13 @@ evaluate_BP_nxburned <- function (Folder.Outputs,
     theme_void()+
     theme(legend.position="bottom",plot.title = element_text(hjust = 0.5))+
     xlab("Longitude") + ylab("Latitude")+
-    coord_fixed(xlim = c(extent(sim_BP)[1],extent(sim_BP)[2]),
-                ylim = c(extent(sim_BP)[3],extent(sim_BP)[4]))+
+    coord_fixed(xlim = c(extent(all_rasters_sum)[1],extent(all_rasters_sum)[2]),
+                ylim = c(extent(all_rasters_sum)[3],extent(all_rasters_sum)[4]))+
     ggtitle("Estimated Burn Probability")
 
 
-  width_measured <- extent(sim_BP)[2]-extent(sim_BP)[1]
-  height_measured <- extent(sim_BP)[4]-extent(sim_BP)[3]
+  width_measured <- extent(all_rasters_sum)[2]-extent(all_rasters_sum)[1]
+  height_measured <- extent(all_rasters_sum)[4]-extent(all_rasters_sum)[3]
 
   ratio_use <- width_measured/height_measured
 
