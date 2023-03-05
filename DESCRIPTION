@@ -10,15 +10,15 @@ Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.2.1
 Imports:
-    lubridate (>=1.9.2),
-    sp (>=1.6.0),
-    tidyverse (>=2.0.0),
-    ecmwfr (>=1.5.0), 
-    ncdf4 (>=1.21), 
-    udunits2 (>=0.13.2.1), 
-    sf (>=1.0.9), 
-    rgdal (>=1.6.4), 
-    raster (>=3.6.14), 
+    lubridate (>= 1.9.2),
+    sp (>= 1.6.0),
+    tidyverse (>= 2.0.0),
+    ecmwfr (>= 1.5.0), 
+    ncdf4 (>= 1.21), 
+    udunits2 (>= 0.13.2.1), 
+    sf (>= 1.0.9), 
+    rgdal (>= 1.6.4), 
+    raster (>= 3.6.14), 
     rgeos (>=0.6.2),
     stringr (>=1.5.0), 
     zoo (>=1.8.11), 
@@ -51,5 +51,7 @@ Imports:
     Metrics (>=0.1.4),
     ie2misc (>=0.9.0),
     forestmangr (>=0.9.5)
+Remotes:
+    bmaparicio/MTTfireCAL@HEAD
 Depends: 
     R (>= 2.10)
