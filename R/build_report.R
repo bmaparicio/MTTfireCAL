@@ -707,9 +707,46 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
 
 
 
+  itemizeDates <- function(startDate="2020-12-28", endDate="2020-12-30",
+                           format="%Y-%m-%d") {
+    #startDate <- as.Date(startDate) - as.difftime(1, unit="days") #esta parte ? para corrigir para termos UTC+1 sempre
+    out <- seq(as.Date(startDate, format=format),
+               as.Date(endDate, format=format), by="days")
+    format(out, format)
+  }
+
+  #itemizeDates(startDate="2020-1-27", endDate="2020-2-21")
+
+
+
+  results_days_fire <- data.frame()
+
+
+  for (q in 1:nrow(dated_fires_join_use)) {
+    days_fire <- itemizeDates(startDate=dated_fires_join_use$Data_ini[q], endDate=dated_fires_join_use$Data_end[q])
+    results_pt <- as.data.frame(cbind(days_fire,dated_fires_join_use$ID[q]))
+    results_days_fire <- rbind(results_days_fire,results_pt)
+  }
+
+
+
+
+  results_days_fire$concat_dates <- gsub("-","",results_days_fire$days_fire)
+
+  results_days_fire$concat_use <- paste(results_days_fire$concat_dates,results_days_fire$V2,sep="_")
 
 
   meteo_fires_inside <- result_hours_final_df[result_hours_final_df$ID %in% dated_fires_join_use$ID, ]
+
+  meteo_fires_inside$concat_new <- substr(meteo_fires_inside$day_UTC_corrected,1,8)
+
+  meteo_fires_inside$concat_new <- paste(meteo_fires_inside$concat_new,meteo_fires_inside$ID,sep="_")
+
+
+  meteo_fires_inside <- meteo_fires_inside[meteo_fires_inside$concat_new %in% results_days_fire$concat_use, ]
+
+
+
   tail(meteo_fires_inside,100)
 
   nrow(meteo_fires_inside)
