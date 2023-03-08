@@ -9,6 +9,7 @@ To install MTTfireCAL from GitHub:
 install.packages("devtools")
 install.packages("usethis")
 ```
+```
 library(devtools)
 install_github("bmaparicio/MTTfireCAL")
 ```
