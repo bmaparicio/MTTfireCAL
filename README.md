@@ -6,6 +6,9 @@ This R package is meant to assists in the calibration of the [MTT](https://cdnsc
 ## Instalation
 To install MTTfireCAL from GitHub:
 ```
+install.packages("devtools")
+install.packages("usethis")
+```
 library(devtools)
 install_github("bmaparicio/MTTfireCAL")
 ```
