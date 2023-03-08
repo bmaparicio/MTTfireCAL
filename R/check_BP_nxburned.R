@@ -379,7 +379,7 @@ evaluate_BP_nxburned <- function (Folder.Outputs,
     }
 
     percentage_nxburned<- as.data.frame(percentage_nxburned)
-    colnames(percentage_nxburned)<-c("nxburned","percentage")
+    colnames(percentage_nxburned)<-c("nxburned","percentage of landscape")
 
     setwd(paste(Folder.Outputs,"/correlation_BP_NxBurned",sep=""))
     write.csv(percentage_nxburned,"proportion_nxburned_original.csv",row.names = FALSE)
@@ -400,7 +400,7 @@ evaluate_BP_nxburned <- function (Folder.Outputs,
       }
 
       percentage_nxburned<- as.data.frame(percentage_nxburned)
-      colnames(percentage_nxburned)<-c("nxburned","percentage")
+      colnames(percentage_nxburned)<-c("nxburned","percentage of landscape")
 
       percentage_nxburned[aa+1,1]<- paste(">=",percentage_nxburned[aa+1,1],sep="")
 
