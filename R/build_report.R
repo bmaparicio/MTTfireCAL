@@ -835,12 +835,32 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
   }
 
 
-  if (fire.aggregation=="WS" & summarize.per.fire == FALSE){
+  results_meteo_aggregation <- data.frame()
+
+  if (fire.aggregation=="WS" & summarize.per.fire == FALSE & meteo.aggregation=="none"){
+    for(y in 1:length(unique(meteo_fires_inside$ID))) {
+      meteo_fires_inside_loop <- subset(meteo_fires_inside,ID==unique(meteo_fires_inside$ID)[y])
+
+      meteo_fires_inside_loop_concat_use <- base::as.data.frame(meteo_fires_inside_loop %>%
+                                                                  group_by(concat_use_fire_aggre) %>%
+                                                                  slice(which.max(WS_use)))
+
+      meteo_fires_inside_loop_end <- meteo_fires_inside_loop[meteo_fires_inside_loop$concat_use %in% meteo_fires_inside_loop_concat_use$concat_use, ]
+      results_meteo_aggregation<- rbind(results_meteo_aggregation,meteo_fires_inside_loop_end)
+    }
+
+    meteo_fires_inside<- results_meteo_aggregation}
+
+
+
+
+  if (fire.aggregation=="WS" & summarize.per.fire == FALSE & meteo.aggregation!="none"){
     meteo_fires_inside <- base::as.data.frame(meteo_fires_inside %>%
                                                 group_by(concat_use_fire_aggre) %>%
                                                 slice(which.max(WS_use)))}
 
-  if (fire.aggregation=="WS" & summarize.per.fire == TRUE){
+
+  if (fire.aggregation=="WS" & summarize.per.fire == TRUE & meteo.aggregation!="none"){
     meteo_fires_inside <- base::as.data.frame(meteo_fires_inside %>%
                                                 group_by(ID) %>%
                                                 slice(which.max(WS_use)))}
