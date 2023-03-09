@@ -104,6 +104,12 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
   dated_fires <- spTransform(dated_fires, CRS("+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0"))
   dated_fires <- st_as_sf(dated_fires)
 
+  names(dated_fires)[names(dated_fires)=="Date_ini"] = "Data_ini"
+  names(dated_fires)[names(dated_fires)=="Date_end"] = "Data_end"
+
+  names(dated_fires)[names(dated_fires)=="start_date"] = "Data_ini"
+  names(dated_fires)[names(dated_fires)=="end_date"] = "Data_end"
+
   dated_fires <- subset(dated_fires,Data_ini != "NaN" & Data_end != "NaN")
   dated_fires <- st_make_valid(dated_fires)
 
@@ -578,7 +584,7 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
     theme(legend.position = "bottom")+
     theme(legend.text=element_text(size=10),
           legend.title=element_text(size=12))+
-    guides(fill=guide_legend(nrow=round(nrow(table_for_graph_user)/4),byrow=TRUE,title="Fire size (ha)"))
+    guides(fill=guide_legend(nrow=ceiling(nrow(table_for_graph_user)/4),byrow=TRUE,title="Fire size (ha)"))
 
 
 
