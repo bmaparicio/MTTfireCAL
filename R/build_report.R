@@ -2255,13 +2255,15 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
       my_cluster_loop$herbaceous <- 60
       my_cluster_loop$woody <- 90
 
+      mainDir<- output.folder
+      subDir_FMS <- "FMS_files"
+      dir.create(file.path(mainDir, subDir_FMS), showWarnings = FALSE)
 
       for (w in 1:nrow(my_cluster_loop)) {
 
-        mainDir<- output.folder
-        subDir_FMS <- "FMS_files"
+
         #create the csv file with cluster meteo data
-        dir.create(file.path(mainDir, subDir_FMS), showWarnings = FALSE)
+
         setwd(file.path(mainDir, subDir_FMS))
 
         my_cluster_loop_vs2 <- my_cluster_loop[w,]
@@ -2269,9 +2271,9 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
         my_cluster_id <- my_cluster_loop_vs2[w,2]
         my_fms_loop <- my_cluster_loop_vs2[,c("mc","HTR_1","HTR_10","HTR_100","herbaceous","woody")]
 
-
+        nome_usar_fms <- paste("percentile",my_cluster_loop[w,"percentile"],sep="_")
         mainDir<- output.folder
-        subDir_FMS_separate <- paste(subDir_FMS,nome_usar,sep="/")
+        subDir_FMS_separate <- paste(subDir_FMS,nome_usar_fms,sep="/")
         #create the csv file with cluster meteo data
         dir.create(file.path(mainDir, subDir_FMS_separate), showWarnings = FALSE)
         setwd(file.path(mainDir, subDir_FMS_separate))
