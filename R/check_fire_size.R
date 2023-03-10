@@ -15,6 +15,7 @@
 #' @examples
 #'\dontrun{evaluate_fire_size(Folder.Outputs="C:/user/fconstmtt/Outputs",
 #'intervals=c(100,250,500,750,1000,2500,5000,10000),all.dist=FALSE,
+#'plot.all=TRUE,
 #'hist.fire.sizes="C:/user/summary fire size.csv",
 #'freqs.durclass="C:/user/results/ignitions/clusters_freqs_final.csv")}
 #'
@@ -524,6 +525,11 @@ evaluate_fire_size <-  function (Folder.Outputs,
 
   for (t in 1:nrow(results_inter_expanded)){
     results_inter_expanded_loop <- as.data.frame(results_inter_expanded[t,])
+
+    if(ncol(results_inter_expanded_loop)==1){
+      names(results_inter_expanded_loop)<-names(results_inter_expanded)
+    }
+
     results_inter_expanded_loop <- cbind(as.list(colnames(results_inter_expanded_loop)),results_inter_expanded_loop)
     results_inter_expanded_loop$`"durclass_1"`
 

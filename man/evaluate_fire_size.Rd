@@ -35,6 +35,7 @@ Combines and calculates the RMSE and pearson correlation between all the duratio
 \examples{
 \dontrun{evaluate_fire_size(Folder.Outputs="C:/user/fconstmtt/Outputs",
 intervals=c(100,250,500,750,1000,2500,5000,10000),all.dist=FALSE,
+plot.all=TRUE,
 hist.fire.sizes="C:/user/summary fire size.csv",
 freqs.durclass="C:/user/results/ignitions/clusters_freqs_final.csv")}
 
