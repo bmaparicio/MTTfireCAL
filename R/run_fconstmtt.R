@@ -356,16 +356,7 @@ run_fconstmtt <- function(Folder.fconstmtt,Folder,landscape,CrownFireMethod,
     FireListFile_correct_df_all_dur_all_all<-left_join(FireListFile_correct_df_all_dur_all_all,FireListFile_correct_df_all_dur_all_all_not_fin, by=c("cluster_name"="cluster"))
   }
 
-  FmsFolder_correct_df_final$id <- gsub(".fms","",FmsFolder_correct_df_final$id)
-  FmsFolder_correct_df_final$full_name_fms <- FmsFolder_correct_df$FmsFolder_correct
 
-  FmsFolder_correct_df_final$id <- as.numeric(FmsFolder_correct_df_final$id)
-
-  FireListFile_correct_df_all_dur_all_all_not_fin<-left_join(meteofile_use,FmsFolder_correct_df_final, by=c("cluster"="id"))
-
-  FireListFile_correct_df_all_dur_all_all$cluster_name<-as.numeric(FireListFile_correct_df_all_dur_all_all$cluster_name)
-
-  FireListFile_correct_df_all_dur_all_all<-left_join(FireListFile_correct_df_all_dur_all_all,FireListFile_correct_df_all_dur_all_all_not_fin, by=c("cluster_name"="cluster"))
 
 
 
