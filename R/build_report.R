@@ -366,7 +366,7 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
     scale_x_continuous(breaks= c(1, 2, 3,4,5,6,7,8,9),
                        labels= c("0-\n100","100-\n250","250-\n500","500-\n750","750-\n1000","1000-\n2500",
                                  "2500-\n5000","5000-\n10000",">10000"))+
-    theme_tq()+
+    theme_tq_envelope()+
     scale_y_continuous(breaks = seq(0, (max(freqs_my_fires_t_inter_intersected$freq_rel)+0.05), by = 0.1))+
     theme(panel.grid.minor = element_blank(), axis.title=element_text(size=14),
           panel.grid.major.x = element_blank(), axis.text = element_text(size = 8),
@@ -419,7 +419,7 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
 
   BA_dist <- ggplot(my_BA_per_year_fin, aes(x=Year, y=Burned_area)) +
     geom_col(width = .7, position = "dodge", alpha=0.5)+
-    theme_tq()+
+    theme_tq_envelope()+
     theme(panel.grid.minor = element_blank(), axis.title=element_text(size=14),
           panel.grid.major.x = element_blank(), axis.text = element_text(size = 10),
           plot.title = element_text(size = 16), legend.position = "none",
@@ -483,7 +483,7 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
     geom_col(width = .7, position = "dodge", alpha=0.5)+
     scale_x_continuous(breaks= c(1:nrow(freqs_my_fires_t_inter_intersected_spikes)),
                        labels= c(automatic_lables_final,paste(">",fire.size.intervals[length(fire.size.intervals)],sep="")))+
-    theme_tq()+
+    theme_tq_envelope()+
     theme(panel.grid.minor = element_blank(), axis.title=element_text(size=14),
           panel.grid.major.x = element_blank(), axis.text = element_text(size = 7),
           plot.title = element_text(size = 16), legend.position = "none",
@@ -657,7 +657,7 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
     scale_x_continuous(breaks= c(1:nrow(freqs_my_fires_t_inter_intersected_spikes)),
                        labels= c(automatic_lables_final,paste(">",fire.size.intervals[length(fire.size.intervals)],sep="")))+
     geom_vline(aes(xintercept=pos, colour="black"), spike_detected_use)+
-    theme_tq()+
+    theme_tq_envelope()+
     theme(panel.grid.minor = element_blank(), axis.title=element_text(size=14),
           panel.grid.major.x = element_blank(), axis.text = element_text(size = 8),
           plot.title = element_text(size = 16), legend.position = "none",

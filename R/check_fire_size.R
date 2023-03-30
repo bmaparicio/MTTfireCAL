@@ -774,7 +774,7 @@ evaluate_fire_size <-  function (Folder.Outputs,
                              labels= c(automatic_lables_final,paste(">",intervals[length(intervals)],sep="")))+
 
 
-          theme_tq()+
+          theme_tq_envelope()+
           theme(panel.grid.minor = element_blank(), axis.title=element_text(size=12),
                 panel.grid.major.x = element_blank(), axis.text = element_text(size = 8),
                 plot.title = element_text(size = 16))+
@@ -813,7 +813,7 @@ evaluate_fire_size <-  function (Folder.Outputs,
                        scale_x_continuous(breaks= c(1:nrow(historical_use_always)),
                                   labels= c(automatic_lables_final,paste(">",intervals[length(intervals)],sep="")))+
 
-                       theme_tq()+
+                       theme_tq_envelope()+
                        theme(panel.grid.minor = element_blank(), axis.title=element_text(size=12),
                        panel.grid.major.x = element_blank(), axis.text = element_text(size = 8),
                        plot.title = element_text(size = 16))+
@@ -865,7 +865,7 @@ evaluate_fire_size <-  function (Folder.Outputs,
                              labels= c(automatic_lables_final,paste(">",intervals[length(intervals)],sep="")))+
 
 
-          theme_tq()+
+          theme_tq_envelope()+
           theme(panel.grid.minor = element_blank(), axis.title=element_text(size=12),
                 panel.grid.major.x = element_blank(), axis.text = element_text(size = 8),
                 plot.title = element_text(size = 16))+
@@ -903,7 +903,7 @@ evaluate_fire_size <-  function (Folder.Outputs,
         scale_x_continuous(breaks= c(1:nrow(historical_use_always)),
                            labels= c(automatic_lables_final,paste(">",intervals[length(intervals)],sep="")))+
 
-        theme_tq()+
+        theme_tq_envelope()+
         theme(panel.grid.minor = element_blank(), axis.title=element_text(size=12),
               panel.grid.major.x = element_blank(), axis.text = element_text(size = 8),
               plot.title = element_text(size = 16))+
@@ -968,7 +968,7 @@ evaluate_fire_size <-  function (Folder.Outputs,
                              labels= c(automatic_lables_final,paste(">",intervals[length(intervals)],sep="")))+
 
 
-          theme_tq()+
+          theme_tq_envelope()+
           theme(panel.grid.minor = element_blank(), axis.title=element_text(size=12),
                 panel.grid.major.x = element_blank(), axis.text = element_text(size = 8),
                 plot.title = element_text(size = 16))+
@@ -1006,7 +1006,7 @@ evaluate_fire_size <-  function (Folder.Outputs,
         scale_x_continuous(breaks= c(1:nrow(historical_use_always)),
                            labels= c(automatic_lables_final,paste(">",intervals[length(intervals)],sep="")))+
 
-        theme_tq()+
+        theme_tq_envelope()+
         theme(panel.grid.minor = element_blank(), axis.title=element_text(size=12),
               panel.grid.major.x = element_blank(), axis.text = element_text(size = 8),
               plot.title = element_text(size = 16))+
@@ -1057,7 +1057,7 @@ evaluate_fire_size <-  function (Folder.Outputs,
                              labels= c(automatic_lables_final,paste(">",intervals[length(intervals)],sep="")))+
 
 
-          theme_tq()+
+          theme_tq_envelope()+
           theme(panel.grid.minor = element_blank(), axis.title=element_text(size=12),
                 panel.grid.major.x = element_blank(), axis.text = element_text(size = 8),
                 plot.title = element_text(size = 16))+
@@ -1096,7 +1096,7 @@ evaluate_fire_size <-  function (Folder.Outputs,
         scale_x_continuous(breaks= c(1:nrow(historical_use_always)),
                            labels= c(automatic_lables_final,paste(">",intervals[length(intervals)],sep="")))+
 
-        theme_tq()+
+        theme_tq_envelope()+
         theme(panel.grid.minor = element_blank(), axis.title=element_text(size=12),
               panel.grid.major.x = element_blank(), axis.text = element_text(size = 8),
               plot.title = element_text(size = 16))+
@@ -1161,7 +1161,7 @@ evaluate_fire_size <-  function (Folder.Outputs,
                            labels= c(automatic_lables_final,paste(">",intervals[length(intervals)],sep="")))+
 
 
-        theme_tq()+
+        theme_tq_envelope()+
         theme(panel.grid.minor = element_blank(), axis.title=element_text(size=12),
               panel.grid.major.x = element_blank(), axis.text = element_text(size = 8),
               plot.title = element_text(size = 16))+
@@ -1238,7 +1238,7 @@ evaluate_fire_size <-  function (Folder.Outputs,
                            labels= c(automatic_lables_final,paste(">",intervals[length(intervals)],sep="")))+
 
 
-        theme_tq()+
+        theme_tq_envelope()+
         theme(panel.grid.minor = element_blank(), axis.title=element_text(size=12),
               panel.grid.major.x = element_blank(), axis.text = element_text(size = 8),
               plot.title = element_text(size = 16))+
