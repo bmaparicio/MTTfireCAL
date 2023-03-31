@@ -2,6 +2,7 @@
 #' @description Downloads ERA5-Land reanalysis data and stores it in a csv file
 #' @param study.area Shapefile with the limits of the study area (polygon). Must not contain more than one polygon.
 #' @param my.fires Polygon shapefile containing the dated fire perimeters. The shapefile must contain a field with a unique id per fire perimeter (ID), a field with the burned area per perimeter in hectares (Area_ha), a field with the date of start of the fire (Date_ini) and the end of the fire (Date_end). The fields Date_ini and Date_end must follow the format yyyy-mm-dd.
+#' @param data.source Source for the weather data. Possible sources are "era5-land" or "era5"
 #' @param output.folder Path to the folder where the outputs should be saved.
 #' @param utc.zone Numeric. Represents the UTC time zone in the study area. Should be set to the time zone during the fire season (i.e. the user should consider the daylight saving time). E.g. for Portugal, the utc.zone should be set to +1.
 #' @param wf_user Personal UID that identifies the user in the Climate Change Service (CDS). Can be retrieved from the user profile page after logging in at https://cds.climate.copernicus.eu/user
@@ -15,7 +16,7 @@
 #' utc.zone=+1,wf_user="12345",wf_key="123456ab-12a3-1234-1234-123ab4567891",
 #' output.folder="C:/user/results")}
 #'
-get_fire_weather <- function(study.area, my.fires,output.folder,utc.zone,wf_user,wf_key) {
+get_fire_weather <- function(study.area, my.fires,data.source,output.folder,utc.zone,wf_user,wf_key) {
 
 
 
@@ -149,6 +150,8 @@ get_fire_weather <- function(study.area, my.fires,output.folder,utc.zone,wf_user
 
   setwd(output.folder)
 
+  if (data.source=="era5-land") {
+
   list_requests <- list()
 
   for (w in 1:n_times_required){
@@ -192,7 +195,23 @@ get_fire_weather <- function(study.area, my.fires,output.folder,utc.zone,wf_user
   foreach(w=1:length(list_requests)) %dopar% {
     data <- ecmwfr::wf_request(list_requests[[w]], user = wf_user,transfer = T, path=".",time_out=7200)
   }
+  }
 
+  if (data.source=="era5") {
+    request <- list("dataset_short_name" = "reanalysis-era5-single-levels",
+                    "product_type"="reanalysis",
+                    "variable"=c("2m_temperature","2m_dewpoint_temperature","10m_u_component_of_wind","10m_v_component_of_wind"),
+                    "date" = days_fire_final_loop,
+                    "time"=hours,
+                    "area" = extent_studyarea_use,
+                    "format" = "netcdf",
+                    "target" = paste("era5_weather_study_area_",w,".nc",sep=""))
+
+    list_requests<-request
+
+    data <- ecmwfr::wf_request(list_requests, user = wf_user,transfer = T, path=".",time_out=7200)
+
+  }
 
 
 
@@ -201,27 +220,27 @@ get_fire_weather <- function(study.area, my.fires,output.folder,utc.zone,wf_user
 
   my_nc_files <- list.files(pattern="\\.nc$")
 
-  library(gtools)
-  library(ncdf4)
-  library(lubridate)
-  library(sp)
-  library(tidyverse)
-  library(ecmwfr)
-  library(ncdf4)
-  library(udunits2)
-  library(sf)
-  library(rgdal)
-  library(raster)
-  library(rgeos)
-  library(stringr)
-  library(zoo)
-  library(lwgeom)
-  library(tibble)
-  library(abind)
-  library(foreach)
-  library(doParallel)
-  library(parallel)
-  library(gtools)
+  # library(gtools)
+  # library(ncdf4)
+  # library(lubridate)
+  # library(sp)
+  # library(tidyverse)
+  # library(ecmwfr)
+  # library(ncdf4)
+  # library(udunits2)
+  # library(sf)
+  # library(rgdal)
+  # library(raster)
+  # library(rgeos)
+  # library(stringr)
+  # library(zoo)
+  # library(lwgeom)
+  # library(tibble)
+  # library(abind)
+  # library(foreach)
+  # library(doParallel)
+  # library(parallel)
+  # library(gtools)
   my_nc_files <- mixedsort(my_nc_files)
 
   for(z in 1:length(my_nc_files)){
@@ -417,7 +436,7 @@ get_fire_weather <- function(study.area, my.fires,output.folder,utc.zone,wf_user
 
       posicoes_dias <- results_j
 
-      require(abind)
+      #require(abind)
 
 
 
@@ -555,7 +574,11 @@ get_fire_weather <- function(study.area, my.fires,output.folder,utc.zone,wf_user
 
 
       if (dim(out)[1] == 0) {
-        b  <- suppressMessages(sf::st_buffer(my_fires_t_dated_loop, dist=10000))
+        if(data.source=="era5-land"){
+          b  <- suppressMessages(sf::st_buffer(my_fires_t_dated_loop, dist=10000))}
+
+        if(data.source=="era5"){
+          b  <- suppressMessages(sf::st_buffer(my_fires_t_dated_loop, dist=50000))}
 
 
         coordenadas_st <- st_as_sf(coordenadas)

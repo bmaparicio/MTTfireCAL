@@ -7,6 +7,7 @@
 get_fire_weather(
   study.area,
   my.fires,
+  data.source,
   output.folder,
   utc.zone,
   wf_user,
@@ -17,6 +18,8 @@ get_fire_weather(
 \item{study.area}{Shapefile with the limits of the study area (polygon). Must not contain more than one polygon.}
 
 \item{my.fires}{Polygon shapefile containing the dated fire perimeters. The shapefile must contain a field with a unique id per fire perimeter (ID), a field with the burned area per perimeter in hectares (Area_ha), a field with the date of start of the fire (Date_ini) and the end of the fire (Date_end). The fields Date_ini and Date_end must follow the format yyyy-mm-dd.}
+
+\item{data.source}{Source for the weather data. Possible sources are "era5-land" or "era5"}
 
 \item{output.folder}{Path to the folder where the outputs should be saved.}
 
