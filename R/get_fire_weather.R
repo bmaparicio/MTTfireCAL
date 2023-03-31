@@ -189,12 +189,13 @@ get_fire_weather <- function(study.area, my.fires,data.source,output.folder,utc.
 
   options(timeout = max(500, getOption("timeout")))
   cores<-detectCores()
-  cl <- makeCluster(cores[1])
+  cl <- makeCluster(cores[1]-1)
   registerDoParallel(cl)
 
   foreach(w=1:length(list_requests)) %dopar% {
     data <- ecmwfr::wf_request(list_requests[[w]], user = wf_user,transfer = T, path=".",time_out=7200)
   }
+  on.exit(stopCluster(cl))
   }
 
   if (data.source=="era5") {
@@ -205,7 +206,7 @@ get_fire_weather <- function(study.area, my.fires,data.source,output.folder,utc.
                     "time"=hours,
                     "area" = extent_studyarea_use,
                     "format" = "netcdf",
-                    "target" = paste("era5_weather_study_area_",w,".nc",sep=""))
+                    "target" = paste("era5_weather_study_area_",1,".nc",sep=""))
 
     list_requests<-request
 
