@@ -201,7 +201,7 @@ get_fire_weather <- function(study.area, my.fires,data.source,output.folder,utc.
     request <- list("dataset_short_name" = "reanalysis-era5-single-levels",
                     "product_type"="reanalysis",
                     "variable"=c("2m_temperature","2m_dewpoint_temperature","10m_u_component_of_wind","10m_v_component_of_wind"),
-                    "date" = days_fire_final_loop,
+                    "date" = days_fire_final,
                     "time"=hours,
                     "area" = extent_studyarea_use,
                     "format" = "netcdf",
