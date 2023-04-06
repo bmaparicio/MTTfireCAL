@@ -30,4 +30,4 @@ If you have any sugestion on how to improve MTTfireCAL package or if you encount
 
 ## Citation
 Please use the following citation when refering to this package:
-Aparício, B.A., Benali, A., Sá, A.C.L. (2023) ‘MTTfireCAL’ package for R – An innovative, comprehensive and fast procedure to calibrate the MTT fire spread modelling system. MethodsX.
+Aparício, B.A., Benali, A., Sá, A.C.L. (2023) ‘MTTfireCAL’ package for R – An innovative, comprehensive and fast procedure to calibrate the MTT fire spread modelling system. 
