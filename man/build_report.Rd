@@ -19,7 +19,8 @@ build_report(
   manual.dur,
   create.clusters,
   calibration.period,
-  summarize.per.fire
+  summarize.per.fire,
+  live.fuel.moisture
 )
 }
 \arguments{
@@ -52,6 +53,8 @@ build_report(
 \item{calibration.period}{Optional. Sets the years to be considered. It subsets the my.fires and my.dated.fires with the years interval. The user must specify the minimum and maximum years to consider using a numeric vector (e.g. c(1995,2022)). Additionally, the user can use "coincident" to select the coincident interval between both datasets. If absent, the entire period in the datasets will be used.}
 
 \item{summarize.per.fire}{Optional. Logical. Allows to summarize the weather conditions of each fire event (i.e. multi-days fires will only have one value for the weather conditions). Only available if fire.aggregation = "WS". Default is FALSE.}
+
+\item{live.fuel.moisture}{Vector. Values for the herbaceous and woody live fuel moisture.}
 }
 \value{
 Returns fuel moisture file based on clustering or percentiles, a csv file with the meteorological values per clustering method, a csv file with a summary of meteorology per fire event, and a csv file with the fire size for the fires recorded in the study area in the period analysed.
@@ -66,6 +69,7 @@ meteo.data="fire_weather_study_area.csv",active.period="energy",
 meteo.aggregation="max.min",
 min.size=100,min.overlap=50,fire.aggregation="WS",
 fire.size.intervals=c(100,250,500,750,1000,2500,5000,10000),
-create.clusters=TRUE,output.folder="C:/user/results")}
+create.clusters=TRUE,live.fuel.moisture=c(60,90),
+output.folder="C:/user/results")}
 
 }
