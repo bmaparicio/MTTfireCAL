@@ -16,7 +16,7 @@
 #' @param calibration.period Optional. Sets the years to be considered. It subsets the my.fires and my.dated.fires with the years interval. The user must specify the minimum and maximum years to consider using a numeric vector (e.g. c(1995,2022)). Additionally, the user can use "coincident" to select the coincident interval between both datasets. If absent, the entire period in the datasets will be used.
 #' @param summarize.per.fire Optional. Logical. Allows to summarize the weather conditions of each fire event (i.e. multi-days fires will only have one value for the weather conditions). Only available if fire.aggregation = "WS". Default is FALSE.
 #' @param live.fuel.moisture Vector of two values for the herbaceous and woody live fuel moisture, respectively.
-#' @param fm.forests. Vector of values for the fuel models' ID of forest type.
+#' @param fm.forests. Optional. Vector of values for the fuel models' ID of forest type.
 #'
 #' @return Returns fuel moisture file based on clustering or percentiles, a csv file with the meteorological values per clustering method, a csv file with a summary of meteorology per fire event, and a csv file with the fire size for the fires recorded in the study area in the period analysed.
 #' @export
@@ -2188,6 +2188,10 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
         my_cluster_id <- my_cluster_loop_vs2[w,1]
 
 
+
+        if (missing(fm.forests)){
+          fm.forests <- c()
+        }
 
         my_cluster_loop_vs2_forests <- my_cluster_loop_vs2[my_cluster_loop_vs2$mc %in% fm.forests,]
 

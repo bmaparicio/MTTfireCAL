@@ -57,7 +57,7 @@ build_report(
 
 \item{live.fuel.moisture}{Vector of two values for the herbaceous and woody live fuel moisture, respectively.}
 
-\item{fm.forests.}{Vector of values for the fuel models' ID of forest type.}
+\item{fm.forests.}{Optional. Vector of values for the fuel models' ID of forest type.}
 }
 \value{
 Returns fuel moisture file based on clustering or percentiles, a csv file with the meteorological values per clustering method, a csv file with a summary of meteorology per fire event, and a csv file with the fire size for the fires recorded in the study area in the period analysed.
