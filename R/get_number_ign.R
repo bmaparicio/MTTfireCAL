@@ -15,5 +15,5 @@ get_number_ign <- function (fuelmap, unburnable){
   my_fuelmap_df <- getValues(my_fuelmap)
   my_fuelmap_df <- subset(my_fuelmap_df, !(my_fuelmap_df %in% unburnable))
   min_ign <- round(length(my_fuelmap_df)/50)
-  cat(paste("Minimum number of ignitions: ",min_ign,".\n\nThe value was calculated using the rule of thumb outlined in Aparício et al. 2023 (doi:), which recommends one ignition for every 30 hectares of burnable area.",sep=""))
+  cat(paste("Minimum number of ignitions: ",min_ign,".\n\nThe value was calculated using the rule of thumb outlined in Aparício et al. 2023 (doi:).",sep=""))
 }
