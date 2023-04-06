@@ -20,7 +20,8 @@ build_report(
   create.clusters,
   calibration.period,
   summarize.per.fire,
-  live.fuel.moisture
+  live.fuel.moisture,
+  fm.forests
 )
 }
 \arguments{

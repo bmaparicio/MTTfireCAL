@@ -34,7 +34,7 @@
 build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.period,meteo.aggregation,
                          min.size,min.overlap,output.folder,fire.aggregation,fire.size.intervals,
                          manual.dur,create.clusters,calibration.period,summarize.per.fire,
-                         live.fuel.moisture) {
+                         live.fuel.moisture,fm.forests) {
   my_study_area <- readOGR(study.area)
   my_fires <- readOGR(my.fires)
   result_hours_final <- read.csv(meteo.data,sep=",")
@@ -2159,9 +2159,16 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
 
       nome_usar<- substr(nome_usar,1,nchar(nome_usar)-4)
 
-      my_cluster_loop$HTR_1 <- round((4.37+0.161*my_cluster_loop$RH)-0.1*(my_cluster_loop$T -25)-0.027*my_cluster_loop$RH,0)
-      my_cluster_loop$HTR_10 <- my_cluster_loop$HTR_1+1
-      my_cluster_loop$HTR_100 <- my_cluster_loop$HTR_1+2
+      my_cluster_loop$HTR_1_forests <- round((4.37+0.161*my_cluster_loop$RH)-0.1*(my_cluster_loop$T -25)-0.027*my_cluster_loop$RH,0)
+      my_cluster_loop$HTR_10_forests <- my_cluster_loop$HTR_1_forests+1
+      my_cluster_loop$HTR_100_forests <- my_cluster_loop$HTR_1_forests+2
+
+
+
+      my_cluster_loop$HTR_1_shrubs <- round(((0.1617-0.001419*my_cluster_loop$T)*(-log(1-my_cluster_loop$RH/100))^(0.4657-0.003578*my_cluster_loop$T))*100,0)
+      my_cluster_loop$HTR_10_shrubs <- my_cluster_loop$HTR_1_shrubs+1
+      my_cluster_loop$HTR_100_shrubs <- my_cluster_loop$HTR_1_shrubs+2
+
 
       my_cluster_loop$herbaceous <- live.fuel.moisture[1]
       my_cluster_loop$woody <- live.fuel.moisture[2]
@@ -2176,9 +2183,26 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
         setwd(file.path(mainDir, subDir_FMS))
 
         my_cluster_loop_vs2 <- my_cluster_loop[w,]
-        my_cluster_loop_vs2 <- cbind(mc,my_cluster_loop_vs2)
+        my_cluster_loop_vs2 <- cbind(mc,my_cluster_loop_vs2,row.names = NULL)
         my_cluster_id <- my_cluster_loop_vs2[w,1]
-        my_fms_loop <- my_cluster_loop_vs2[,c("mc","HTR_1","HTR_10","HTR_100","herbaceous","woody")]
+
+
+
+        my_cluster_loop_vs2_forests <- my_cluster_loop_vs2[my_cluster_loop_vs2$mc %in% fm.forests,]
+
+        my_cluster_loop_vs2_forests <- my_cluster_loop_vs2_forests[,c("mc","HTR_1_forests","HTR_10_forests","HTR_100_forests","herbaceous","woody")]
+
+        my_cluster_loop_vs2_shrubs <- my_cluster_loop_vs2[!my_cluster_loop_vs2$mc %in% fm.forests,]
+
+        my_cluster_loop_vs2_shrubs <- my_cluster_loop_vs2_shrubs[,c("mc","HTR_1_shrubs","HTR_10_shrubs","HTR_100_shrubs","herbaceous","woody")]
+
+        colnames(my_cluster_loop_vs2_shrubs) <- c("mc", "HTR_1", "HTR_10", "HTR_100", "herbaceous", "woody")
+        colnames(my_cluster_loop_vs2_forests) <- c("mc", "HTR_1", "HTR_10", "HTR_100", "herbaceous", "woody")
+
+        my_fms_loop <- rbind(my_cluster_loop_vs2_forests,my_cluster_loop_vs2_shrubs)
+
+
+        my_fms_loop <- my_fms_loop[order(my_fms_loop$mc),]
 
 
         mainDir<- output.folder
@@ -2251,9 +2275,15 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
 
       nome_usar<- substr(nome_usar,1,nchar(nome_usar)-4)
 
-      my_cluster_loop$HTR_1 <- round((4.37+0.161*my_cluster_loop$RH)-0.1*(my_cluster_loop$T -25)-0.027*my_cluster_loop$RH,0)
-      my_cluster_loop$HTR_10 <- my_cluster_loop$HTR_1+1
-      my_cluster_loop$HTR_100 <- my_cluster_loop$HTR_1+2
+      my_cluster_loop$HTR_1_forests <- round((4.37+0.161*my_cluster_loop$RH)-0.1*(my_cluster_loop$T -25)-0.027*my_cluster_loop$RH,0)
+      my_cluster_loop$HTR_10_forests <- my_cluster_loop$HTR_1_forests+1
+      my_cluster_loop$HTR_100_forests <- my_cluster_loop$HTR_1_forests+2
+
+
+
+      my_cluster_loop$HTR_1_shrubs <- round(((0.1617-0.001419*my_cluster_loop$T)*(-log(1-my_cluster_loop$RH/100))^(0.4657-0.003578*my_cluster_loop$T))*100,0)
+      my_cluster_loop$HTR_10_shrubs <- my_cluster_loop$HTR_1_shrubs+1
+      my_cluster_loop$HTR_100_shrubs <- my_cluster_loop$HTR_1_shrubs+2
 
       my_cluster_loop$herbaceous <- live.fuel.moisture[1]
       my_cluster_loop$woody <- live.fuel.moisture[2]
@@ -2272,7 +2302,25 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
         my_cluster_loop_vs2 <- my_cluster_loop[w,]
         my_cluster_loop_vs2 <- cbind(mc,my_cluster_loop_vs2)
         my_cluster_id <- my_cluster_loop_vs2[w,2]
-        my_fms_loop <- my_cluster_loop_vs2[,c("mc","HTR_1","HTR_10","HTR_100","herbaceous","woody")]
+
+
+        my_cluster_loop_vs2_forests <- my_cluster_loop_vs2[my_cluster_loop_vs2$mc %in% fm.forests,]
+
+        my_cluster_loop_vs2_forests <- my_cluster_loop_vs2_forests[,c("mc","HTR_1_forests","HTR_10_forests","HTR_100_forests","herbaceous","woody")]
+
+        my_cluster_loop_vs2_shrubs <- my_cluster_loop_vs2[!my_cluster_loop_vs2$mc %in% fm.forests,]
+
+        my_cluster_loop_vs2_shrubs <- my_cluster_loop_vs2_shrubs[,c("mc","HTR_1_shrubs","HTR_10_shrubs","HTR_100_shrubs","herbaceous","woody")]
+
+        colnames(my_cluster_loop_vs2_shrubs) <- c("mc", "HTR_1", "HTR_10", "HTR_100", "herbaceous", "woody")
+        colnames(my_cluster_loop_vs2_forests) <- c("mc", "HTR_1", "HTR_10", "HTR_100", "herbaceous", "woody")
+
+        my_fms_loop <- rbind(my_cluster_loop_vs2_forests,my_cluster_loop_vs2_shrubs)
+
+
+        my_fms_loop <- my_fms_loop[order(my_fms_loop$mc),]
+
+
 
         nome_usar_fms <- paste("percentile",my_cluster_loop[w,"percentile"],sep="_")
         mainDir<- output.folder
