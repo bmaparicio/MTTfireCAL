@@ -608,6 +608,7 @@ evaluate_fire_size <- function (Folder.Outputs,
                                 durclass_2=durclass_2,
                                 durclass_3=durclass_3,
                                 durclass_4=durclass_4,
+                                durclass_5=durclass_5,
                                 FR=sum_use/sum(sum_use),
                                 x_axis=x_axis))
 
