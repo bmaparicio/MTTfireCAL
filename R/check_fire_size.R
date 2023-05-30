@@ -602,15 +602,74 @@ evaluate_fire_size <- function (Folder.Outputs,
   #
 
 
-  df <- as.data.frame(results_inter %>%
-                        group_by(combo)%>%
-                        reframe(durclass_1=durclass_1,
-                                durclass_2=durclass_2,
-                                durclass_3=durclass_3,
-                                durclass_4=durclass_4,
-                                durclass_5=durclass_5,
-                                FR=sum_use/sum(sum_use),
-                                x_axis=x_axis))
+  # df <- as.data.frame(results_inter %>%
+  #                       group_by(combo)%>%
+  #                       reframe(durclass_1=durclass_1,
+  #                               durclass_2=durclass_2,
+  #                               durclass_3=durclass_3,
+  #                               durclass_4=durclass_4,
+  #                               durclass_5=durclass_5,
+  #                               FR=sum_use/sum(sum_use),
+  #                               x_axis=x_axis))
+  #
+
+
+  ndurations <- length(grep(x = colnames(results_inter), pattern = "^durclass_"))
+
+  if (ndurations == 1){
+    df <- as.data.frame(results_inter %>%
+                          group_by(combo)%>%
+                          reframe(durclass_1=durclass_1,
+                                  #durclass_2=durclass_2,
+                                  #durclass_3=durclass_3,
+                                  #durclass_4=durclass_4,
+                                  #durclass_5=durclass_5,
+                                  FR=sum_use/sum(sum_use),
+                                  x_axis=x_axis))}
+
+  if (ndurations == 2){
+    df <- as.data.frame(results_inter %>%
+                          group_by(combo)%>%
+                          reframe(durclass_1=durclass_1,
+                                  durclass_2=durclass_2,
+                                  #durclass_3=durclass_3,
+                                  #durclass_4=durclass_4,
+                                  #durclass_5=durclass_5,
+                                  FR=sum_use/sum(sum_use),
+                                  x_axis=x_axis))}
+
+  if (ndurations == 3){
+    df <- as.data.frame(results_inter %>%
+                          group_by(combo)%>%
+                          reframe(durclass_1=durclass_1,
+                                  durclass_2=durclass_2,
+                                  durclass_3=durclass_3,
+                                  #durclass_4=durclass_4,
+                                  #durclass_5=durclass_5,
+                                  FR=sum_use/sum(sum_use),
+                                  x_axis=x_axis))}
+
+  if (ndurations == 4){
+    df <- as.data.frame(results_inter %>%
+                          group_by(combo)%>%
+                          reframe(durclass_1=durclass_1,
+                                  durclass_2=durclass_2,
+                                  durclass_3=durclass_3,
+                                  durclass_4=durclass_4,
+                                  #durclass_5=durclass_5,
+                                  FR=sum_use/sum(sum_use),
+                                  x_axis=x_axis))}
+
+  if (ndurations == 5){
+    df <- as.data.frame(results_inter %>%
+                          group_by(combo)%>%
+                          reframe(durclass_1=durclass_1,
+                                  durclass_2=durclass_2,
+                                  durclass_3=durclass_3,
+                                  durclass_4=durclass_4,
+                                  durclass_5=durclass_5,
+                                  FR=sum_use/sum(sum_use),
+                                  x_axis=x_axis))}
 
 
   results <- matrix(ncol=3, nrow= 1000000)
