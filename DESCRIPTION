@@ -45,7 +45,7 @@ Imports:
     scales (>= 1.2.1),
     foreach (>= 1.5.2),
     doParallel (>= 1.0.17),
-    parallel (>= 4.2.1),
+    parallel (>= 4.1.1),
     gtools (>= 3.9.4),
     Metrics (>= 0.1.4),
     ie2misc (>= 0.9.0),
