@@ -897,7 +897,7 @@ evaluate_fire_size <- function (Folder.Outputs,
 
 
 
-  nbreaks <- nrow(df_loop)
+  #nbreaks <- nrow(df_loop)
 
   total_combos <- max(all_for_plot$combo)
 
