@@ -767,7 +767,7 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
     }
 
     if(active.period=="energy") {
-      meteo_fires_inside <- meteo_fires_inside[grep("12$|13$|14$|15$|16$|17$|18$|19$|20$", meteo_fires_inside$day_UTC_corrected ), ]
+      meteo_fires_inside <- meteo_fires_inside[grep("14$|15$|16$|17$|18$|19$|20$|21$|22$", meteo_fires_inside$day_UTC_corrected ), ]
     }}
 
   if (length(active.period)==2 & is.numeric(active.period)==TRUE){
@@ -1522,7 +1522,7 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
     }
 
     if(active.period=="energy") {
-      result_hours_final_df_wind_rose <- result_hours_final_df[grep("12$|13$|14$|15$|16$|17$|18$|19$|20$", result_hours_final_df$day_UTC_corrected ), ]
+      result_hours_final_df_wind_rose <- result_hours_final_df[grep("14$|15$|16$|17$|18$|19$|20$|21$|22$", result_hours_final_df$day_UTC_corrected ), ]
     }
   }
 
@@ -1538,12 +1538,12 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
   for_wind_rose_0ha$Area_ha <- as.numeric(for_wind_rose_0ha$Area_ha)
   for_wind_rose_0ha_meteo_fires_inside <- result_hours_final_df_wind_rose[result_hours_final_df_wind_rose$ID %in% for_wind_rose_0ha$ID, ]
 
-
+  by_use_wind_rose <- ceiling(max(for_wind_rose_0ha_meteo_fires_inside$WS))/6
 
 
   p0 <- plot_windrose(spd = for_wind_rose_0ha_meteo_fires_inside$WS,
                       dir = for_wind_rose_0ha_meteo_fires_inside$WD,
-                      spdseq = c(0,3,6,12,20,ceiling(max(for_wind_rose_0ha_meteo_fires_inside$WS))))
+                      spdseq = round(seq(from=0, to=ceiling(max(for_wind_rose_0ha_meteo_fires_inside$WS)),by=by_use_wind_rose),1))
 
 
 
@@ -1565,7 +1565,7 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
   if (nrow(for_wind_rose_100ha_meteo_fires_inside)>0){
     p100 <- plot_windrose(spd = for_wind_rose_100ha_meteo_fires_inside$WS,
                           dir = for_wind_rose_100ha_meteo_fires_inside$WD,
-                          spdseq = c(0,3,6,12,20,ceiling(max(for_wind_rose_0ha_meteo_fires_inside$WS))))
+                          spdseq = round(seq(from=0, to=ceiling(max(for_wind_rose_0ha_meteo_fires_inside$WS)),by=by_use_wind_rose),1))
   }else{p100 <- ggplot() +
     annotate("text", x = 0.5,  y = 0.5,
              size = 3,
@@ -1587,7 +1587,7 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
   if (nrow(for_wind_rose_500ha_meteo_fires_inside)>0){
     p500 <- plot_windrose(spd = for_wind_rose_500ha_meteo_fires_inside$WS,
                           dir = for_wind_rose_500ha_meteo_fires_inside$WD,
-                          spdseq = c(0,3,6,12,20,ceiling(max(for_wind_rose_0ha_meteo_fires_inside$WS))))
+                          spdseq = round(seq(from=0, to=ceiling(max(for_wind_rose_0ha_meteo_fires_inside$WS)),by=by_use_wind_rose),1))
   } else{p500 <- ggplot() +
     annotate("text", x = 0.5,  y = 0.5,
              size = 3,
@@ -1610,7 +1610,7 @@ build_report <- function(study.area, my.fires,my.dated.fires,meteo.data,active.p
   if (nrow(for_wind_rose_1000ha_meteo_fires_inside)>0){
     p1000 <- plot_windrose(spd = for_wind_rose_1000ha_meteo_fires_inside$WS,
                            dir = for_wind_rose_1000ha_meteo_fires_inside$WD,
-                           spdseq = c(0,3,6,12,20,ceiling(max(for_wind_rose_0ha_meteo_fires_inside$WS))))
+                           spdseq = round(seq(from=0, to=ceiling(max(for_wind_rose_0ha_meteo_fires_inside$WS)),by=by_use_wind_rose),1))
   } else {
     p1000 <- ggplot() +
       annotate("text", x = 0.5,  y = 0.5,
