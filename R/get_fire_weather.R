@@ -269,6 +269,7 @@ get_fire_weather <- function(study.area, my.fires,data.source,output.folder,utc.
     nc_open_loop <- paste("era5_weather_study_area_",z,".nc",sep="")
     
     my_data_temp <- nc_open(nc_open_loop)
+    #names(my_data_temp$var)
     
     if (z == 1){
       
@@ -278,9 +279,11 @@ get_fire_weather <- function(study.area, my.fires,data.source,output.folder,utc.
       lat <- round(lat,1)
       lon <- round(lon,1)
       
-      t <- ncvar_get(my_data_temp, "time")
+      t <- ncvar_get(my_data_temp, "valid_time")
       
-      timestamp_use <- as_datetime(c(t*60*60),origin="1900-01-01")
+      #timestamp_use <- as_datetime(c(t*60*60),origin="1900-01-01")
+      #timestamp_use <- lubridate::as_datetime(t,origin="1970-01-01")
+      timestamp_use <- as.POSIXct(t, origin = "1970-01-01", tz = "UTC")
       t2m.array <- ncvar_get(my_data_temp, "t2m")
       d2m.array <- ncvar_get(my_data_temp, "d2m")
       u10.array <- ncvar_get(my_data_temp, "u10")
@@ -302,9 +305,10 @@ get_fire_weather <- function(study.area, my.fires,data.source,output.folder,utc.
       
     } else {
       
-      t <- ncvar_get(my_data_temp, "time")
+      t <- ncvar_get(my_data_temp, "valid_time")
       
-      timestamp_use_z <- as_datetime(c(t*60*60),origin="1900-01-01")
+      #timestamp_use_z <- as_datetime(c(t*60*60),origin="1900-01-01")
+      timestamp_use <- as.POSIXct(t, origin = "1970-01-01", tz = "UTC")
       t2m.array_z <- ncvar_get(my_data_temp, "t2m")
       d2m.array_z <- ncvar_get(my_data_temp, "d2m")
       u10.array_z <- ncvar_get(my_data_temp, "u10")
