@@ -14,13 +14,24 @@
 #' utc.zone=+1,wf_user="12345",wf_key="123456ab-12a3-1234-1234-123ab4567891",
 #' output.folder="C:/user/results")}
 #'
-
 get_fire_weather <- function(study.area, my.fires,data.source,output.folder,utc.zone,ECMWF_user) {
   
   
   
   
   my_fires <- readOGR(my.fires)
+  
+  
+  
+  if (any(grepl("/", my_fires$Date_end))) {
+    my_fires$Date_end <- gsub("/", "-", my_fires$Date_end)
+  }
+  
+  if (any(grepl("/", my_fires$Date_ini))) {
+    my_fires$Date_ini <- gsub("/", "-", my_fires$Date_ini)
+  }
+  
+  
   
   my_fires <- gBuffer(my_fires,width=0,byid=TRUE)
   
