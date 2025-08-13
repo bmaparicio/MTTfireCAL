@@ -1,3 +1,4 @@
+
 #' Get meteorological variables from an existing netcdf file
 #' @description Get meteorological variables from an existing netcdf file and stores it in a csv file.
 #' @param study.area Shapefile with the limits of the study area (polygon). Must not contain more than one polygon.
@@ -21,6 +22,17 @@ fire_weather_nc <- function(study.area, my.fires,nc.folder,utc.zone,output.folde
   
   
   my_fires <- readOGR(my.fires)
+  
+  
+  
+  if (any(grepl("/", my_fires$Date_end))) {
+    my_fires$Date_end <- gsub("/", "-", my_fires$Date_end)
+  }
+  
+  if (any(grepl("/", my_fires$Date_ini))) {
+    my_fires$Date_ini <- gsub("/", "-", my_fires$Date_ini)
+  }
+  
   
   my_fires <- gBuffer(my_fires,width=0,byid=TRUE)
   
@@ -188,7 +200,8 @@ fire_weather_nc <- function(study.area, my.fires,nc.folder,utc.zone,output.folde
       
       t <- ncvar_get(my_data_temp, "valid_time")
       
-      timestamp_use <- as_datetime(c(t),origin="1970-01-01")
+      #timestamp_use <- as_datetime(c(t),origin="1970-01-01")
+      timestamp_use <- as.POSIXct(t, origin = "1970-01-01", tz = "UTC")
       t2m.array <- ncvar_get(my_data_temp, "t2m")
       d2m.array <- ncvar_get(my_data_temp, "d2m")
       u10.array <- ncvar_get(my_data_temp, "u10")
@@ -212,7 +225,8 @@ fire_weather_nc <- function(study.area, my.fires,nc.folder,utc.zone,output.folde
       
       t <- ncvar_get(my_data_temp, "valid_time")
       
-      timestamp_use_z <- as_datetime(c(t),origin="1970-01-01")
+      #timestamp_use_z <- as_datetime(c(t),origin="1970-01-01")
+      timestamp_use <- as.POSIXct(t, origin = "1970-01-01", tz = "UTC")
       t2m.array_z <- ncvar_get(my_data_temp, "t2m")
       d2m.array_z <- ncvar_get(my_data_temp, "d2m")
       u10.array_z <- ncvar_get(my_data_temp, "u10")
